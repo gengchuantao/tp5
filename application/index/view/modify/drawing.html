@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>受控图纸</title>
+</head>
+<body class="container">
+<!-- 修改单首页 -->
+<div class="row">
+    <div class="col-md-12">
+        <!-- 路径导航-->
+        <ol class="breadcrumb" style="background-color: #f7e1b5">
+            <li class="breadcrumb-item active"><span class = "glyphicon glyphicon-option-vertical"></span>修改单-受控图纸</li>
+        </ol>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--查询条件-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-2">
+                                    <select name="drawing_status" class="selectpicker form-control" multiple data-max-options="1"  title="请选择流程">
+                                        <option value="未出图">未出图</option>
+                                        <option value="已指派">已指派</option>
+                                        <option value="已出图">已出图</option>
+                                        <option value="已审核">已审核</option>
+                                        <option value="已上传">已上传</option>
+                                    </select>
+                                </div>
+                                <div class="col-xs-6 col-sm-2">
+                                    <div class="input-group">
+                                        <input name="contract_id" type="text" class="form-control" placeholder="合同号..."value="{:input('get.contract_id')}">
+                                        <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-2 text-right">
+
+                                </div>
+                                <div class="col-xs-6 col-sm-2 text-right">
+
+                                </div>
+                                <div class="col-xs-6 col-sm-2 text-right">
+
+                                </div>
+                                <div class="col-xs-6 col-sm-2 text-right">
+                                    <a href="{:url('AllModify')}" class="btn btn-default"><i class="glyphicon glyphicon-export"></i></a>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--表单显示-->
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered table-striped table-condensed">
+                        <tr class="info">
+                            <th style=" white-space:nowrap">操作</th>
+                            <th style=" white-space:nowrap">序号</th>
+                            <th style=" white-space:nowrap">修改单号</th>
+                            <th style=" white-space:nowrap">流程</th>
+                            <th style=" white-space:nowrap">合同号</th>
+                            <th style=" white-space:nowrap">修改分类</th>
+                            <th style=" white-space:nowrap">修改台量</th>
+                            <th style=" white-space:nowrap">出图人(指派)</th>
+                            <th style=" white-space:nowrap">出图人(实际)</th>
+                            <th style=" white-space:nowrap">出图日期</th>
+                            <th style=" white-space:nowrap">校审人</th>
+                            <th style=" white-space:nowrap">校审日期</th>
+                            <th style=" white-space:nowrap">存放位置</th>
+                            <th style=" white-space:nowrap">上传日期</th>
+                            <th style=" white-space:nowrap">出图备注</th>
+                            <th style=" white-space:nowrap">上传备注</th>
+                        </tr>
+                        {volist name="modifys" id="_Modify" key="key"}
+                        <tr>
+                            <td style=" white-space:nowrap">
+                                <a title="修改" class="btn btn-info btn-xs" data-toggle="modal" data-target="#EditDrawingModal" onclick="GetEditDrawingID('{$_Modify.id}');"><i class="glyphicon glyphicon-edit
+"></i></a>
+                                {eq name="$_Modify.drawing_status" value="未出图"}
+                                <a title="指派" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AssignmentModal" onclick="GetAssignmentID('{$_Modify.id}');"><i class="glyphicon glyphicon-hand-right"></i></a>
+                                {else/}
+                                {/eq}
+                                {eq name="$_Modify.drawing_status" value="已指派"}
+                                <a title="出图" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#DrewModal" onclick="GetDrewID('{$_Modify.id}');"><i class="glyphicon glyphicon-picture
+"></i></a>
+                                {else/}
+                                {/eq}
+                                {eq name="$_Modify.drawing_status" value="已出图"}
+                                <a title="校审" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ReviewDrawingModal" onclick="GetReviewDrawingID('{$_Modify.id}');"><i class="glyphicon glyphicon-ok"></i></a>
+                                {else/}
+                                {/eq}
+                                {eq name="$_Modify.drawing_status" value="已审核"}
+                                <a title="出图" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#DrewModal" onclick="GetDrewID('{$_Modify.id}');"><i class="glyphicon glyphicon-picture
+"></i></a>
+                                <a title="校审" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ReviewDrawingModal" onclick="GetReviewDrawingID('{$_Modify.id}');"><i class="glyphicon glyphicon-ok"></i></a>
+                                <a title="上传" class="btn btn-success btn-xs" data-toggle="modal" data-target="#UploadDrawingModal" onclick="GetUploadDrawingID('{$_Modify.id}');"><i class="glyphicon glyphicon-open
+"></i></a>
+                                {else/}
+                                {/eq}
+
+                                {eq name="$_Modify.drawing_status" value="已上传"}
+                                {else/}
+                                {/eq}
+                            </td>
+                            <td style="white-space:nowrap">{$_Modify->getData('id')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('modify_id')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('drawing_status')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('contract_id')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('modify_type')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('modify_num')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('drawing_people')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('drew_people')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('drew_date')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('review_people')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('drew_review_date')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('drew_position')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('drew_upload_time')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('drew_people_remarks')}</td>
+                            <td style="white-space:nowrap">{$_Modify->getData('upload_remarks')}</td>
+                        </tr>
+                        {/volist}
+                    </table>
+                    {$modifys->render()}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditDrawingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    编辑
+                </h4>
+            </div>
+            <form id="EditDrawingForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            <input class="form-control" type="hidden" id="modify_edit_id" name="modify_edit_id" />
+                            <label for="edit_modify_id">修改单号:</label>
+                            <input class="form-control" type="text" id="edit_modify_id" name="edit_modify_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <label for="m_modify_type">修改分类:</label>
+                            <select id="m_modify_type" name="m_modify_type" class="selectpicker form-control form-group-sm" multiple data-max-options="5"  title="请选择修改分类">
+                                <option value="新增电梯">新增电梯</option>
+                                <option value="土建修改">土建修改</option>
+                                <option value="装饰修改">装饰修改</option>
+                                <option value="功能修改">功能修改</option>
+                                <option value="梯型修改">梯型修改</option>
+                                <option value="其它修改">其它修改</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <label for="modify_type">:</label>
+                            <input class="form-control" type="text" id="modify_type" name="modify_type" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <label for="e_modify_num">修改台量:</label>
+                            <input class="form-control" type="text" id="e_modify_num" name="e_modify_num" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <label for="e_plus_num">其中(新增台量):</label>
+                            <input class="form-control" type="text" id="e_plus_num" name="e_plus_num" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <label for="e_model_change_num">其中(梯型修改):</label>
+                            <input class="form-control" type="text" id="e_model_change_num" name="e_model_change_num" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            出图备注:
+                            <textarea class="form-control" type="text" id="e_drew_people_remarks" name="e_drew_people_remarks" rows="5"></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            上传备注:
+                            <textarea class="form-control" type="text" id="e_upload_remarks" name="e_upload_remarks" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="EditDrawing()" class="btn btn-primary">
+                        提交
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+<!-- 模态框（指派-开始） -->
+<div class="modal fade" id="AssignmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    图纸指派
+                </h4>
+            </div>
+            <form id="AssignmentForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            修改单号:
+                            <input class="form-control" type="hidden" id="modify_assignment_id" name="modify_assignment_id" />
+                            <input class="form-control" type="text" id="d_modify_id" name="d_modify_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <a style="color: red;">资料接收日期:</a>
+                            <div class='input-group date' id='d_drawing_rec_date'>
+                                <input type='text' class="form-control" id='drawing_rec_date' name='drawing_rec_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <a style="color: red;">出图人:</a>
+                            <select id="drawing_people" name="drawing_people" class="selectpicker form-control" >
+                                <option value="战智娜">战智娜</option>
+                                <option value="宗雪莹">宗雪莹</option>
+                                <option value="王霞">王霞</option>
+                                <option value="刘斌">刘斌</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="Assignment()" class="btn btn-primary">
+                        指派
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（指派-结束） -->
+<!-- 模态框（出图-开始） -->
+<div class="modal fade" id="DrewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    出图
+                </h4>
+            </div>
+            <form id="DrewForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            修改单号:
+                            <input class="form-control" type="hidden" id="modify_drew_id" name="modify_drew_id" />
+                            <input class="form-control" type="text" id="drew_modify_id" name="drew_modify_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">出图日期:</a>
+                            <div class='input-group date' id='d_drew_date'>
+                                <input type='text' class="form-control" id='drew_date' name='drew_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            图纸张数:
+                            <input class="form-control" type="number" id="drawing_num" name="drawing_num" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            图纸版本:
+                            <input class="form-control" type="number" id="drew_version" name="drew_version" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            出图备注:
+                            <textarea class="form-control" type="text" id="drew_people_remarks" name="drew_people_remarks" rows="10"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="Drew()" class="btn btn-primary">
+                        出图
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（出图-结束） -->
+<!-- 模态框（校审-开始） -->
+<div class="modal fade" id="ReviewDrawingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    校审
+                </h4>
+            </div>
+            <form id="ReviewForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            合同号:
+                            <input class="form-control" type="hidden" id="modify_review_id" name="modify_review_id" />
+                            <input class="form-control" type="text" id="review_modify_id" name="review_modify_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <a style="color: red;">校审日期:</a>
+                            <div class='input-group date' id='d_drew_review_date'>
+                                <input type='text' class="form-control" id='drew_review_date' name='drew_review_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            准确率:
+                            <input class="form-control" type="text" id="proof_accuracy_rate" name="proof_accuracy_rate" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            校审备注:
+                            <textarea class="form-control" type="text" id="drew_review_remarks" name="drew_review_remarks" rows="10"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="ReviewDrawing()" class="btn btn-primary">
+                        校审
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（校审-结束） -->
+<!-- 模态框（上传-开始） -->
+<div class="modal fade" id="UploadDrawingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    上传
+                </h4>
+            </div>
+            <form id="UploadDrawingForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            合同号:
+                            <input class="form-control" type="hidden" id="modify_upload_id" name="modify_upload_id" />
+                            <input class="form-control" type="text" id="upload_modify_id" name="upload_modify_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            图纸存放位置:
+                            <input class="form-control" type="text" id="drew_position" name="drew_position" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <a style="color: red;">上传日期:</a>
+                            <div class='input-group date' id='d_drew_upload_time'>
+                                <input type='text' class="form-control" id='drew_upload_time' name='drew_upload_time' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12">
+                            上传备注:
+                            <textarea class="form-control" type="text" id="upload_remarks" name="upload_remarks" rows="10"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="UploadDrawing()" class="btn btn-primary">
+                        上传
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（上传-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/modify.js" type="text/javascript"></script>
+</html>

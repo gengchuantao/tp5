@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>事业部入金调整</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>事业部入金调整</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addModal"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增</a>
+                        <a href="{:url('export')}" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- 查询（开始） -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="col-xs-2 col-sm-2">
+                                    <input style="width: 100%;" name="company" type="text" class="form-control form-group-sm" placeholder="区域..." value="{:input('get.company')}" />
+                                </div>
+                                <div class="col-xs-2 col-sm-2">
+                                    <input style="width: 100%;" name="bu_name" type="text" class="form-control form-group-sm" placeholder="事业部..." value="{:input('get.bu_name')}" />
+                                </div>
+                                <div class="col-xs-2 col-sm-2">
+                                    <select name="expenditure_type" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="收支类型">
+                　　                  <optgroup label="请选择收支类型：">
+                    　　                  <option value="普通">普通</option>
+                    　　                  <option value="逾期提货">逾期提货</option>
+                                         <option value="延迟产出">延迟产出</option>
+                                         <option value="营业不良">营业不良</option>
+                                        <option value="大项目">大项目</option>
+                　　                  </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col-xs-2 col-sm-2 text-right">
+                                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>查询</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <!-- 查询（结束） -->
+            </div>
+            <!-- 表单（开始） -->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <tr class="info">
+                        <th>序号</th>
+                        <th>财年</th>
+                        <th>月份</th>
+                        <th>事业部名称</th>
+                        <th>分公司</th>
+                        <th class="text-right">季度绩效</th>
+                        <th class="text-right">年终奖</th>
+                        <th>收支类型</th>
+                        <th>责任人</th>
+                        <th>备注</th>
+                        <th>操作</th>
+                    </tr>
+                    {volist name="bufdetails" id="_Bufdetail" key="key"}
+                    <tr>
+                        <td>{$_Bufdetail->getData('id')}</td>
+                        <td>{$_Bufdetail->getData('year')}</td>
+                        <td>{$_Bufdetail->getData('month')}</td>
+                        <td>{$_Bufdetail->getData('bu_name')}</td>
+                        <td>{$_Bufdetail->getData('scompany')}</td>
+                        <td class="text-right">{$_Bufdetail->getData('quarter_pay')|round=6}</td>
+                        <td class="text-right">{$_Bufdetail->getData('year_pay')}</td>
+                        <td class="text-left">{$_Bufdetail->getData('expenditure_type')}</td>
+                        <td class="text-left">{$_Bufdetail->getData('liable_person')}</td>
+                        <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$_Bufdetail->getData('remarks')}</td>
+                        <td>
+                            <a class="btn btn-danger btn-xs" href="{:url('delete?id=' . $_Bufdetail->getData('id'))}" onclick='return del();'><i class="glyphicon glyphicon-trash"></i></a>&nbsp;
+                            <a class="btn btn-xs btn-primary" href="{:url('edit?id=' . $_Bufdetail->getData('id'))}"><i class="glyphicon glyphicon-pencil"></i></a>
+                        </td>
+                    </tr>
+                    {/volist}
+                </table>
+            </div>
+            {$bufdetails->render()}
+            <!-- 表单（结束） -->
+        </div>
+    </div>
+</div>
+<!-- 模态框（新增-开始） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    新增
+                </h4>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">区域:</a>
+                            <input class="form-control"  type="text" id="add_company"  name="add_company" readonly="readonly"/>
+                            <select id="e_add_company"  class="selectpicker form-control" value="" onchange="GetAll();GetBuName();">
+                                　　             <option data-tokens="ketchup mustard" value="">请选择区域</option>
+                                <option value="济南大区">济南大区</option>
+                                <option value="青岛分公司">青岛分公司</option>
+                                <option value="潍坊分公司">潍坊分公司</option>
+                                <option value="烟台分公司">烟台分公司</option>
+                                <option value="临沂分公司">临沂分公司</option>
+                                <option value="东营分公司">东营分公司</option>
+                                <option value="德州分公司">德州分公司</option>
+                                <option value="济宁分公司">济宁分公司</option>
+                                <option value="菏泽办事处">菏泽办事处</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">责任人:</a>
+                            <input class="form-control"  type="text" id="add_liable_person"  name="add_liable_person" readonly="readonly"/>
+                            <select id="e_add_liable_person"  class="selectpicker form-control" value="">
+                                　　              <option data-tokens="ketchup mustard" value="">请选择责任人</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">事业部:</a>
+                            <input class="form-control"  type="text" id="add_bu_name"  name="add_bu_name" readonly="readonly"/>
+                            <select id="e_add_bu_name"  class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择事业部">
+                                　　                  <option data-tokens="ketchup mustard" value="">请选择事业部</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">收支类型:</a>
+                            <input class="form-control"  type="text" id="add_expenditure_type"  name="add_expenditure_type" readonly="readonly"/>
+                            <select id="e_add_expenditure_type"  class="selectpicker form-control" value="">
+                                <option data-tokens="ketchup mustard" value="">请选择收支类型</option>
+                                <option value="逾期提货">逾期提货</option>
+                                <option value="延迟产出">延迟产出</option>
+                                <option value="营业不良">营业不良</option>
+                                <option value="省外项目">省外项目</option>
+                                <option value="大项目">大项目</option>
+                                <option value="普通">普通</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            季度绩效:
+                            <input class="form-control" type="number" id="add_quarter_pay" name="add_quarter_pay" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            年终奖:
+                            <input class="form-control" type="number" id="add_year_pay" name="add_year_pay" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            月份:
+                            <input class="form-control" type="number" id="add_month" name="add_month" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            财年:
+                            <input class="form-control" type="number" id="add_year" name="add_year" />
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <a style="color: red;">备注:</a>
+                            <textarea class="form-control" type="text" id="add_remarks" name="add_remarks" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="addNew()" class="btn btn-success">保存</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新增-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/buFinanceDetail.js" type="text/javascript"></script>
+</html>

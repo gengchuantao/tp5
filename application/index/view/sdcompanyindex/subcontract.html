@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--查询条件-->
+                <div class="row">
+                    <div class="col-md-12">
+                      <h4>2020财年</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--表单显示-->
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered table-striped table-condensed">
+                        <tr class="info">
+                            <th style=" white-space:nowrap">区域</th>
+                            <th class="text-center">完工</th>
+                            <th class="text-center">安装标准价</th>
+                            <th class="text-center">安装签约价</th>
+                            <th class="text-center">安装下浮</th>
+                            <th class="text-center">安装下浮(扣除附加配套)</th>
+                            <th class="text-center">安装分包</th>
+                            <th class="text-center">安装分包比例</th>
+                            <th class="text-center">附加分包</th>
+                            <th class="text-center">附加分包比例</th>
+                            {eq name="Think.session.super_admin" value="1"}
+                            <th class="text-center">配套分包</th>
+                            <th class="text-center">配套分包比例</th>
+                            <th class="text-center">附加&配套占比</th>
+                            <th class="text-center">安装&附加&配套占比</th>
+                            <th class="text-center">附加&配套台量</th>
+                            <th class="text-center">附加&配套台量占比</th>
+                            {else/}
+                            {/eq}
+                            <th class="text-center" style="background-color: orange">调验台量</th>
+                            <th class="text-center" style="background-color: orange">调验标准价</th>
+                            <th class="text-center" style="background-color: orange">调验签约价</th>
+                        </tr>
+                        {volist name="sdcompanyindexs" id="_Sdcompanyindex" key="key"}
+                        <tr>
+                            <td>{$_Sdcompanyindex->getData('scompany')}</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_num')}</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_spl')/1000|number_format}</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_sign')/1000|number_format}</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_rate')*100|number_format=2}%</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_rate_without_wf_wp')*100|number_format=2}%</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_wa_amount')/1000|number_format}</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_wa_rate')|number_format=2}%</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_wf_amount')/1000|number_format}</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_wf_rate')|number_format=2}%</td>
+                            {eq name="Think.session.super_admin" value="1"}
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_wp_amount')/1000|number_format}</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_wp_rate')|number_format=2}%</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_wf_wp')|number_format=2}%</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_wa_wf_wp')|number_format=2}%</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_wf_wp_num')}</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_wf_wp_num')*100/$_Sdcompanyindex->getData('formal_elevator_num')|number_format=2}%</td>
+                            {else/}
+                            {/eq}
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_debug_num')}</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_debug_spl')/1000|number_format}</td>
+                            <td class="text-right" style="white-space:nowrap">{$_Sdcompanyindex->getData('formal_elevator_debug_sign')/1000|number_format}</td>
+                        </tr>
+                        {/volist}
+                    </table>
+                    {$sdcompanyindexs->render()}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

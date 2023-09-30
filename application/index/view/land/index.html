@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <!-- 标题（结束） -->
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>土地信息</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a href="{:url('landExport')}" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-export" title="导出"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- 查询（开始） -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-inline">
+                            <div class="row">
+
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                                    <div class="input-group">
+                                        <input  id="deal_date_from" name="deal_date_from" type="text" class="form-control" placeholder="成交日期从..."  value="{:input('get.deal_date_from')}">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                                    <div class="input-group">
+                                        <input  id="deal_date_to" name="deal_date_to" type="text" class="form-control" placeholder="成交日期至..."  value="{:input('get.deal_date_to')}">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                                    <div class="input-group">
+                                        <input  id="city" name="city" type="text" class="form-control" placeholder="地市..."  value="{:input('get.city')}">
+
+                                    </div>
+                                </div>
+                            <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                                <div class="input-group">
+                                    <select id="land_type_select"  class="selectpicker form-control form-group-sm" multiple data-max-options="10"  title="请选择土地分类">
+                                        　　                 <option value="商品住宅">商品住宅</option>
+                                        　　                 <option value="商业用地">商业用地</option>
+                                        <option value="公建用地">公建用地</option>
+                                        <option value="其它">其它</option>
+                                        <input type="text"  style="display:none;" id="land_type" name="land_type"/>
+                                    </select>
+                                    <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                                        </span>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- 查询（结束） -->
+            </div>
+            <!-- 表单（开始） -->
+            <div class="table-responsive" >
+                <table class="table table-hover table-bordered table-striped table-condensed text-nowrap">
+                    <tr class="info">
+
+                        <th style=" white-space:nowrap">ID</th>
+                        <th style=" white-space:nowrap">土地分类</th>
+                        <th style=" white-space:nowrap">地市</th>
+                        <th style=" white-space:nowrap">区县</th>
+                        <th style=" white-space:nowrap">土地编号</th>
+                        <th style=" white-space:nowrap">成交日期</th>
+                        <th style=" white-space:nowrap">土地名称</th>
+                        <th style=" white-space:nowrap">用地面积(m²)</th>
+                        <th style=" white-space:nowrap">规划用途</th>
+                        <th style=" white-space:nowrap">规划建筑面积(m²)</th>
+                        <th style=" white-space:nowrap">土地位置</th>
+                    </tr>
+                    {volist name="lands" id="_Lands" key="key"}
+                    <tr>
+                        <td style=" white-space:nowrap">{$_Lands->getData('id')}</td>
+                        <td style=" white-space:nowrap">{$_Lands->getData('land_type')}</td>
+                        <td style=" white-space:nowrap">{$_Lands->getData('city')}</td>
+                        <td style=" white-space:nowrap">{$_Lands->getData('district')}</td>
+                        <td style=" white-space:nowrap">{$_Lands->getData('land_number')}</td>
+                        <td style=" white-space:nowrap">{$_Lands->getData('deal_date')}</td>
+                        <td style=" white-space:nowrap">{$_Lands->getData('land_name')}</td>
+                        <td class="text-right" style=" white-space:nowrap">{$_Lands->getData('land_area')|number_format=2}</td>
+                        <td style=" white-space:nowrap">{$_Lands->getData('plan_purpose')}</td>
+                        <td class="text-right" style=" white-space:nowrap">{$_Lands->getData('plan_area')|number_format=2}</td>
+                        <td style=" white-space:nowrap">{$_Lands->getData('land_location')}</td>
+                    </tr>
+                    {/volist}
+                </table>
+                {$lands->render()}
+            </div>
+            <!-- 表单（结束） -->
+            <div class="panel-footer">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/../tp5/public/static/js/myjs/land.js" type="text/javascript"></script>
+</html>

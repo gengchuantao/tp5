@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>安装入金</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <!-- 标题（结束） -->
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>安装入金</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a data-toggle="modal" data-target="#InstallIncomeProductExport" class="btn btn-warning btn-xs" title="导出入金明细"><i class="bi bi-file-earmark-excel"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- 查询（开始） -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                                    <div class="input-group">
+                                        <input  id="receipt_id" name="receipt_id" type="text" class="form-control" placeholder="收款编号..."  value="{:input('get.receipt_id')}">
+                                        <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- 查询（结束） -->
+            </div>
+            <!-- 表单（开始） -->
+            <div class="table-responsive" >
+                <table class="table table-hover table-bordered table-striped table-condensed text-nowrap">
+                    <tr class="info">
+
+                        <th style=" white-space:nowrap">ID</th>
+                        <th style=" white-space:nowrap">发布编号</th>
+                        <th style=" white-space:nowrap">合同号</th>
+                        <th style=" white-space:nowrap">工号</th>
+                        <th style=" white-space:nowrap">期数</th>
+                        <th style=" white-space:nowrap">收款款项名称</th>
+                        <th style=" white-space:nowrap">款项类型</th>
+                        <th style=" white-space:nowrap" class="text-right">拆分金额</th>
+                        <th style=" white-space:nowrap">拆分日期</th>
+                        <th style=" white-space:nowrap">工号阶段</th>
+                        <th style=" white-space:nowrap" class="text-right">偏差日期</th>
+                        <th style=" white-space:nowrap" class="text-right">区域</th>
+                        <th style=" white-space:nowrap" class="text-right">欠款类型</th>
+                        <th style=" white-space:nowrap" class="text-right">付款方式</th>
+                        <th style=" white-space:nowrap" class="text-right">到期应收日期</th>
+                    </tr>
+                    {volist name="install_incomes" id="_InstallIncomes" key="key"}
+                    <tr>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('id')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('receipt_id')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('contract_id')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('product_id')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('periods')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('income_name')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('income_type')}</td>
+                        <td style=" white-space:nowrap" class="text-right">{$_InstallIncomes->getData('split_amount')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('split_date')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('product_id_stage')}</td>
+                        <td style=" white-space:nowrap" class="text-right">{$_InstallIncomes->getData('deviation_days')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('scompany')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('arrears_type')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('payment_method')}</td>
+                        <td style=" white-space:nowrap">{$_InstallIncomes->getData('expire_date')}</td>
+                    </tr>
+                    {/volist}
+                </table>
+                {$install_incomes->render()}
+            </div>
+            <!-- 表单（结束） -->
+            <div class="panel-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<hr \>
+<!-- 模态框（导出入金明细-开始）-->
+<div class="modal fade" id="InstallIncomeProductExport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    安装入金明细导出
+                </h4>
+            </div>
+            <form id="InstallIncomeProductExportForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            财年:
+                            <select id="install_income_fyear" name="install_income_fyear" class="selectpicker form-control" value="">
+                                <option data-tokens="ketchup mustard" value="">请选择财年</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button  type="button" onclick="InstallIncomeExport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（导出入金明细-结束）-->
+</body>
+<script src="/../tp5/public/static/js/myjs/installIncome.js"></script>
+</html>

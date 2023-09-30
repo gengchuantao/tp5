@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!--<meta charset="UTF-8">-->
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>测试系统</title>
+    <link rel="shortcut icon" type="image/x-icon" href="__IMG__/favicon.ico"/>
+    <link rel="apple-touch-icon-precomposed" href="__IMG__/apple.png">
+    <!--这个JS文件是老大，必须要先引入才行-->
+    <script src="__JS__/jquery/jquery-3.7.0.min.js"></script>
+    <script src="__JS__/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <!--先加载CSS文件-->
+
+    <!--<link href="__JS__/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/bootstrap.min.css');?>">
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/app.css');?>">
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/icon.css');?>">
+    <link rel="stylesheet" href="__JS__/bootstrap-fileinput-master/5.2.6/css/fileinput.css">
+
+    <link rel="stylesheet" href="__CSS__/bootstrap-icons/1.5.0/bootstrap-icons.css">
+    <link href="__JS__/bootstrap-submenu/3.0.1/css/bootstrap-submenu.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="<?php addVersion('__JS__/bootstrap-datepicker/1.10.0/dist/css/bootstrap-datepicker.min.css');?>">
+
+
+    <link rel="stylesheet" href="__JS__/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+    <link rel="stylesheet" href="__JS__/placeholder-loading-develop/dist/css/placeholder-loading.min.css">
+    <link rel="stylesheet" href="__JS__/bootstrap-table/1.22.1/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="__JS__/bootstrap-table/1.22.1/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.css">
+
+    <!--plugins-->
+
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/simplebar.css');?>">
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/perfect-scrollbar.css');?>">
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/metisMenu.min.css');?>">
+
+
+
+
+
+
+    <!-- loader-->
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/pace.min.css');?>">
+    <script src="<?php addVersion('__JS__/syndron/js/pace.min.js');?>"></script>
+
+    <!-- Bootstrap CSS-->
+
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/app.css');?>">
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/icons.css');?>">
+
+    <link rel="stylesheet" href="<?php addVersion('__CSS__/project_css/welcome.css');?>">
+    <!-- Theme Style CSS -->
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/dark-theme.css');?>">
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/semi-dark.css');?>">
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/header-colors.css');?>">
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/lobibox.min.css');?>">
+    <link rel="stylesheet" href="<?php addVersion('__JS__/syndron/css/main.min.css');?>">
+
+    <!--JS文件-->
+    <script src="__JS__/bootstrap-fileinput-master/5.2.6/js/fileinput.min.js"></script>
+    <script src="__JS__/bootstrap-fileinput-master/5.2.6/js/locales/zh.js"></script>
+
+    <link href="__JS__/bootstrap-select/1.14.0/css/bootstrap-select.min.css" rel="stylesheet">
+    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>-->
+
+</head>
+
+<body>
+<!--wrapper-->
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div class="sidebar-wrapper " data-simplebar="true">
+        <div class="sidebar-header">
+            <div>
+                <img src="__IMG__/apple.png" class="logo-icon" alt="logo icon">
+            </div>
+            <div>
+                <h4 class="logo-text" style="font-family:Helvetica,Helvetica Neue,sans-serif, Verdana,ui-rounded;font-weight: bolder; letter-spacing: -1px;color: #d42d32">HITACHI</h4>
+            </div>
+            <div class="toggle-icon ms-auto"><i class='bx bx-arrow-to-left'></i>
+            </div>
+        </div>
+        <!--navigation-->
+        <ul class="metismenu " id="menu">
+            <li>
+                <a href="{:url('Index/main')}">
+                    <div class="parent-icon"><i class='bx bx-home-circle'></i>
+                    </div>
+                    <div class="menu-title">主页</div>
+                </a>
+            </li>
+            <li id="powerBI" style="display: none">
+                <a href="{:url('Index/welcome')}">
+                    <div class="parent-icon"><i class='bx bx-chart'></i>
+                    </div>
+                    <div class="menu-title">PowerBI</div>
+                </a>
+            </li>
+            <li class="menu-label">DEPARTMENT</li>
+            <li id="contractDepartment" style="display: none">
+                <a href="javascript:;" class="has-arrow">
+                    <div class="parent-icon"><i class="bx bx-category"></i>
+                    </div>
+                    <div class="menu-title">合同部</div>
+                </a>
+                <ul>
+                    <li> <a href="{:url('Contract/index')}"><i class="bx bx-right-arrow-alt"></i>合同信息管理</a></li>
+                    <li> <a href="{:url('Quote/index')}"><i class="bx bx-right-arrow-alt"></i>报价信息管理</a></li>
+                    <li> <a href="{:url('Customer/index')}"><i class="bx bx-right-arrow-alt"></i>客户信息管理</a></li>
+                    <li> <a class="has-arrow" href="javascript:;"><i class="bx bx-right-arrow-alt"></i>受控图纸管理</a>
+                        <ul>
+                            <li> <a href="{:url('Contract/drawing')}"><i class="bx bx-right-arrow-alt"></i>受控图纸</a></li>
+                            <li> <a href="{:url('Modify/index')}"><i class="bx bx-right-arrow-alt"></i>合同修改单</a></li>
+                        </ul>
+                    </li>
+                    <li> <a href="{:url('Litigation/index')}"><i class="bx bx-right-arrow-alt"></i>法务信息管理</a></li>
+                    <li> <a href="{:url('Acceptance/index')}"><i class="bx bx-right-arrow-alt"></i>票据信息管理</a></li>
+                    <li> <a href="{:url('Product/report')}"><i class="bx bx-right-arrow-alt"></i>常用报表导出</a></li>
+                </ul>
+            </li>
+
+
+            <li class="menu-label">OTHERS</li>
+            <li id="arrearsManagement" style="display: none">
+                <a href="javascript:;" class="has-arrow">
+                    <div class="parent-icon"><i class='bx bx-dollar'></i>
+                    </div>
+                    <div class="menu-title">应收账款管理</div>
+                </a>
+                <ul>
+                    <li> <a href="{:url('Funding/index')}"><i class="bx bx-right-arrow-alt"></i>款项拆分</a></li>
+                    <li> <a href="{:url('Equipmentarrears/index')}"><i class="bx bx-right-arrow-alt"></i>设备欠款</a></li>
+                    <li> <a href="{:url('Installarrears/index')}"><i class="bx bx-right-arrow-alt"></i>安装欠款</a></li>
+                    <li> <a href="{:url('Collection_meeting/index')}"><i class="bx bx-right-arrow-alt"></i>收款会议</a></li>
+                    <li> <a href="{:url('Collection_meeting/meeting_calendar')}"><i class="bx bx-right-arrow-alt"></i>会议安排</a></li>
+                </ul>
+            </li>
+            <li id="systemSettings" style="display: none">
+                <a href="javascript:;" class="has-arrow">
+                    <div class="parent-icon"><i class='bx bxs-cog'></i>
+                    </div>
+                    <div class="menu-title">系统设置</div>
+                </a>
+                <ul>
+                    <li> <a href="{:url('Staff/index')}"><i class="bx bx-right-arrow-alt"></i>用户管理</a></li>
+                    <li> <a href="{:url('Responsible/index')}"><i class="bx bx-right-arrow-alt"></i>营业/监理/收款专员维护</a></li>
+                    <li> <a href="{:url('Bustaff/index')}"><i class="bx bx-right-arrow-alt"></i>事业部成员维护</a></li>
+                    <li> <a href="{:url('Index/admin')}"><i class="bx bx-right-arrow-alt"></i>后台数据管理</a></li>
+                    <li> <a href="{:url('Log/index')}"><i class="bx bx-right-arrow-alt"></i>系统日志</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="{:url('Staff/changepw')}">
+                    <div class="parent-icon"><i class="bx bx-user-circle"></i>
+                    </div>
+                    <div class="menu-title">个人信息管理</div>
+                </a>
+            </li>
+            <li>
+                <a href="{:url('Login/logOut')}">
+                    <div class="parent-icon"><i class="bx bx-log-out"></i>
+                    </div>
+                    <div class="menu-title">退出系统</div>
+                </a>
+            </li>
+        </ul>
+        <!--end navigation-->
+    </div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header>
+        <div class="topbar d-flex align-items-center">
+            <nav class="navbar navbar-expand">
+                <div class="mobile-toggle-menu"><i class='bx bx-menu'></i>
+                </div>
+               <!-- <div class="search-bar flex-grow-1">
+                    <div class="alert border-0 border-start border-5 border-primary alert-dismissible fade show">
+                        <div>A simple primary alert—check it out!</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>-->
+                <div class="top-menu ms-auto">
+                    <ul class="navbar-nav align-items-center">
+                        <li class="nav-item mobile-search-icon">
+                            <a class="nav-link" href="#">	<i class='bx bx-search'></i></a>
+                        </li>
+                        <li class="nav-item dropdown dropdown-large">
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">	<i class='bx bx-category'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <div class="row row-cols-3 g-3 p-3">
+                                    <div class="col text-center">
+                                        <div class="app-box mx-auto bg-gradient-cosmic text-white" ><a class="text-white" href="{:url('Index/welcome')}"><i class='bx bx-chart' ></i></a>
+                                        </div>
+                                        <div class="app-title">PowerBI</div>
+                                    </div>
+                                    <div class="col text-center">
+                                        <div class="app-box mx-auto bg-gradient-burning text-white"><a class="text-white" href="{:url('Buscore/report')}"><i class='bx bx-atom'></i></a>
+                                        </div>
+                                        <div class="app-title">事业部</div>
+                                    </div>
+                                    <div class="col text-center">
+                                        <div class="app-box mx-auto bg-gradient-lush text-white"><a class="text-white" href="{:url('Safety/index')}"><i class='bx bx-shield'></i></a>
+                                        </div>
+                                        <div class="app-title">安全播报</div>
+                                    </div>
+                                    <div class="col text-center">
+                                        <div class="app-box mx-auto bg-gradient-kyoto text-dark"><i class='bx bx-notification'></i>
+                                        </div>
+                                        <div class="app-title">营业效能</div>
+                                    </div>
+                                    <div class="col text-center">
+                                        <div class="app-box mx-auto bg-gradient-blues text-dark"><i class='bx bx-file'></i>
+                                        </div>
+                                        <div class="app-title">工作指引</div>
+                                    </div>
+                                    <div class="col text-center">
+                                        <div class="app-box mx-auto bg-gradient-moonlit text-white"><i class='bx bx-filter-alt'></i>
+                                        </div>
+                                        <div class="app-title">Alerts</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown dropdown-large">
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">0</span>
+                                <i class='bx bx-bell'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="javascript:;">
+                                    <div class="msg-header">
+                                        <p class="msg-header-title">Notifications</p>
+                                        <p class="msg-header-clear ms-auto">Marks all as read</p>
+                                    </div>
+                                </a>
+                                <div class="header-notifications-list">
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-primary text-primary"><i class="bx bx-group"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">New Customers<span class="msg-time float-end">14 Sec
+												ago</span></h6>
+                                                <p class="msg-info">5 new user registered</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-danger text-danger"><i class="bx bx-cart-alt"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">New Orders <span class="msg-time float-end">2 min
+												ago</span></h6>
+                                                <p class="msg-info">You have recived new orders</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-success text-success"><i class="bx bx-file"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">24 PDF File<span class="msg-time float-end">19 min
+												ago</span></h6>
+                                                <p class="msg-info">The pdf files generated</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-warning text-warning"><i class="bx bx-send"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Time Response <span class="msg-time float-end">28 min
+												ago</span></h6>
+                                                <p class="msg-info">5.1 min avarage time response</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-info text-info"><i class="bx bx-home-circle"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">New Product Approved <span class="msg-time float-end">2 hrs ago</span></h6>
+                                                <p class="msg-info">Your new product has approved</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-danger text-danger"><i class="bx bx-message-detail"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">New Comments <span class="msg-time float-end">4 hrs
+												ago</span></h6>
+                                                <p class="msg-info">New customer comments recived</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-success text-success"><i class='bx bx-check-square'></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Your item is shipped <span class="msg-time float-end">5 hrs
+												ago</span></h6>
+                                                <p class="msg-info">Successfully shipped your item</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-primary text-primary"><i class='bx bx-user-pin'></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">New 24 authors<span class="msg-time float-end">1 day
+												ago</span></h6>
+                                                <p class="msg-info">24 new authors joined last week</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-warning text-warning"><i class='bx bx-door-open'></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Defense Alerts <span class="msg-time float-end">2 weeks
+												ago</span></h6>
+                                                <p class="msg-info">45% less alerts last 4 weeks</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <a href="javascript:;">
+                                    <div class="text-center msg-footer">View All Notifications</div>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown dropdown-large">
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">0</span>
+                                <i class='bx bx-comment'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="javascript:;">
+                                    <div class="msg-header">
+                                        <p class="msg-header-title">Messages</p>
+                                        <p class="msg-header-clear ms-auto">Marks all as read</p>
+                                    </div>
+                                </a>
+                                <div class="header-message-list">
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="" class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Daisy Anderson <span class="msg-time float-end">5 sec
+												ago</span></h6>
+                                                <p class="msg-info">The standard chunk of lorem</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="" class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Althea Cabardo <span class="msg-time float-end">14
+												sec ago</span></h6>
+                                                <p class="msg-info">Many desktop publishing packages</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="" class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Oscar Garner <span class="msg-time float-end">8 min
+												ago</span></h6>
+                                                <p class="msg-info">Various versions have evolved over</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="" class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Katherine Pechon <span class="msg-time float-end">15
+												min ago</span></h6>
+                                                <p class="msg-info">Making this the first true generator</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="" class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Amelia Doe <span class="msg-time float-end">22 min
+												ago</span></h6>
+                                                <p class="msg-info">Duis aute irure dolor in reprehenderit</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="" class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Cristina Jhons <span class="msg-time float-end">2 hrs
+												ago</span></h6>
+                                                <p class="msg-info">The passage is attributed to an unknown</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="" class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">James Caviness <span class="msg-time float-end">4 hrs
+												ago</span></h6>
+                                                <p class="msg-info">The point of using Lorem</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="" class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Peter Costanzo <span class="msg-time float-end">6 hrs
+												ago</span></h6>
+                                                <p class="msg-info">It was popularised in the 1960s</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="" class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">David Buckley <span class="msg-time float-end">2 hrs
+												ago</span></h6>
+                                                <p class="msg-info">Various versions have evolved over</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="" class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Thomas Wheeler <span class="msg-time float-end">2 days
+												ago</span></h6>
+                                                <p class="msg-info">If you are going to use a passage</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="" class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Johnny Seitz <span class="msg-time float-end">5 days
+												ago</span></h6>
+                                                <p class="msg-info">All the Lorem Ipsum generators</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <a href="javascript:;">
+                                    <div class="text-center msg-footer">View All Messages</div>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="user-box dropdown">
+                    <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bx bx-caret-down" ></i>
+                        <div class="user-info ps-3">
+                            <p class="user-name mb-0">{$Think.session.staff_name}</p>
+                            <p class="designattion mb-0">{$Think.session.company}</p>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="javascript:;"><i class="bx bx-user"></i><span>Profile</span></a>
+                        </li>
+                        <li><a class="dropdown-item" href="javascript:;"><i class="bx bx-cog"></i><span>Settings</span></a>
+                        </li>
+                        <li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
+                        </li>
+                        <li><a class="dropdown-item" href="javascript:;"><i class='bx bx-dollar-circle'></i><span>Earnings</span></a>
+                        </li>
+                        <li><a class="dropdown-item" href="javascript:;"><i class='bx bx-download'></i><span>Downloads</span></a>
+                        </li>
+                        <li>
+                            <div class="dropdown-divider mb-0"></div>
+                        </li>
+                        <li><a class="dropdown-item" href="{:url('Login/logout')}"><i class='bx bx-log-out-circle'></i><span>Logout</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!--end header -->
+
+

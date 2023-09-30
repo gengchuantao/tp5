@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<div class="btn-group btn-lg">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        常用报表导出 <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+
+        <li><a style="cursor:pointer;" data-toggle="modal" data-target="#IntoForceModal">M0生效明细导出</a></li>
+
+
+    </ul>
+</div>
+<!--生效明细模态框查询开始-->
+<div class="modal fade" id="IntoForceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    生效明细导出
+                </h4>
+            </div>
+            <form id="IntoForceForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            导出条件:
+                            <select id="export_condition" name="export_condition" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择导出条件">
+                                <option value="" selected style="display:none"></option>
+                                <option value="生效日期">生效日期</option>
+                                <option value="上报日期">上报日期</option>
+                                <option value="统计日期">统计日期</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            日期从:
+                            <input class="form-control" type="text" id="IntoForceFrom" name="IntoForceFrom" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            日期至:
+                            <input class="form-control" type="text" id="IntoForceTo" name="IntoForceTo" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="add_btn" type="button" onclick="M0IntoForceReport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--生效明细模态框查询结束-->
+<!--签梯模态框查询开始-->
+<div class="modal fade" id="SignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    签梯明细导出
+                </h4>
+            </div>
+            <form id="SignForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            双方盖章日期从:
+                            <input class="form-control" type="text" id="BothSealFrom" name="BothSealFrom" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            双方盖章日期至:
+                            <input class="form-control" type="text" id="BothSealTo" name="BothSealTo" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="SignReport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--签梯模态框查询结束-->
+<!--发货模态框查询开始-->
+<div class="modal fade" id="DeliveryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    发货明细导出
+                </h4>
+            </div>
+            <form id="DeliveryForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            导出条件:
+                            <select id="export_delivery_condition" name="export_delivery_condition" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择导出条件">
+                                <option value="" selected style="display:none"></option>
+                                <option value="上报出仓日期">上报出仓日期</option>
+                                <option value="预计发货日期">预计发货日期</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            发货日期从:
+                            <input class="form-control" type="text" id="DeliveryFrom" name="DeliveryFrom" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            发货日期至:
+                            <input class="form-control" type="text" id="DeliveryTo" name="DeliveryTo" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="DeliveryReport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--发货模态框查询结束-->
+</body>
+<script src="/../tp5/public/static/js/myjs/report.js" type="text/javascript"></script>
+</html>

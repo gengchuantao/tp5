@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>维保数据</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>保养成本及毛利率</span></h4>
+                    </div>
+                    <!--<div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#NewStationmaster" style="color: #ffffff"><span class="glyphicon glyphicon-plus"></span>新增</a>
+                        <a href="{:url('export')}" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</a>
+                    </div>-->
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--查询条件-->
+                <!-- <form class="form-inline">
+                     <div class="form-group">
+                             <input name="company" type="text" class="form-control" placeholder="区域..." value="{:input('get.company')}">
+                         </label>
+                         <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
+                     </div>
+                 </form>-->
+            </div>
+            <!--表单显示-->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <tr class="info">
+                        <th>序号</th>
+                        <th>编辑</th>
+                        <th>分公司</th>
+                        <th>期初在保平均价格</th>
+                        <th>在保平均价格</th>
+                        <th>新签年平均价格</th>
+                        <th>单梯保养成本</th>
+                        <th>毛利率</th>
+                    </tr>
+                    {volist name="maintains" id="_Maintain" key="key"}
+                    <tr>
+                        <td>{$key}</td>
+                        <td>
+                            <a title="编辑" class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#editProfitModal" onclick="GetUpdateID('{$_Maintain.id}');"><i class="glyphicon glyphicon-pencil"></i></a>
+                        </td>
+                        <td>{$_Maintain->getData('company')}</td>
+                        <td>{$_Maintain->getData('begin_guarantee_ave_year')}</td>
+                        <td>{$_Maintain->getData('guarantee_ave_year')}</td>
+                        <td>{$_Maintain->getData('new_ave_year')}</td>
+                        <td>{$_Maintain->getData('maintain_cost_single')}</td>
+                        <td>{$_Maintain->getData('gross_profit_margin')}</td>
+                    </tr>
+                    {/volist}
+                </table>
+                {$maintains->render()}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- 模态框（编辑保养成本及毛利率-开始） -->
+<div class="modal fade" id="editProfitModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    修改
+                </h4>
+            </div>
+            <form id="editProfitForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            区域:
+                            <input class="form-control" type="hidden" id="update_id" name="update_id" />
+                            <input class="form-control" type="text" id="update_company" name="update_company" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            期初在保平均价格:
+                            <input class="form-control" type="text" id="update_begin_guarantee_ave_year" name="update_begin_guarantee_ave_year" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            在保平均价格:
+                            <input class="form-control" type="text" id="update_guarantee_ave_year" name="update_guarantee_ave_year" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            新签年平均价格:
+                            <input class="form-control" type="text" id="update_new_ave_year" name="update_new_ave_year" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            单梯保养成本:
+                            <input class="form-control" type="text" id="update_maintain_cost_single" name="update_maintain_cost_single" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            毛利率:
+                            <input class="form-control" type="text" id="update_gross_profit_margin" name="update_gross_profit_margin" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="UpdateProfit()" class="btn btn-primary">修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- 模态框（编辑保养成本及毛利率-结束） -->
+<script src="/../tp5/public/static/js/myjs/maintainProfit.js"></script>
+</html>

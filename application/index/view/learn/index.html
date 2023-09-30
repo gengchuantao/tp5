@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<ol class="breadcrumb">
+    <li><a href={:url('Safety/bi')}><span class = "glyphicon glyphicon-option-vertical"></span>平台主页</a></li>
+    <li class="active">信息共享</li>
+    {eq name="Think.session.admin" value="1"}
+    <a class="btn btn-success" data-toggle="modal" data-target="#CreateModal" style="color: #ffffff"><span class = "glyphicon glyphicon-plus"></span>信息发布</a>
+    {else/}
+    {/eq}
+</ol>
+<!-- 选项卡菜单-->
+<ul id="myTab" class="nav nav-pills background-fixed" role="tablist">
+    <li class="active"><a href="#SchemeNotice" role="tab" data-toggle="tab"><small>通知通报</small></a></li>
+    <li><a href="#CaseNotification" role="tab" data-toggle="tab"><small>案例发报</small></a></li>
+    <li><a href="#TrainingMaterials" role="tab" data-toggle="tab"><small>培训资料</small></a></li>
+</ul>
+<!-- /选项卡菜单-->
+<!-- 选项卡面板 -->
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane active" id="SchemeNotice">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr class="info">
+                    <!--<th>序号</th>-->
+                    <th>标题</th>
+                    {eq name="Think.session.admin" value="1"}
+                    <th class="text-center">操作</th>
+                    {else/}
+                    {/eq}
+                </tr>
+                {volist name="learn01" id="_Learn" key="key"}
+                <tr>
+                    <td><a href="{:url('preview?id=' . $_Learn->getData('id'))}">{$_Learn->getData('title')}【{$_Learn->getData('create_time')}】</a></td>
+                    {eq name="Think.session.admin" value="1"}
+                    <td class="text-center">&nbsp;
+                        <a title="上传" class="btn btn-xs btn-success" href="{:url('upload?id=' . $_Learn->getData('id'))}"><i class="glyphicon glyphicon-upload
+"></i></a>
+                        <a title="删除" class="btn btn-xs btn-danger" href="{:url('delete?id=' . $_Learn->getData('id'))}" onclick='return del();'><i class="glyphicon glyphicon-trash"></i></a>
+                    </td>
+                    {else/}
+                    {/eq}
+                </tr>
+                {/volist}
+            </table>
+            {$learn01->render()}
+        </div>
+    </div>
+    <div class="tab-pane" id="CaseNotification">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr class="info">
+                    <!--<th>序号</th>-->
+                    <th>标题</th>
+                    {eq name="Think.session.admin" value="1"}
+                    <th class="text-center">操作</th>
+                    {else/}
+                    {/eq}
+                </tr>
+                {volist name="learn02" id="_Learn" key="key"}
+                <tr >
+                    <td><a href="{:url('preview?id=' . $_Learn->getData('id'))}">{$_Learn->getData('title')}【{$_Learn->getData('create_time')}】</a></td>
+                    {eq name="Think.session.admin" value="1"}
+                    <td class="text-center">&nbsp;
+                        <a title="上传" class="btn btn-xs btn-success" href="{:url('upload?id=' . $_Learn->getData('id'))}"><i class="glyphicon glyphicon-upload
+"></i></a>
+                        <a title="删除" class="btn btn-xs btn-danger" href="{:url('delete?id=' . $_Learn->getData('id'))}" onclick='return del();'><i class="glyphicon glyphicon-trash"></i></a>
+                    </td>
+                    {else/}
+                    {/eq}
+                </tr>
+                {/volist}
+            </table>
+            {$learn02->render()}
+        </div>
+    </div>
+    <div class="tab-pane" id="TrainingMaterials">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr class="info">
+                    <!--<th>序号</th>-->
+                    <th>标题</th>
+                    {eq name="Think.session.admin" value="1"}
+                    <th class="text-center">操作</th>
+                    {else/}
+                    {/eq}
+                </tr>
+                {volist name="learn03" id="_Learn" key="key"}
+                <tr>
+                    <td><a href="{:url('preview?id=' . $_Learn->getData('id'))}">{$_Learn->getData('title')}【{$_Learn->getData('create_time')}】</a></td>
+                    {eq name="Think.session.admin" value="1"}
+                    <td class="text-center">&nbsp;
+                        <a title="上传" class="btn btn-xs btn-success" href="{:url('upload?id=' . $_Learn->getData('id'))}"><i class="glyphicon glyphicon-upload
+"></i></a>
+                        <a title="删除" class="btn btn-xs btn-danger" href="{:url('delete?id=' . $_Learn->getData('id'))}" onclick='return del();'><i class="glyphicon glyphicon-trash"></i></a>
+                    </td>
+                    {else/}
+                    {/eq}
+                </tr>
+                {/volist}
+            </table>
+            {$learn03->render()}
+        </div>
+    </div>
+</div>
+<!--表单开始-->
+
+<!--表单结束-->
+<!--创建模态框开始-->
+<div class="modal fade" id="CreateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    信息发布
+                </h4>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                        文章标题: <input class="form-control" type="text" id="title" name="title" required="required"/>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            类别: <select id="type" name="type" class="selectpicker form-control" >
+                            <option selected value="方案通知">方案通知</option>
+                            <option value="案例通报">案例通报</option>
+                            <option value="培训资料">培训资料</option>
+                        </select>
+                        </div>
+                   </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="SavePost()" class="btn btn-success">保存</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--创建模态框结束-->
+</body>
+<script src="/../tp5/public/static/js/myjs/learn.js" type="text/javascript"></script>
+</html>

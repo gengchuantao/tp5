@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>HELC.SD</title>
+    <script src="__JS__/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="__IMG__/favicon.ico"/>
+    <link rel="apple-touch-icon-precomposed" href="__IMG__/apple.png">
+    <link href="__JS__/bootstrap/3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="__CSS__/style.css">
+    <img src="__IMG__/06.png" class="img-responsive img-thumbnail" alt="Responsive image">
+</head>
+{__NOLAYOUT__}
+<body class="container">
+<!--登陆框-->
+<div class="container">
+    <div class="form row">
+        <form id="LoginForm" class="form-group" >
+            <div class="form-horizontal col-md-offset-4" id="login_form">
+                <h3 class="form-title" style="color: darkred">LOGIN</h3>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">用户</span>
+                            <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1" id="staff_id" name="staff_id">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">密码</span>
+                            <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1" id="password" name="password">
+                            <input type="hidden" class="form-control"  aria-describedby="basic-addon1" id="device" name="device">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-offset-9">
+                        <button id="login" type="button" class="btn btn-success pull-right btn-md" onclick="Login()" style="cursor: pointer"><i class="glyphicon glyphicon-log-in"></i>&nbsp登录</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div><img src="__IMG__/09.png" class="img-responsive  center-block" ></div>
+</div>
+</body>
+<hr \>
+<!-- 模态框（登陆成功-开始） -->
+<div class="modal fade" id="LoginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:40%;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="border-radius:5px">
+            <div class="modal-header success alert-success">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h5 class="modal-title">
+                    登陆成功，请等待页面跳转……
+                </h5>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（登陆成功-结束） -->
+<!-- 模态框（登陆失败-开始） -->
+<div class="modal fade" id="ErrorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:40%;">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header danger alert-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h5 class="modal-title">
+                    登陆失败，请检查用户名跟密码！
+                </h5>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（登陆成功-结束） -->
+<!--底部-->
+<footer class="navbar-fixed-bottom">
+    <script src="__JS__/bootstrap/3.3.5/dist/js/bootstrap.min.js"></script>
+    <script src="__JS__/mobile-detect.js-master/mobile-detect.min.js"></script>
+    <script src="__JS__/mobile-detect.js-master/mobile-detect.js"></script>
+    <script src="__JS__/mobile-device-js-master/device.js"></script>
+    <script src="__JS__/myjs/GetDevice.js"></script>
+    <script src="__JS__/myjs/login.js"></script>
+    <div class="container col-center-block">
+        <p style="width:300px;margin:auto">© Hitachi, Ltd. 1994, 2019. All rights reserved.</p>
+    </div>
+</footer>
+</html>

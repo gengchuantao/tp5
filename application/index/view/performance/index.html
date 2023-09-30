@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>区域PPM管理</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>区域PPM管理</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a href="{:url('PerformanceToExcel')}" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-export" title="导出"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div id="toolbar">
+
+            </div>
+            <div class="table-responsive">
+                <table
+                        class="table table-striped table-sm"
+                        id="performanceIndex"
+                        data-toggle="table"
+                        data-toolbar=".toolbar"
+                        data-toolbar-align="right"
+                        style="white-space: nowrap;"
+                        data-unique-id="id">
+                    <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（新建商业承兑汇票-开始） -->
+<div class="modal fade" id="NewCustomer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 95%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title text-danger" >
+                    新建商业承兑汇票
+                </h4>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            票据编号:
+                            <input class="form-control" type="text" id="bill_id" name="bill_id" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            票据状态:
+                            <select id="bill_status" name="bill_status" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择票据状态">
+                                <option value="未通报">未通报</option>
+                                <option value="已通报未结清">已通报未结清</option>
+                                <option value="已结清">已结清</option>
+                                <option value="已拒付">已拒付</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-2">
+                            区域:
+                            <select id="company" name="company" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择区域">
+                                <option value="济南大区">济南大区</option>
+                                <option value="青岛分公司">青岛分公司</option>
+                                <option value="潍坊分公司">潍坊分公司</option>
+                                <option value="烟台分公司">烟台分公司</option>
+                                <option value="临沂分公司">临沂分公司</option>
+                                <option value="济宁分公司">济宁分公司</option>
+                                <option value="东营分公司">东营分公司</option>
+                                <option value="德州分公司">德州分公司</option>
+                                <option value="菏泽办事处">菏泽办事处</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            票据分类:
+                            <select id="bill_classification" name="bill_classification" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择">
+                                <option value="电子商承">电子商承</option>
+                                <option value="纸质商承">纸质商承</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            可转让:
+                            <select id="transferable" name="transferable" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择">
+                                <option value="是">是</option>
+                                <option value="否">否</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            票面金额:
+                            <input class="form-control" type="number" id="bill_amount" name="bill_amount" >
+                        </div>
+                        <div class='col-xs-6 col-sm-2' >
+                            <a style="color: red;">*出票日期:</a>
+                            <div class='input-group date' id='c_issue_date'>
+                                <input type='text' class="form-control" id='issue_date' name='issue_date' />
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                        <div class='col-xs-6 col-sm-2' >
+                            <a style="color: red;">*到期日期:</a>
+                            <div class='input-group date' id='c_due_date'>
+                                <input type='text' class="form-control" id='due_date' name='due_date' />
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="AddNew()" class="btn btn-primary">
+                        新增
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新建客户-结束） -->
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    请确认是否删除？
+                </h4>
+            </div>
+            <form id="DeleteForm">
+                <input class="form-control" type="hidden" readonly="readonly" id="delete_id" name="delete_id" />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    更新
+                </h4>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            ID:
+                            <input class="form-control" type="text" id="update_id" name="update_id" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            客户分类:
+                            <select id="update_customer_classification" name="update_customer_classification" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择客户分类">
+                                <option value="普通客户">普通客户</option>
+                                　　                 <option value="KA客户">KA客户</option>
+                                <option value="本地大客户">本地大客户</option>
+                                　　                 <option value="经销商">经销商</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            大客户编码:
+                            <input class="form-control" type="text" id="update_key_account_code" name="update_key_account_code" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            客户全称:
+                            <input class="form-control" type="text" id="update_full_name" name="update_full_name" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            客户简称:
+                            <input class="form-control" type="text" id="update_short_name" name="update_short_name" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            区域:
+                            <input class="form-control" type="text" id="update_company" name="update_company" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="UpdatePost()" class="btn btn-primary">修改</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/performanceJsonData.js"></script>
+</html>

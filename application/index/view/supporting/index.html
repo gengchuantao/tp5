@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+{volist name="supportings" id="_Supporting" key="key"}
+<div style="page-break-after: always;">
+    &nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>
+    <h3 class="text-center">日立电梯(中国)有限公司山东分公司</h3>
+    <h3 class="text-center"><u>请款单</u></h3>
+    <div class="col-md-4 col-xs-4">部门:{$_Supporting->getData('department')}</div>
+    <div class="col-md-3 col-xs-3 text-right">日期:{$Think.session.today_date}</div>
+    <div class="col-md-5 col-xs-5 text-right">网点:{$_Supporting->getData('supplier')}</div>
+    <div>
+        <div class="col-md-12 col-xs-12" style="border:1px solid #000">
+            兹领到(现金)&nbsp{$_Supporting->getData('capital_chinese_character')}<br>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp(支票)&nbsp<br>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp(汇款)&nbsp¥{$_Supporting->getData('payment_amount')|number_format=2}
+        </div>
+        <div class="col-md-2 col-xs-2 text-center" style="border:1px solid #000"><br>请款<br>用途<br>&nbsp</div>
+        <div class="col-md-10 col-xs-10" style="border:1px solid #000"><br>{$_Supporting->getData('subcontract_id')}_{$_Supporting->getData('buyer_unit')}<br>(附加工程)<br>&nbsp</div>
+        <div class="col-md-3 col-xs-3 text-center" style="border:1px solid #000">主管领导</div>
+        <div class="col-md-6 col-xs-6 text-center" style="border:1px solid #000">部门负责人意见</div>
+        <div class="col-md-3 col-xs-3 text-center" style="border:1px solid #000">领款人</div>
+        <div class="col-md-3 col-xs-3" style="border:1px solid #000">&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp</div>
+        <div class="col-md-6 col-xs-6" style="border:1px solid #000">&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp</div>
+        <div class="col-md-3 col-xs-3" style="border:1px solid #000">&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp</div>
+        &nbsp<br>
+        <div class="col-md-4 col-xs-4"></div>
+        <div class="col-md-4 col-xs-4">审核:</div>
+        <div class="col-md-4 col-xs-4">出纳:</div>
+    </div>
+</div>
+{/volist}
+</body>
+</html>

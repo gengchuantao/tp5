@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>营业员、项目经理、收款专员信息维护</title>
+</head>
+<body >
+<!--start page wrapper -->
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">系统设置</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{:url('Index/main')}"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">>营业员、项目经理、收款专员信息维护</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+        <hr class="border border-secondary border-1opacity-50">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-auto">
+                        <label for="search_name"></label><input id="search_name" class="form-control" placeholder="姓名" />
+                    </div>
+                    <div class="col-auto">
+                        <label for="search_company"></label>
+                        <div class="input-group">
+                            <select id="search_company" class="form-control" style="width: 200px">
+                                <option value="">请选择区域</option>
+                                <option value="济南大区">济南大区</option>
+                                <option value="青岛分公司">青岛分公司</option>
+                                <option value="潍坊分公司">潍坊分公司</option>
+                                <option value="烟台分公司">烟台分公司</option>
+                                <option value="临沂分公司">临沂分公司</option>
+                                <option value="济宁分公司">济宁分公司</option>
+                                <option value="东营分公司">东营分公司</option>
+                                <option value="德州分公司">德州分公司</option>
+                                <option value="菏泽办事处">菏泽办事处</option>
+                            </select>
+                            <button class="btn btn-outline-info bi bi-search" type="button" id="query"></button>
+                        </div>
+                    </div>
+
+                </div>
+                <hr>
+                <div id="toolbar">
+                    <div style="display:inline-block;">
+                        <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                            <a class="btn btn-xs btn-primary bi bi-plus-square" data-bs-toggle="modal" data-bs-target="#NewModal" title="新增">新增</a>
+                            <a class="btn btn-xs btn-danger bi bi-trash"  title="删除" onclick="GetDeleteID('id');">删除</a>
+                            <a class="btn btn-xs btn-success bi bi-pencil-square"  title="编辑" onclick="GetEditID('id');">编辑</a>
+                            <a href="{:url('exportToExcel')}" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-export" title="导出"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table
+                        class="table table-striped table-sm"
+                        id="responsibleIndex"
+                        data-toggle="table"
+                        style="white-space: nowrap;"
+                        data-unique-id="id">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end page wrapper -->
+
+<!-- 模态框（新建-开始） -->
+<div class="modal fade" id="NewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" style="width: 80%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close btn-danger" data-dismiss="modal" aria-hidden="true">
+                    <i class="bi bi-x-square"></i>
+                </button>
+                <h4 class="modal-title text-danger" >
+                    新建营业员、项目经理、收款专员
+                </h4>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="emid">员工编号:</label><input class="form-control" type="text" id="emid" name="emid" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="name">员工姓名:</label><input class="form-control" type="text" id="name" name="name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="company">区域:</label>
+                            <select id="company" name="company" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择">
+                                <option value="">请选择区域</option>
+                                <option value="济南大区">济南大区</option>
+                                <option value="青岛分公司">青岛分公司</option>
+                                <option value="潍坊分公司">潍坊分公司</option>
+                                <option value="烟台分公司">烟台分公司</option>
+                                <option value="临沂分公司">临沂分公司</option>
+                                <option value="济宁分公司">济宁分公司</option>
+                                <option value="东营分公司">东营分公司</option>
+                                <option value="德州分公司">德州分公司</option>
+                                <option value="菏泽办事处">菏泽办事处</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="office">办事处:</label><input class="form-control" type="text" id="office" name="office" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="position">职责:</label>
+                            <select id="position" name="position" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择">
+                                <option value="">请选择岗位</option>
+                                <option value="营业员">营业员</option>
+                                <option value="项目经理">项目经理</option>
+                                <option value="收款专员">收款专员</option>
+                                <option value="营业助理">营业助理</option>
+                                <option value="营业技术">营业技术</option>
+                                <option value="维保业务经理">维保业务经理</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="AddNew()" class="btn btn-primary">
+                        新增
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新建-结束） -->
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    请确认是否删除？
+                </h4>
+            </div>
+            <form id="DeleteForm">
+                <input class="form-control" type="text" readonly="readonly" id="delete_id" name="delete_id" />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="bi bi-x-square"></i>
+                </button>
+                <h4 class="modal-title" >
+                    更新
+                </h4>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="update_id">ID:</label><input class="form-control" type="text" id="update_id" name="update_id" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="update_emid">员工编号:</label><input class="form-control" type="text" id="update_emid" name="update_emid" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="update_name">姓名:</label><input class="form-control" type="text" id="update_name" name="update_name" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="update_company">区域:</label><input class="form-control" type="text" id="update_company" name="update_company" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="update_office">办事处:</label><input class="form-control" type="text" id="update_office" name="update_office" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="update_position">职位:</label><input class="form-control" type="text" id="update_position" name="update_position" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="update_status">状态:</label><input class="form-control" type="text" id="update_status" name="update_status" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="updatePost()" class="btn btn-primary">更新</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/responsible.js" type="text/javascript"></script>
+</html>

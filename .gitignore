@@ -1,0 +1,22 @@
+# 项目排除路径
+/public/static/js/js-xlsx-master/modules/04_base64.js
+/public/static/js/js-xlsx-master/modules/45_rtf.js
+/public/static/js/js-xlsx-master/modules/51_xlsbmeta.js
+/public/static/js/js-xlsx-master/modules/51_xlsxmeta.js
+/public/static/js/js-xlsx-master/modules/59_vba.js
+/public/static/js/js-xlsx-master/modules/64_ftab.js
+/public/static/js/js-xlsx-master/modules/83_numbers.js
+/public/static/js/js-xlsx-master/packages/otorp/dump_macho_proto_defs.node.js
+/public/static/js/js-xlsx-master/packages/otorp/index.node.js
+/public/static/js/js-xlsx-master/test.js
+/public/static/js/js-xlsx-master/test.mjs
+/public/static/js/sheetjs-master/modules/04_base64.js
+/public/static/js/sheetjs-master/modules/51_xlsbmeta.js
+/public/static/js/sheetjs-master/modules/51_xlsxmeta.js
+/public/static/js/sheetjs-master/modules/59_vba.js
+/public/static/js/sheetjs-master/modules/64_ftab.js
+/public/static/js/sheetjs-master/modules/83_numbers.js
+/public/static/js/sheetjs-master/packages/otorp/dump_macho_proto_defs.node.js
+/public/static/js/sheetjs-master/packages/otorp/index.node.js
+/public/static/js/sheetjs-master/test.js
+/public/static/js/sheetjs-master/test.mjs

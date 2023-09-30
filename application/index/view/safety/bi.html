@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<!--标题栏-->
+<h3 class="page-header text-center" style="color:darkred">安全播报平台<small></small></h3>
+<div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <strong>导航</strong>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                        <a class="btn btn-block btn-default" style="background-color: #d42d32;color: white"  href="{:url('Learn/index')}"><span class="glyphicon glyphicon-unchecked
+"></span>信息共享</a>
+                        <br>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                        <a class="btn btn-block btn-default" style="background-color: #d42d32;color: white"  href="{:url('Safety/index')}"><span class="glyphicon glyphicon-unchecked
+"></span>项目登记</a>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>本财年各区域项目登记情况</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th>区域</th>
+                <th class="text-right">安装</th>
+                <th class="text-right">维改</th>
+                <th class="text-right">保养</th>
+                <th class="text-right">合计</th>
+            </tr>
+            {volist name="result1" id="result1"}
+            <tr>
+                <td>{$result1.company}</td>
+                <td class="text-right"><a href="">{$result1.sum}</a></td>
+                <td class="text-right"><a href="">{$result1.sum1}</a></td>
+                <td class="text-right"><a href="">{$result1.sum2}</a></td>
+                <td class="text-right">{$result1.sum3}</td>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

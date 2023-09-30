@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>历史数据</title>
+</head>
+<body class="container">
+<h4>历史数据</h4>
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <form id="MyForm" class="form-inline">
+            <div class="col-sm-2 col-md-2">
+                <label>请选择财年： </label>
+            </div>
+            <div class="col-sm-2 col-md-2">
+                <select id="fyear" name="fyear" class="selectpicker form-control form-group-xs" multiple data-max-options="1"  title="{$Think.session.fyear}" onchange="HistoryData();">
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+　　                 <option value="2020">2020</option>
+　　                 <option value="2019">2019</option>
+                    <option value="2018">2018</option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>区域生效/待生效/待签数据汇总</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th>区域</th>
+                <th class="text-right">指标</th>
+                <th class="text-right">生效</th>
+                <th class="text-right">完成率</th>
+                <th class="text-right">待生效</th>
+                <th class="text-right">待签订</th>
+                <th class="text-right">合计</th>
+            </tr>
+            {volist name="result" id="vo"}
+            <tr>
+                <td>{$vo.scompany}</td>
+                <td class="text-right">{$vo.sign_index}</td>
+                <td class="text-right">{$vo.sign_complete}</td>
+                <td class="text-right">{$vo.sign_rate}%</td>
+                <td class="text-right">{$vo.pre_intoforce}</td>
+                <td class="text-right">{$vo.pre_sign}</td>
+                <td class="text-right">{$vo.total}</td>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>区域指标及生效数据</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th>区域</th>
+                <th class="text-right">指标</th>
+                <th class="text-right">实际</th>
+                <th class="text-right">完成率</th>
+                <th class="text-right">卓越线</th>
+                <th class="text-right">卓越率</th>
+            </tr>
+            {volist name="result" id="vo"}
+            <tr>
+                <td>{$vo.scompany}</td>
+                <td class="text-right">{$vo.sign_index}</td>
+                <td class="text-right">{$vo.sign_complete}</td>
+                {lt name="vo.sign_rate" value="$Think.session.yearpass"}
+                <td class="text-right"><span class="badge" style="background-color: orange">{$vo.sign_rate}%</span></td>
+                {else/}
+                <td class="text-right">{$vo.sign_rate}%</td>
+                {/lt}
+                <td class="text-right">{$vo.excellent}</td>
+                <td class="text-right">{$vo.excellent_rate}%</td>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>本财年投标报价数据报表</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th>区域</th>
+                <th class="text-right">市场容量</th>
+                <th class="text-right">报价项目</th>
+                <th class="text-right">报价台量</th>
+                <th class="text-right">市场覆盖率</th>
+                <th class="text-right">中标台量</th>
+                <th class="text-right">中标率%</th>
+                <th class="text-right">流失台量</th>
+            </tr>
+            {volist name="result" id="vo"}
+            <tr>
+                <td>{$vo.scompany}</td>
+                <td class="text-right">{$vo.market_capacity}</td>
+                <td class="text-right">{$vo.quote_num}</td>
+                <td class="text-right">{$vo.quote_sum}</td>
+                <td class="text-right">{$vo.market_coverage}</td>
+                <td class="text-right">{$vo.bid}</td>
+                <td class="text-right">{$vo.bid_rate}</td>
+                <td class="text-right">{$vo.lost_sum}</td>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>区域完工指标及完成情况</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th class="text-left">区域</th>
+                <th class="text-right">指标</th>
+                <th class="text-right">完工</th>
+                <th class="text-right">完工率</th>
+
+            </tr>
+            {volist name="result" id="vo"}
+            {lt name="vo.install_rate" value="$Think.session.install_rate"}
+            <tr class = "warning">
+                <td class="text-left">{$vo.scompany}</td>
+                <td class="text-right">{$vo.install_index}</td>
+                <td class="text-right">{$vo.install_complete}</td>
+                <td class="text-right">{$vo.install_rate|number_format=2}%</td>
+            </tr>
+            {else/}
+            <tr >
+                <td class="text-left">{$vo.scompany}</td>
+                <td class="text-right">{$vo.install_index}</td>
+                <td class="text-right">{$vo.install_complete}</td>
+                <td class="text-right">{$vo.install_rate|number_format=2}%</td>
+            </tr>
+            {/lt}
+            {/volist}
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>本财年完工梯关闭情况</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th class="text-left">区域</th>
+                <th class="text-right">完工</th>
+                <th class="text-right">关闭</th>
+                <th class="text-right">关闭率</th>
+
+            </tr>
+            {volist name="result" id="vo"}
+            <tr>
+                <td class="text-left">{$vo.scompany}</td>
+                <td class="text-right">{$vo.install_complete}</td>
+                <td class="text-right">{$vo.close}</td>
+                <td class="text-right">{$vo.close_rate|number_format=2}%</td>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>区域欠款合计(元)</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th>区域</th>
+                <th class="text-right">设备欠款</th>
+                <th class="text-right">安装欠款</th>
+                <th class="text-right">合计</th>
+            </tr>
+            {volist name="result" id="vo"}
+            <tr>
+                <td>{$vo.scompany}</td>
+                <td class="text-right">{$vo.equipment_arrears|number_format=2}</td>
+                <td class="text-right">{$vo.install_arrears|number_format=2}</td>
+                <td class="text-right">{$vo.equipment_arrears+$vo.install_arrears|number_format=2}</td>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>保养台量数据</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed" id="maintainNum" >
+            <tr style="background-color: #d42d32;color: white">
+                <th class="text-left" style="white-space:nowrap">区域</th>
+                <th class="text-right" style="white-space:nowrap">合计</th>
+                <th class="text-right" style="white-space:nowrap">三包</th>
+                <th class="text-right" style="white-space:nowrap">有偿</th>
+                <th class="text-right" style="white-space:nowrap">有偿指标</th>
+                <th class="text-right" style="white-space:nowrap">有偿完成率</th>
+                <th class="text-right" style="white-space:nowrap">保养对象</th>
+                <th class="text-right" style="white-space:nowrap">保养率</th>
+                <th class="text-right" style="white-space:nowrap">转签率指标</th>
+                <th class="text-right" style="white-space:nowrap">转签率实绩</th>
+                <th class="text-right" style="white-space:nowrap">转签完成率</th>
+                <th class="text-right" style="white-space:nowrap">有偿:三包</th>
+            </tr>
+            {volist name="result1" id="result1"}
+            <tr>
+                <td style="white-space:nowrap">{$result1.company|mb_substr=0,2,'utf-8'}</td>
+                <td class="text-right">{$result1.guarantee+$result1.paid}</td>
+                <td class="text-right">{$result1.guarantee}</td>
+                <td class="text-right">{$result1.paid}</td>
+                <td class="text-right">{$result1.paid_index}</td>
+                <td class="text-right">{$result1.paid*100/$result1.paid_index|number_format=2}%</td>
+                <td class="text-right">{$result1.maintain_object}</td>
+                {if $result1.maintain_object===0}
+                <td class="text-right"></td>
+                {else /}
+                <td class="text-right">{$result1.paid*100/$result1.maintain_object|number_format=2}%</td>
+                {/if}
+                <td class="text-right">{$result1.transfer_rate_index*100|number_format=2}%</td>
+                <td class="text-right">{$result1.transfer_rate_complete*100|number_format=2}%</td>
+                {if $result1.transfer_rate_index===0.0000}
+                <td class="text-right"></td>
+                {else /}
+                <td class="text-right">{$result1.transfer_rate_complete*100/$result1.transfer_rate_index|number_format=2}%</td>
+                {/if}
+                {if $result1.guarantee===0}
+                <td class="text-right"></td>
+                {else /}
+                <td class="text-right">{$result1.paid/$result1.guarantee|number_format=2}</td>
+                {/if}
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>保养业务数据(K元)</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th class="text-left">区域</th>
+                <th class="text-right">销售指标</th>
+                <th class="text-right">销售实际</th>
+                <th class="text-right">完成率</th>
+                <th class="text-right">入金指标</th>
+                <th class="text-right">入金实际</th>
+                <th class="text-right">完成率</th>
+                <th class="text-right">成本率指标</th>
+                <th class="text-right">成本率实际</th>
+                <th class="text-right">折合完成率</th>
+                <th class="text-right">历史欠款指标</th>
+                <th class="text-right">历史欠款实际</th>
+                <th class="text-right">完成率</th>
+            </tr>
+            {volist name="result2" id="result2"}
+            <tr>
+                <td style="white-space:nowrap">{$result2.company|mb_substr=0,2,'utf-8'}</td>
+                <td class="text-right">{$result2.maintain_sale_index}</td>
+                <td class="text-right">{$result2.maintain_sale}</td>
+                {if $result2.maintain_sale_index===0.00}
+                <td class="text-right"></td>
+                {else /}
+                <td class="text-right">{$result2.maintain_sale*100/$result2.maintain_sale_index|number_format=2}%</td>
+                {/if}
+
+                <td class="text-right">{$result2.maintain_income_index}</td>
+                <td class="text-right">{$result2.maintain_income}</td>
+                {if $result2.maintain_income_index===0.00}
+                <td class="text-right"></td>
+                {else /}
+                <td class="text-right">{$result2.maintain_income*100/$result2.maintain_income_index|number_format=2}%</td>
+                {/if}
+
+                <td class="text-right">{$result2.maintain_cost_rate_index*100|number_format=2}%</td>
+                <td class="text-right">{$result2.maintain_cost_rate_complete*100|number_format=2}%</td>
+                {if $result2.maintain_cost_rate_index===0.0000}
+                <td class="text-right"></td>
+                {else /}
+                <td class="text-right">{$result2.maintain_cost_rate_complete*-100/$result2.maintain_cost_rate_index+200|number_format=2}%</td>
+                {/if}
+                <td class="text-right">{$result2.maintain_history_arrears_index*100|number_format=2}%</td>
+                <td class="text-right">{$result2.maintain_history_arrears_complete*100|number_format=2}%</td>
+                {if $result2.maintain_history_arrears_index===0.0000}
+                <td class="text-right"></td>
+                {else /}
+                <td class="text-right">{$result2.maintain_history_arrears_complete*100/$result2.maintain_history_arrears_index|number_format=2}%</td>
+                {/if}
+
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>维改业务数据(不含M0,K元)</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th class="text-left">区域</th>
+                <th class="text-right">销售指标</th>
+                <th class="text-right">销售实际</th>
+                <th class="text-right">完成率</th>
+                <th class="text-right">入金指标</th>
+                <th class="text-right">入金实际</th>
+                <th class="text-right">完成率</th>
+
+                <th class="text-right">历史欠款指标</th>
+                <th class="text-right">历史欠款实际</th>
+                <th class="text-right">完成率</th>
+
+                <th class="text-right">M0指标</th>
+                <th class="text-right">M0实际</th>
+                <th class="text-right">M0完成率</th>
+            </tr>
+            {volist name="result3" id="result3"}
+            <tr>
+                <td style="white-space:nowrap">{$result3.company|mb_substr=0,2,'utf-8'}</td>
+                <td class="text-right">{$result3.repair_sale_index}</td>
+                <td class="text-right">{$result3.repair_sale}</td>
+                {if $result3.repair_sale_index===0.00}
+                <td class="text-right"></td>
+                {else /}
+                <td class="text-right">{$result3.repair_sale*100/$result3.repair_sale_index|number_format=2}%</td>
+                {/if}
+
+                <td class="text-right">{$result3.repair_income_index}</td>
+                <td class="text-right">{$result3.repair_income}</td>
+                {if $result3.repair_income_index===0.00}
+                <td class="text-right"></td>
+                {else /}
+                <td class="text-right">{$result3.repair_income*100/$result3.repair_income_index|number_format=2}%</td>
+                {/if}
+
+                <td class="text-right">{$result3.repair_history_arrears_index*100|number_format=2}%</td>
+                <td class="text-right">{$result3.repair_history_arrears_complete*100|number_format=2}%</td>
+                {if $result3.repair_history_arrears_index===0.0000}
+                <td class="text-right"></td>
+                {else /}
+                <td class="text-right">{$result3.repair_history_arrears_complete*100/$result3.repair_history_arrears_index|number_format=2}%</td>
+                {/if}
+
+                <td class="text-right">{$result3.m0_index}</td>
+                <td class="text-right">{$result3.m0_complete}</td>
+                {if $result3.m0_index===0}
+                <td class="text-right"></td>
+                {else /}
+                <td class="text-right">{$result3.m0_complete*100/$result3.m0_index|number_format=2}%</td>
+                {/if}
+
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>区域保养成本及毛利率(元)</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th class="text-left">区域</th>
+                <th class="text-right">在保年平均价格</th>
+                <th class="text-right">新签年平均价格</th>
+                <th class="text-right">单梯保养成本</th>
+                <th class="text-right">毛利率</th>
+            </tr>
+            {volist name="result4" id="result4"}
+            <tr>
+                <td style="white-space:nowrap">{$result4.company|mb_substr=0,2,'utf-8'}</td>
+                <td class="text-right">{$result4.guarantee_ave_year|number_format=2}</td>
+                <td class="text-right">{$result4.new_ave_year|number_format=2}</td>
+                <td class="text-right">{$result4.maintain_cost_single|number_format=2}</td>
+                <td class="text-right">{$result4.gross_profit_margin|number_format=2}%</td>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+</body>
+<script  src="/../tp5/public/static/js/myjs/HistoryData.js"></script>
+</html>

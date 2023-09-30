@@ -1,0 +1,40 @@
+<ol class="breadcrumb">
+    <li><a href="{:url('index')}"><span class = "glyphicon glyphicon-option-vertical"></span>项目列表</a></li>
+    <li class="active">上传图片</li>
+</ol>
+<body class="container">
+<form action="{:url('uploadimg')}" class="form-horizontal center-block" method="post" enctype="multipart/form-data">
+        <div class="form-group ">
+            <label class="col-sm-2 control-label" >合同号：</label>
+            <div  class="col-sm-8 ">
+                <input type="hidden" name="id" value="{$Safety->getData('id')}" />
+                <input class="form-control" id="contract_id" type="text" disabled="disabled" value="{$Safety->getData('contract_id')}"/>
+            </div>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label" >项目名称：</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="project_name" type="text" disabled="disabled" value="{$Safety->getData('project_name')}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" >图片种类：</label>
+            <div class="col-sm-8">
+                <select name="image_type" class="selectpicker" multiple data-max-options="1" data-live-search="false" data-live-search-placeholder="搜索" data-actions-box="false">
+                    　　                  <optgroup label="请选择：">
+                    　　                  <option selected value="开工告知">开工告知</option>
+                    　　                  <option value="现场施工">现场施工</option>
+                                         <option value="安全检查">安全检查</option>
+                    　　                  </optgroup>
+                </select>
+            </div>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label" >附件:</label>
+            <input type="file" name="image[]" multiple="multiple" class="file" accept=".png,.jpg,.jpeg,.gif" />
+        </div>
+        <div class="col-sm-10 text-right">
+            <button type="submit" class="btn btn-success" >提交</button>
+        </div>
+</form>
+</body>

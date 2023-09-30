@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>安装欠款</title>
+</head>
+<body>
+<!--start page wrapper -->
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">合同部</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{:url('Index/main')}"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">应收账款管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">安装欠款</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <!--标题信息-->
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <h4 class="panel-title"><span>安装欠款管理</span></h4>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                            <a href="{:url('Equipmentarrears/index')}" class="badge" style="background-color: deepskyblue">跳转至设备欠款</a>
+                        </div>
+                        <hr/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                        <select id="deadline" class="form-control" >
+                            <option value="">请选择截止日期</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                        <select id="search_arrears_status" name="search_arrears_status" class="selectpicker form-control" style="font-size: 6px !important;" data-max-options="1"  title="请选择状态">
+                            <option value="">请选择状态</option>
+                            <option value="新建">新建</option>
+                            <option value="已提交">已提交</option>
+                            <option value="已审核">已审核</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                        <input id="search_contract_id" class="form-control"  placeholder="合同号" />
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                        <input id="search_company" class="form-control"  placeholder="分公司" />
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                        <input id="search_bu_name" class="form-control"  placeholder="事业部" />
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                        <input id="search_follow_person" class="form-control"  placeholder="跟进人" />
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                        <input id="search_clause_customer" class="form-control"  placeholder="买方单位" />
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                        <div class="input-group">
+                            <input id="search_customer_abbreviation" class="form-control"  placeholder="客户简称" />
+                            <span class="input-group-btn">
+                    <a id="query" class="btn btn-md btn-default bi bi-search" title="查询"></a>
+              </span>
+                        </div>
+                    </div>
+                </div>
+                <div id="toolbar">
+                    <a onclick="installArrearsReply()" class="btn btn-sm btn-primary bi bi-reply-fill" title="回复">回复</a>
+                    {eq name="Think.session.admin" value="1"}
+                    <a onclick="installArrearsMark()" class="btn btn-sm btn-danger bi bi-flag-fill" title="标记">标记</a><i class="bi bi-grip-vertical"></i>
+                    {else/}
+                    {/eq}
+                    <button class="btn btn-sm btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        数据导出
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#InstallArrearsContractExport" href="">合同明细导出</a></li>
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#InstallArrearsProductExport" href="">工号明细导出</a></li>
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#InstallIncomeProductExport" href="">历史欠款入金导出</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#InstallArrearsReplyHeadExport" href="">总部回复导出</a></li>
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#IntegrationArrearsExport" href="">一体化合同应收款工号明细导出</a></li>
+                    </ul>
+                </div>
+                <div >
+                    <table
+                            class="table  table-striped table-sm"
+                            id="installArrears"
+                            data-toggle="table"
+                            data-toolbar=".toolbar"
+                            data-toolbar-align="left"
+                            style="white-space: nowrap;"
+                            data-unique-id="id"
+                            data-buttons-class="btn-sm">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end page wrapper -->
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">更新欠款跟进人及原因</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3 col-lg-2">
+                            合同号&期数:
+                            <input class="form-control" type="hidden" id="update_id" name="update_id" />
+                            <input class="form-control" type="text" id="update_contract_id_and_periods" name="update_contract_id_and_periods" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3 col-lg-2">
+                            买方单位:
+                            <input class="form-control" type="text" id="update_clause_customer" name="update_clause_customer" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3 col-lg-2">
+                            客户类型:
+                            <input class="form-control" type="text" id="update_customer_type" name="update_customer_type" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3 col-lg-2">
+                            项目名称:
+                            <input class="form-control" type="text" id="update_fix_project_name" name="update_fix_project_name" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3 col-lg-2">
+                            合同总欠款:
+                            <input class="form-control" type="text" id="update_contract_arrears" name="update_contract_arrears" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3 col-lg-2">
+                            到期应收欠款:
+                            <input class="form-control" type="text" id="update_expire_arrears" name="update_expire_arrears" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3 col-lg-2">
+                            其中当年欠款:
+                            <input class="form-control" type="text" id="update_this_year_arrears" name="update_this_year_arrears" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3 col-lg-2">
+                            其中历史欠款:
+                            <input class="form-control" type="text" id="update_history_arrears" name="update_history_arrears" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3 col-lg-2">
+                            <label for="update_company">区域:</label>
+                            <select id="update_company" name="update_company" class="selectpicker form-control"  onchange="GetAll();GetBuName();">
+            　　             <option data-tokens="ketchup mustard" >请选择区域</option>
+                                <option value="济南大区">济南大区</option>
+                                <option value="青岛分公司">青岛分公司</option>
+                                <option value="潍坊分公司">潍坊分公司</option>
+                                <option value="烟台分公司">烟台分公司</option>
+                                <option value="临沂分公司">临沂分公司</option>
+                                <option value="东营分公司">东营分公司</option>
+                                <option value="德州分公司">德州分公司</option>
+                                <option value="济宁分公司">济宁分公司</option>
+                                <option value="菏泽办事处">菏泽办事处</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3 col-lg-2">
+                            <label for="update_follow_person">跟进人:</label>
+                            <select id="update_follow_person" name="update_follow_person" class="selectpicker form-control" >
+            　　              <option data-tokens="ketchup mustard" value="">请选择跟进人</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3 col-lg-2">
+                            <label for="update_bu_name">事业部:</label>
+                            <select id="update_bu_name"  name="update_bu_name" class="selectpicker form-control " >
+                　　                  <option data-tokens="ketchup mustard" value="">请选择事业部</option>
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-3">
+                                <label for="update_last_month_arrears_method">上月欠款处理方法:</label>
+                                <select id="update_last_month_arrears_method" name="update_last_month_arrears_method" class="selectpicker form-control" value="">
+                                    　　             <option data-tokens="ketchup mustard" value="">欠款处理方法</option>
+                                    <option value="1按客户要求整理请款资料">1按客户要求整理请款资料</option>
+                                    <option value="2性能不良待处理（工程）">2性能不良待处理（工程）</option>
+                                    <option value="3性能不良待处理（品证）">3性能不良待处理（品证）</option>
+                                    <option value="4内部流程流转中">4内部流程流转中</option>
+                                    <option value="5零头客户下期支付">5零头客户下期支付</option>
+                                    <option value="6请款手续在客户流转中">6请款手续在客户流转中</option>
+                                    <option value="7已发律师函">7已发律师函</option>
+                                    <option value="8已提交诉讼">8已提交诉讼</option>
+                                    <option value="9客户有还款计划执行中">9客户有还款计划执行中</option>
+                                    <option value="10因客户原因需补请款资料">10因客户原因需补请款资料</option>
+                                    <option value="11按合同支付条件未到期">11按合同支付条件未到期</option>
+                                    <option value="12请款手续齐全待支付">12请款手续齐全待支付</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-6 col-sm-3">
+                                <label for="update_arrears_method">本月欠款处理方法:</label>
+                                <select id="update_arrears_method" name="update_arrears_method" class="selectpicker form-control">
+                                    　　             <option data-tokens="ketchup mustard" value="">欠款处理方法</option>
+                                    <option value="1按客户要求整理请款资料">1按客户要求整理请款资料</option>
+                                    <option value="2性能不良待处理（工程）">2性能不良待处理（工程）</option>
+                                    <option value="3性能不良待处理（品证）">3性能不良待处理（品证）</option>
+                                    <option value="4内部流程流转中">4内部流程流转中</option>
+                                    <option value="5零头客户下期支付">5零头客户下期支付</option>
+                                    <option value="6请款手续在客户流转中">6请款手续在客户流转中</option>
+                                    <option value="7已发律师函">7已发律师函</option>
+                                    <option value="8已提交诉讼">8已提交诉讼</option>
+                                    <option value="9客户有还款计划执行中">9客户有还款计划执行中</option>
+                                    <option value="10因客户原因需补请款资料">10因客户原因需补请款资料</option>
+                                    <option value="11按合同支付条件未到期">11按合同支付条件未到期</option>
+                                    <option value="12请款手续齐全待支付">12请款手续齐全待支付</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6">
+                            上月欠款原因:
+                            <textarea class="form-control" type="text" id="update_last_month_arrears_reason" name="update_last_month_arrears_reason" rows="3" disabled="disabled"></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <a style="color: red;">本月欠款原因:</a>
+                            <textarea class="form-control" type="text" id="update_arrears_reason" name="update_arrears_reason" rows="3"></textarea>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">当年欠款预计收款金额:</a>
+                            <input class="form-control" type="number" id="update_this_year_arrears_expected" name="update_this_year_arrears_expected"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">当年欠款预计收款日期:</a>
+                            <div class='input-group date' id='u_this_year_arrears_expected_collection_date'>
+                                <input type='text' class="form-control" id='this_year_arrears_expected_collection_date' name='this_year_arrears_expected_collection_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">历史欠款预计收款金额:</a>
+                            <input class="form-control" type="number" id="update_history_arrears_expected" name="update_history_arrears_expected"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">历史欠款预计收款日期:</a>
+                            <div class='input-group date' id='u_history_arrears_expected_collection_date'>
+                                <input type='text' class="form-control" id='history_arrears_expected_collection_date' name='history_arrears_expected_collection_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="font-weight: bold;">预计收款总金额:</a>
+                            <input class="form-control" style="background-color: darkorange;color: white" type="number" id="update_expected_collection_money" name="update_expected_collection_money"  />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    {eq name="Think.session.coreport" value="1"}
+                    <button type="button" onclick="OnlySave()" class="btn btn-success">
+                        仅保存
+                    </button>
+                    <button type="button" onclick="UpdatePost()" class="btn btn-primary">
+                        提交审核(收款专员)
+                    </button>
+                    {else/}
+                    {/eq}
+                    {eq name="Think.session.arrears_reply" value="1"}
+                    <button type="button" onclick="RefreshPost()" class="btn btn-warning">
+                        提交审核(事业部)
+                    </button>
+                    {else/}
+                    {/eq}
+
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+<!-- 模态框（导出合同明细-开始）-->
+<div class="modal fade" id="InstallArrearsContractExport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">安装欠款合同明细导出</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="InstallArrearsContractExportForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            截至日期:
+                            <select id="closing_date" name="closing_date" class="selectpicker form-control" value="">
+                                <option data-tokens="ketchup mustard" value="">请选择截止日期</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="add_btn" type="button" onclick="InstallArrearsContractExport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（导出合同明细-结束）-->
+<!-- 模态框（导出工号明细-开始）-->
+<div class="modal fade" id="InstallArrearsProductExport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">安装欠款工号明细导出</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="InstallArrearsProductExportForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            截至日期:
+                            <select id="product_closing_date" name="product_closing_date" class="selectpicker form-control" value="">
+                                <option data-tokens="ketchup mustard" value="">请选择截止日期</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button  type="button" onclick="InstallArrearsProductExport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（导出工号明细-结束）-->
+<!-- 模态框（导出历史欠款入金明细-开始）-->
+<div class="modal fade" id="InstallIncomeProductExport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">安装历史欠款入金明细导出</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="InstallIncomeProductExportForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            财年:
+                            <select id="install_income_fyear" name="install_income_fyear" class="selectpicker form-control" value="">
+                                <option data-tokens="ketchup mustard" value="">请选择财年</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button  type="button" onclick="InstallIncomeProductExport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（导出历史欠款入金明细-结束）-->
+<!-- 模态框（批量审核-开始） -->
+<div class="modal fade" id="BatchAudit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">批量审核</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="BatchAuditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            批量操作的ID:
+                            <input class="form-control" type="text" id="batch_audit_id" name="batch_audit_id" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            操作条数:
+                            <input class="form-control" type="text" id="b_audit_sum" readonly="readonly" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row text-right">
+                        <div class="col-xs-12 col-sm-12 ">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" onclick="BatchAudit()" class="btn btn-danger">审核</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（批量审核-结束） -->
+<!-- 模态框（更新跟进级别） -->
+<div class="modal fade" id="FollowUpLevelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">管理员更新收款进度及跟进级别</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="FollowUpLevelForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            合同号&期数:
+                            <input class="form-control" type="hidden" id="f_update_id" name="f_update_id" />
+                            <input class="form-control" type="text" id="f_update_contract_id_and_periods" name="f_update_contract_id_and_periods" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            买方单位:
+                            <input class="form-control" type="text" id="f_update_clause_customer" name="f_update_clause_customer" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            客户类型:
+                            <input class="form-control" type="text" id="f_update_customer_type" name="f_update_customer_type" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            项目名称:
+                            <input class="form-control" type="text" id="f_update_fix_project_name" name="f_update_fix_project_name" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            到期应收欠款:
+                            <input class="form-control" type="text" id="f_update_expire_arrears" name="f_update_expire_arrears" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            其中当年欠款:
+                            <input class="form-control" type="text" id="f_update_this_year_arrears" name="f_update_this_year_arrears" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            其中历史欠款:
+                            <input class="form-control" type="text" id="f_update_history_arrears" name="f_update_history_arrears" disabled="disabled"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            跟进级别:
+                            <input class="form-control" type="text" id="f_update_follow_up_level" name="f_update_follow_up_level" />
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            解决方案:
+                            <textarea class="form-control" type="text" id="f_update_solutions" name="f_update_solutions" rows="5" ></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            解决进度:
+                            <textarea class="form-control" type="text" id="f_update_solution_progress" name="f_update_solution_progress" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="UpdateFollowUpLevel()" class="btn btn-success">
+                        更新
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（更新跟进级别-结束） -->
+<!-- 模态框（导出总部回复明细-开始）-->
+<div class="modal fade" id="InstallArrearsReplyHeadExport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">设备欠款工号明细导出</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="InstallArrearsReplyHeadExportForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            截至日期:
+                            <select id="reply_head_product_closing_date" name="reply_head_product_closing_date" class="selectpicker form-control" value="">
+                                <option data-tokens="ketchup mustard" value="">请选择截止日期</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button  type="button" onclick="InstallArrearsReplyHeadExport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（导出总部回复明细-结束）-->
+<!-- 模态框（导出一体化合同应收明细-开始）-->
+<div class="modal fade" id="IntegrationArrearsExport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">一体化合同应收明细导出</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="IntegrationArrearsExportForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            截至日期:
+                            <select id="integration_closing_date" name="integration_closing_date" class="selectpicker form-control" value="">
+                                <option data-tokens="ketchup mustard" value="">请选择截止日期</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button  type="button" onclick="IntegrationArrearsExport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（导出一体化合同应收明细-结束）-->
+</body>
+<script src="<?php addVersion('__JS__/myjs/installarrears.js');?>"></script>
+</html>

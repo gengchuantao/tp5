@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>本地大客户</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="#"><span class = "glyphicon glyphicon-option-vertical"></span>设置</a></li>
+            <li class="active">本地大客户维护</li>
+        </ol>
+        <div class="row">
+            <div class="col-md-8">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label class="sr-only" id="customer_id">大客户编码</label>
+                        <input name="customer_id" type="text" class="form-control" placeholder="大客户编码..."value="{:input('get.customer_id')}">
+                        <label class="sr-only" id="full_name">大客户全称</label>
+                        <input name="full_name" type="text" class="form-control" placeholder="大客户全称..."value="{:input('get.full_name')}">
+                    </div>
+                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
+                </form>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="{:url('add')}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增</a>
+                <a href="{:url('export')}" class="btn btn-success"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</a>
+            </div>
+        </div>
+        <hr />
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr class="info">
+                    <th>ID</th>
+                    <th>大客户编码</th>
+                    <th>客户全称</th>
+                    <th>客户简称</th>
+                    <th>营业员</th>
+                    <th>联系方式</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                {volist name="localcustomers" id="_Localcustomer" key="key"}
+                <tr>
+                    <td>{$_Localcustomer->getData('id')}</td>
+                    <td>{$_Localcustomer->getData('customer_id')}</td>
+                    <td>{$_Localcustomer->getData('full_name')}</td>
+                    <td>{$_Localcustomer->getData('short_name')}</td>
+                    <td>{$_Localcustomer->getData('salesperson')}</td>
+                    <td>{$_Localcustomer->getData('phone')}</td>
+                    <td>{$_Localcustomer->getData('status')}</td>
+                    <td><a class="btn btn-danger btn-sm" href="{:url('delete?id=' . $_Localcustomer->getData('id'))}" onclick='return del();'><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</a>&nbsp;<a class="btn btn-sm btn-primary" href="{:url('edit?id=' . $_Localcustomer->getData('id'))}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a></td>
+                </tr>
+                {/volist}
+            </table>
+            {$localcustomers->render()}
+        </div>
+    </div>
+</div>
+</body>
+</html>

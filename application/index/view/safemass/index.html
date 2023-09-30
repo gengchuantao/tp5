@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>安全质量数据</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>安全质量数据</span></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+            </div>
+            <!--表单显示-->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <tr class="info">
+                        <th style="white-space:nowrap">ID</th>
+                        <th style="white-space:nowrap">操作</th>
+                        <th style="white-space:nowrap">区域</th>
+                        <th style="white-space:nowrap">财年</th>
+                        <th style="white-space:nowrap">季度</th>
+                        <th style="white-space:nowrap">安全得分</th>
+                        <th style="white-space:nowrap">质量得分</th>
+                        <th style="white-space:nowrap">安全减分</th>
+                        <th style="white-space:nowrap">质量加分</th>
+                        <th style="white-space:nowrap">质量减分</th>
+                    </tr>
+                    {volist name="safemasss" id="_Safemass" key="key"}
+                    <tr>
+                        <td>{$_Safemass->getData('id')}</td>
+                        <td>
+                            <a title="编辑" class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#EditModal" onclick="GetUpdateID('{$_Safemass.id}');"><i class="glyphicon glyphicon-pencil"></i></a>
+                        </td>
+                        <td>{$_Safemass->getData('company')|mb_substr=0,2,'utf-8'}</td>
+                        <td>{$_Safemass->getData('fyear')}</td>
+                        <td>{$_Safemass->getData('season')}</td>
+                        <td>{$_Safemass->getData('safe_complete')}</td>
+                        <td>{$_Safemass->getData('quality_complete')}</td>
+                        <td>{$_Safemass->getData('safe_reduction')}</td>
+                        <td>{$_Safemass->getData('quality_extra')}</td>
+                        <td>{$_Safemass->getData('quality_reduction')}</td>
+                    </tr>
+                    {/volist}
+                </table>
+                {$safemasss->render()}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- 模态框（编辑保养台量数据-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    修改
+                </h4>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            区域:
+                            <input class="form-control" type="hidden" id="update_id" name="update_id" />
+                            <input class="form-control" type="text" id="update_company" name="update_company" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            安全得分:
+                            <input class="form-control" type="text" id="update_safe_complete" name="update_safe_complete" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            质量得分:
+                            <input class="form-control" type="text" id="update_quality_complete" name="update_quality_complete" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            安全减分:
+                            <input class="form-control" type="text" id="update_safe_reduction" name="update_safe_reduction" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            质量加分:
+                            <input class="form-control" type="text" id="update_quality_extra" name="update_quality_extra" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            质量减分:
+                            <input class="form-control" type="text" id="update_quality_reduction" name="update_quality_reduction" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="UpdateSafemass()" class="btn btn-primary">修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- 模态框（编辑保养台量数据-结束） -->
+<script src="/../tp5/public/static/js/myjs/safemass.js"></script>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>配套合同管理</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>安装配套合同管理</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a class="btn btn-xs btn-default" data-toggle="modal" data-target="#NewCustomer" title="新增"><i class="glyphicon glyphicon-plus"></i></a>
+                        <a href="{:url('exportAccessory')}" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-export" title="导出"></i></a>
+                        <a href="{:url('refresh')}" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-refresh" title="刷新"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--查询条件-->
+                <form class="form-group-md">
+                    <div class="col-xs-6 col-sm-2 form-group">
+                        <input name="accessory_contract_id" type="text" class="form-control" placeholder="配套合同号..." value="{:input('get.accessory_contract_id')}">
+                    </div>
+                    <div class="col-xs-6 col-sm-2 form-group">
+                        <input name="distributor" type="text" class="form-control" placeholder="经销商..." value="{:input('get.distributor')}">
+                    </div>
+                    <div class="col-xs-6 col-sm-2 form-group">
+                        <input name="buyer_unit" type="text" class="form-control" placeholder="买方单位..." value="{:input('get.buyer_unit')}">
+                    </div>
+                    <div class="col-xs-6 col-sm-2 text-right">
+                        <button type="submit" class="btn btn-md btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </form>
+            </div>
+            <!--表单显示-->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <tr style="background-color: #2e6da4;color: white">
+                        <th style=" white-space:nowrap">操作</th>
+                        <th style=" white-space:nowrap">序号</th>
+                        <th style=" white-space:nowrap" class="text-center">配套合同号</th>
+                        <th style=" white-space:nowrap" class="text-center">区域</th>
+                        <th style=" white-space:nowrap">经销商</th>
+                        <th style=" white-space:nowrap" class="text-center">台量</th>
+                        <th style=" white-space:nowrap" class="text-right">分包金额</th>
+                        <th style=" white-space:nowrap" class="text-right">付款金额</th>
+                        <th style=" white-space:nowrap">签订日期</th>
+                        <th style=" white-space:nowrap">签订状态</th>
+                        <th style=" white-space:nowrap">合同状态</th>
+                        <th style=" white-space:nowrap">审批状态</th>
+                        <th style=" white-space:nowrap">支付状态</th>
+                        <th style=" white-space:nowrap">委托合同编号</th>
+                        <th style=" white-space:nowrap">安装合同号</th>
+                        <th style=" white-space:nowrap" class="text-left">买方单位</th>
+                    </tr>
+                    {volist name="accessorys" id="_Accessory" key="key"}
+                    <tr>
+                        <td style=" white-space:nowrap">
+                            {eq name="Think.session.super_admin" value="1"}
+                            <a title="删除" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#DeleteModal" onclick="GetDeleteID('{$_Accessory.id}');"><i class="glyphicon glyphicon-trash"></i>&nbsp</a>
+                            <a title="修改" class="btn btn-primary btn-xs " data-toggle="modal" data-target="#EditModal" onclick="getAccessoryEditID('{$_Accessory.id}');">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                            {else/}
+                            {/eq}
+                        </td>
+                        <td>{$_Accessory->getData('id')}</td>
+                        <td style="white-space:nowrap">{$_Accessory->getData('accessory_contract_id')}</td>
+                        <td style="white-space:nowrap">{$_Accessory->getData('company')|mb_substr=0,2,'utf-8'}</td>
+                        <td style="white-space:nowrap">{$_Accessory->getData('distributor')}</td>
+                        <td style="white-space:nowrap">{$_Accessory->getData('contract_num')}</td>
+                        <td style="white-space:nowrap" class="text-right">{$_Accessory->getData('subcontract_amount')|number_format=2}</td>
+                        <td style="white-space:nowrap" class="text-right">{$_Accessory->getData('payment_amount')|number_format=2}</td>
+                        <td style="white-space:nowrap">{$_Accessory->getData('subcontract_sign_date')}</td>
+                        <td style="white-space:nowrap">{$_Accessory->getData('subcontract_sign_status')}</td>
+                        <td style="white-space:nowrap">{$_Accessory->getData('subcontract_status')}</td>
+                        <td style="white-space:nowrap">{$_Accessory->getData('approval_status')}</td>
+                        <!--switch控制合同状态显示不同的标签颜色，默认系统会自动加上break-->
+                        {switch name="$_Accessory.payment_status" }
+                        {case value="已支付"}
+                        <td style="white-space:nowrap"><span class="badge" style="background-color: grey">{$_Accessory->getData('payment_status')}</span></td>
+                        {/case}
+                        {case value="部分支付"}
+                        <td style="white-space:nowrap"><span class="badge" style="background-color: deepskyblue">{$_Accessory->getData('payment_status')}</span></td>
+                        {/case}
+                        {case value="未支付"}
+                        <td style="white-space:nowrap"><span class="badge" style="background-color: orangered">{$_Accessory->getData('payment_status')}</span></td>
+                        {/case}
+
+                        {default /}
+                        <td style="white-space:nowrap">{$_Accessory->getData('payment_status')}</td>
+                        {/switch}
+
+                        <td style="white-space:nowrap">{$_Accessory->getData('entrust_id')}</td>
+                        <td style="white-space:nowrap">{$_Accessory->getData('install_contract_id')}</td>
+                        <td style="white-space:nowrap" class="text-left">{$_Accessory->getData('buyer_unit')}</td>
+                    </tr>
+                    {/volist}
+                </table>
+                {$accessorys->render()}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（新建配套合同-开始） -->
+<div class="modal fade" id="NewCustomer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title text-danger" >
+                    新建配套合同
+                </h4>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">区域:</a>
+                            <select id="company" name="company" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择区域">
+                                <option value="济南大区">济南大区</option>
+                                <option value="青岛分公司">青岛分公司</option>
+                                <option value="潍坊分公司">潍坊分公司</option>
+                                <option value="烟台分公司">烟台分公司</option>
+                                <option value="临沂分公司">临沂分公司</option>
+                                <option value="济宁分公司">济宁分公司</option>
+                                <option value="东营分公司">东营分公司</option>
+                                <option value="德州分公司">德州分公司</option>
+                                <option value="菏泽办事处">菏泽办事处</option>
+                                <option value="山东分公司">山东分公司</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            配套合同号:
+                            <input class="form-control" type="text" id="accessory_contract_id" name="accessory_contract_id" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            买方单位:
+                            <input class="form-control" type="text" id="buyer_unit" name="buyer_unit" >
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            合同台量:
+                            <input class="form-control" type="number" id="contract_num" name="contract_num" >
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            经销商:
+                            <input class="form-control" type="text" id="distributor" name="distributor" >
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            分包金额:
+                            <input class="form-control" type="number" id="subcontract_amount" name="subcontract_amount" >
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            委托合同编号:
+                            <input class="form-control" type="text" id="entrust_id" name="entrust_id" >
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            审批值:
+                            <input class="form-control" type="number" id="approval_value" name="approval_value" >
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="AddNew()" class="btn btn-primary">
+                        新增
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新建配套合同-结束） -->
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    请确认是否删除？
+                </h4>
+            </div>
+            <form id="DeleteForm">
+                <input class="form-control" type="hidden" readonly="readonly" id="delete_id" name="delete_id" />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 90%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    更新
+                </h4>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            ID:
+                            <input class="form-control" type="text" id="accessory_edit_id" name="accessory_edit_id" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            配套合同号:
+                            <input class="form-control" type="text" id="update_accessory_contract_id" name="update_accessory_contract_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            区域:
+                            <input class="form-control" type="text" id="update_company" name="update_company" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            买方单位:
+                            <input class="form-control" type="text" id="update_buyer_unit" name="update_buyer_unit" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            合同台量:
+                            <input class="form-control" type="number" id="update_contract_num" name="update_contract_num" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            经销商:
+                            <input class="form-control" type="text" id="update_distributor" name="update_distributor" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            分包金额:
+                            <input class="form-control" type="number" id="update_subcontract_amount" name="update_subcontract_amount" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            委托合同编号:
+                            <input class="form-control" type="text" id="update_entrust_id" name="update_entrust_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            审批值:
+                            <input class="form-control" type="number" id="update_approval_value" name="update_approval_value" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            付款金额:
+                            <input class="form-control" type="number" id="update_payment_amount" name="update_payment_amount" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            合同状态:
+                            <select id="update_subcontract_status" name="update_subcontract_status" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择合同状态">
+                                <option value="新建">新建</option>
+            　　                 <option value="已提交合同结算">已提交合同结算</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            审批状态:
+                            <select id="update_approval_status" name="update_approval_status" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择审批状态">
+                                <option value="新建">新建</option>
+            　　                 <option value="审批中">审批中</option>
+                                <option value="已同意">已同意</option>
+            　　                 <option value="已拒绝">已拒绝</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            签订状态:
+                            <select id="update_subcontract_sign_status" name="update_subcontract_sign_status" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择签订状态">
+                                <option value="未签订">未签订</option>
+                                <option value="已签订">已签订</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            项目名称:
+                            <textarea class="form-control" type="text" id="update_project_name" name="update_project_name" rows="2" ></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            项目地址:
+                            <textarea class="form-control" type="text" id="update_project_address" name="update_project_address" rows="2" ></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            进展情况:
+                            <textarea class="form-control" type="text" id="update_progress" name="update_progress" rows="6" ></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            备注:
+                            <textarea class="form-control" type="text" id="update_remarks" name="update_remarks" rows="6" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="UpdateAccessory()" class="btn btn-primary">修改</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/accessory.js"></script>
+</html>

@@ -1,0 +1,2341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" href="<?php addVersion('__CSS__/project_css/welcome.css');?>">
+</head>
+<body >
+<!--start page wrapper -->
+<div class="page-wrapper">
+    <div class="page-content">
+
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">PowerBI</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">PowerBI Details</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <div class="card">
+            <hr>
+            <div class="card-body">
+                <ul class="nav nav-tabs nav-primary mb-0" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#saleKpi" role="tab" aria-selected="true">
+                            <div class="d-flex align-items-center">
+
+                                <div class="tab-title"> 生效 </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#installKpi" role="tab" aria-selected="false">
+                            <div class="d-flex align-items-center">
+
+                                <div class="tab-title">完工</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#maintainKpi" role="tab" aria-selected="false">
+                            <div class="d-flex align-items-center">
+
+                                <div class="tab-title">售后</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#arrearsKpi" role="tab" aria-selected="false">
+                            <div class="d-flex align-items-center">
+                                <div class="tab-title">欠款</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content pt-3">
+                    <div class="tab-pane fade show active" id="saleKpi" role="tabpanel">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end d-print-none">
+                            <a type="button" class="btn btn-sm btn-secondary bx bx-printer" id="salePrint" ></a>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="intoForceIndexCompleteToolBar" ><strong>区域生效完成情况(数据截止{$Think.session.intoforce_date})</strong></div>
+                            <div class="table-responsive">
+                                <table
+                                        class="table table-striped table-sm"
+                                        id="intoForceIndexComplete"
+                                        data-cache="true"
+                                        data-toggle="table"
+                                        style="white-space: nowrap;"
+                                        data-search="false"
+                                        data-search-align="left">
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" ><strong>办事处生效完成情况(数据截止{$Think.session.intoforce_date})</strong></div>
+                            <div class="table-responsive">
+                                <table
+                                        class="table table-striped table-sm"
+                                        id="officeIntoForceIndexComplete"
+                                        data-cache="true"
+                                        data-toggle="table"
+                                        style="white-space: nowrap;"
+                                        data-search="false"
+                                        data-search-align="left">
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><strong>重点项目完成情况(数据截止{$Think.session.intoforce_date})</strong></div>
+                            <div class="table-responsive">
+                                <table
+                                        class="table table-striped table-sm"
+                                        id="keyProjectIndexComplete"
+                                        data-toggle="table"
+                                        style="white-space: nowrap;"
+                                        data-search="true"
+                                        data-search-align="left">
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><strong>报价完成情况(数据截止{$Think.session.quote_date})</strong></div>
+                            <div class="table-responsive">
+                                <table
+                                        class="table table-striped table-sm"
+                                        id="quoteIndexComplete"
+                                        data-toggle="table"
+                                        style="white-space: nowrap;"
+                                        data-search="true"
+                                        data-search-align="left">
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><strong>发货KPI完成情况(数据截止{$Think.session.report_delivery_date})</strong></div>
+                            <div class="table-responsive">
+                                <table
+                                        class="table table-striped table-sm"
+                                        id="deliveryIndexKpiComplete"
+                                        data-toggle="table"
+                                        style="white-space: nowrap;"
+                                        data-search="true"
+                                        data-search-align="left">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="installKpi" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header"><strong>完工KPI完成情况(数据截止{$Think.session.complete_date})</strong></div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-sm"
+                                       id="installCompleteIndexComplete"
+                                       data-toggle="table"
+                                       style="white-space: nowrap;"
+                                       data-search="false"
+                                       data-search-align="left">
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><strong>发货指标完成情况(按ERP上报出仓日期取值)</strong></div>
+                            <div class="table-responsive">
+                                <table
+                                        class="table table-striped table-sm"
+                                        id="deliveryIndexComplete"
+                                        data-toggle="table"
+                                        style="white-space: nowrap;"
+                                        data-search="true"
+                                        data-search-align="left">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="maintainKpi" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header"><strong>保养台量数据</strong></div>
+                            <div class="table-responsive">
+                                <table
+                                        class="table table-striped table-sm"
+                                        id="maintainData"
+                                        data-toggle="table"
+                                        style="white-space: nowrap;"
+                                        data-search="true"
+                                        data-search-align="left">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="arrearsKpi" role="tabpanel">
+                        <div class="card">
+                            <div class="card-title"><strong>设备入金完成情况(K元)(数据截止{$Think.session.equipment_income_date})</strong></div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-sm" id="equipmentIncomeIndexComplete" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title"><strong>安装入金完成情况(K元)(数据截止{$Think.session.install_income_date})</strong></div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-sm" id="installIncomeIndexComplete" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end page wrapper -->
+
+<!-- 选项卡菜单-->
+<!--<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="bi-tab" data-toggle="tab" data-target="#bi" type="button" role="tab" aria-controls="bi" aria-selected="true">BI</button>
+    </li>
+
+    {eq name="Think.session.sale" value="1"}
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="sale-tab" data-toggle="tab" data-target="#sale" type="button" role="tab" aria-controls="sale" aria-selected="false">营业</button>
+    </li>
+    {else/}
+    {/eq}
+    {eq name="Think.session.install" value="1"}
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="install-tab" data-toggle="tab" data-target="#install" type="button" role="tab" aria-controls="install" aria-selected="false">安装</button>
+    </li>
+    {else/}
+    {/eq}
+    {eq name="Think.session.maintain" value="1"}
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="after-tab" data-toggle="tab" data-target="#after" type="button" role="tab" aria-controls="after" aria-selected="false">售后</button>
+    </li>
+    {else/}
+    {/eq}
+    {eq name="Think.session.arrears" value="1"}
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="arrears-tab" data-toggle="tab" data-target="#arrears" type="button" role="tab" aria-controls="arrears" aria-selected="false">欠款</button>
+    </li>
+    {else/}
+    {/eq}
+    {eq name="Think.session.litigation" value="1"}
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="bu-tab" data-toggle="tab" data-target="#bu" type="button" role="tab" aria-controls="bu" aria-selected="false">BU</button>
+    </li>
+    {else/}
+    {/eq}
+</ul>-->
+<!-- /选项卡菜单-->
+<!-- 选项卡面板 -->
+<!--<div id="myTabContent" class="tab-content">
+&lt;!&ndash;BI模块&ndash;&gt;
+<div class="tab-pane fade show active" id="bi" role="tabpanel" aria-labelledby="bi-tab">
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">指标类<small></small></span></h3>
+
+    &lt;!&ndash;仅对销售相关权限的用户可见&ndash;&gt;
+    {eq name="Think.session.sale" value="1"}
+    &lt;!&ndash;-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;生效类-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">生效类<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤16地市生效/待生效/待签数据(台)</strong></div>
+        <div id="cityIntoForceData" style="width: 100%;height:640px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本财年与上财年生效台量按月对比(K台)</strong></div>
+        <div id="intoforce_compare" style="width:100%;height:250px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本财年与上财年生效台量按月累计对比(K台)</strong></div>
+        <div id="intoforce_sum_compare" style="width:100%;height:240px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤KA客户本财年生效TOP10(台)</strong></div>
+        <div id="key_account" style="width: 100%;height:200px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本地大客户本财年生效TOP10(台)</strong></div>
+        <div id="local_account" style="width: 100%;height:200px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤经销商本财年生效TOP10(台)</strong></div>
+        <div id="distributor" style="width: 100%;height:200px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤总包本财年生效TOP10(台)</strong></div>
+        <div id="general_contractor" style="width: 100%;height:200px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤各区域设备及安装均价对比(不含调验合同 K元)</strong></div>
+        <div id="averageprice" style="width: 100%;height:200px;"></div>
+    </div>
+    &lt;!&ndash;仅对有rate权限的用户可见&ndash;&gt;
+    <div class="panel panel-default" id="headOfficeIntoForceInfo">
+        <div class="panel-heading"><strong>➤总公司生效情况</strong></div>
+        <div class="row" style="padding: 2px">
+            <div class="col-xs-6 col-md-4 col-lg-6">
+                <ul class="list-group">
+                    <li class="list-group-item text-left">
+                        <span class="badge badge-primary">{$Think.session.head_index}┃{$Think.session.headquarters}</span>
+                        总公司生效指标┃实绩
+                    </li>
+                    <li class="list-group-item text-left panel-footer">
+                        <span class="badge badge-primary">{$Think.session.m0_index}┃{$Think.session.m0_complete}</span>
+                        M0指标┃完成
+                    </li>
+                    <li class="list-group-item text-left panel-footer">
+                        <span class="badge" style="background-color: orangered">{$Think.session.this_month_plan_report}</span>
+                        总公司计划本月报出台量
+                    </li>
+                    <li class="list-group-item text-left">
+                        <span class="badge badge-primary">{$Think.session.average_fall}%</span>
+                        总公司生效下浮
+                    </li>
+                    <li class="list-group-item text-left " >
+                        <span class="badge badge-primary">{$Think.session.average_price}</span>
+                        总公司设备均价
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xs-6 col-md-4 col-lg-6">
+                <ul class="list-group">
+                    <li class="list-group-item text-left">
+                        <span class="badge badge-primary">{$Think.session.difference_all}</span>
+                        已拆分未报出台量
+                    </li>
+                    <li class="list-group-item text-left panel-footer">
+                        <span class="badge badge-primary">{$Think.session.surplus_average_fall}%</span>
+                        已拆分未报出设备下浮
+                    </li>
+
+                    <li class="list-group-item text-left panel-footer">
+                        <span class="badge badge-primary">{$Think.session.surplus_average_price}</span>
+                        已拆分未报出设备均价
+                    </li>
+                    <li class="list-group-item text-left">
+                        <span class="badge badge-primary">{$Think.session.average_install_price}</span>
+                        总公司安装均价
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" style="page-break-after: always;"id="headOfficeIntoForceCompareInfo">
+        <div class="panel-heading"><strong>➤山东司生效与总部生效按月对比(台)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover  table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>类别</th>
+                    <th class="text-right">4月</th>
+                    <th class="text-right">5月</th>
+                    <th class="text-right">6月</th>
+                    <th class="text-right">7月</th>
+                    <th class="text-right">8月</th>
+                    <th class="text-right">9月</th>
+                    <th class="text-right">10月</th>
+                    <th class="text-right">11月</th>
+                    <th class="text-right">12月</th>
+                    <th class="text-right">1月</th>
+                    <th class="text-right">2月</th>
+                    <th class="text-right">3月</th>
+                    <th class="text-right">合计</th>
+                </tr>
+                {volist name="result56" id="result56"}
+                <tr>
+                    <td class="text-left">{$result56.type}</td>
+                    <td class="text-right">{$result56.month4}</td>
+                    <td class="text-right">{$result56.month5}</td>
+                    <td class="text-right">{$result56.month6}</td>
+                    <td class="text-right">{$result56.month7}</td>
+                    <td class="text-right">{$result56.month8}</td>
+                    <td class="text-right">{$result56.month9}</td>
+                    <td class="text-right">{$result56.month10}</td>
+                    <td class="text-right">{$result56.month11}</td>
+                    <td class="text-right">{$result56.month12}</td>
+                    <td class="text-right">{$result56.month1}</td>
+                    <td class="text-right">{$result56.month2}</td>
+                    <td class="text-right">{$result56.month3}</td>
+                    <td class="text-right">{$result56.total}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default" id="buIntoForceTop">
+        <div class="panel-heading"><strong>➤事业部本财年生效TOP10(台)</strong></div>
+        <div id="buIntoForceTop15" style="width: 100%;height:200px;"></div>
+    </div>
+    &lt;!&ndash;/仅对有rate权限的用户可见&ndash;&gt;
+    &lt;!&ndash;-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;报价类-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">报价及新签类<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本财年与上财年报价台量按月对比(K台)</strong></div>
+        <div id="quotecompare" style="width:100%;height:250px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本财年与上财年中标台量按月对比(K台)</strong></div>
+        <div id="winBidCompare" style="width:100%;height:250px;"></div>
+    </div>
+&lt;!&ndash;    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本财年与上财年评审台量按月对比(按总公司寄出时间,K台)</strong></div>
+        <div id="auditContract" style="width:100%;height:250px;"></div>
+    </div>&ndash;&gt;
+    <div class="panel panel-default" style="page-break-after: always;">
+        <div class="panel-heading"><strong>➤本财年与上财年新签台量按月对比(K台)</strong></div>
+        <div id="newcontract" style="width:100%;height:250px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤KA客户本财年新签TOP10(台)</strong></div>
+        <div id="key_account_new_sign" style="width: 100%;height:200px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本地大客户本财年新签TOP10(台)</strong></div>
+        <div id="local_account_new_sign" style="width: 100%;height:200px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤经销商本财年新签TOP10(台)</strong></div>
+        <div id="distributor_new_sign" style="width: 100%;height:200px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤总包本财年新签TOP10(台)</strong></div>
+        <div id="general_contractor_sign" style="width: 100%;height:200px;"></div>
+    </div>
+    <div class="panel panel-default" style="page-break-after: always;">
+        <div class="panel-heading"><strong>➤16地市本财年与上财年新签电梯对比(台)</strong></div>
+        <div id="city_new_contract" style="width: 100%;height:400px;"></div>
+        <div id="city_new_contract_total" style="width: 100%;height:45px;"></div>
+    </div>
+    &lt;!&ndash;-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;欠款类-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">欠款类<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本财年与上财年总欠款按月对比(K元)</strong></div>
+        <div id="arrearscompare" style="width:100%;height:300px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤设备各期欠款欠款趋势按月对比(K元)</strong></div>
+        <div id="equipmentArrearsOrderByMonthAndPeriod" style="width:100%;height:300px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤安装各期欠款欠款趋势按月对比(K元)</strong></div>
+        <div id="installArrearsOrderByMonthAndPeriod" style="width:100%;height:300px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤欠款账龄结构(K元)</strong></div>
+        <div class="panel-body">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="account_age" style="width: 100%;height:300px;"></div>
+        </div>
+    </div>
+    <div class="panel panel-default" >
+        <div class="panel-heading"><strong>➤欠款客户构成(K元)</strong></div>
+        <div class="panel-body">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="arrearsCustomer" style="width: 100%;height:300px;"></div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤KA客户安装1年以上欠款TOP10按月汇总(K元)</strong></div>
+        <div id="keyAccountInstallTop10" style="width:100%;height:320px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤KA客户设备1年以上欠款TOP10按月汇总(K元)</strong></div>
+        <div id="keyAccountEquipmentTop10" style="width:100%;height:320px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本地大客户安装1年以上欠款TOP10按月汇总(K元)</strong></div>
+        <div id="localAccountInstallTop10" style="width:100%;height:320px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本地大客户设备1年以上欠款TOP10按月汇总(K元)</strong></div>
+        <div id="localAccountEquipmentTop10" style="width:100%;height:320px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤总包安装1年以上欠款TOP10按月汇总(K元)</strong></div>
+        <div id="contractorAccountInstallTop10" style="width:100%;height:320px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤总包设备1年以上欠款TOP10按月汇总(K元)</strong></div>
+        <div id="contractorAccountEquipmentTop10" style="width:100%;height:320px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤普通客户安装1年以上欠款TOP10按月汇总(K元)</strong></div>
+        <div id="ptAccountInstallTop10" style="width:100%;height:320px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤普通客户设备1年以上欠款TOP10按月汇总(K元)</strong></div>
+        <div id="ptAccountEquipmentTop10" style="width:100%;height:320px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤区域设备入金按月汇总(K元)</strong></div>
+        <div id="equipmentIncomeByMonth" style="width:100%;height:320px;"></div>
+    </div>
+    <div class="panel panel-default" style="page-break-after: always;">
+        <div class="panel-heading"><strong>➤区域安装入金按月汇总(K元)</strong></div>
+        <div id="installIncomeByMonth" style="width:100%;height:320px;"></div>
+    </div>
+    &lt;!&ndash;-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;市场类-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">市场类<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤全国房地产开发景气指数</strong></div>
+        <div class="panel-body">
+            <p>全国房地产开发景气指数（简称“国房景气指数”）遵循经济周期波动的理论，以景气循环理论与景气循环分析方法为依据，运用时间序列、多元统计、计量经济分析方法，以房地产开发投资为基准指标，选取了房地产投资、资金、面积、销售有关指标，剔除季节因素的影响，包含了随机因素，采用增长率循环方法编制而成，每月根据新加入的数据对历史数据进行修订。国房景气指数选择2012年为基年，将其增长水平定为100。通常情况下，国房景气指数100点是最合适的景气水平，95至105点之间为适度景气水平，95以下为较低景气水平，105以上为偏高景气水平。</p>
+        </div>
+        <div id="realEstateBoomIndex" style="width: 100%;height:200px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤2000年至今全省主要品牌累计电梯注册台量(台)</strong></div>
+        <div id="eachBrandCumulativeRegistration" style="width: 100%;top: 100%;height:200px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤TOP6品牌近10年电梯注册台量(台)</strong></div>
+        <div id="top5Brand10YearsRegistration" style="width: 100%;height:300px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤{$Think.session.estate_month}月房地产市场情况</strong></div>
+        <div class="panel-body">
+            <div class="col-xs-6 col-md-4 col-lg-6">
+                <ul class="list-group">
+                    <li class="list-group-item text-left ">
+                        <span class="badge badge-primary">{$Think.session.estate_invest}亿元</span>
+                        房地产投资累计值
+                    </li>
+                    <li class="list-group-item text-left panel-footer">
+                        <span class="badge badge-primary">{$Think.session.estate_invest_increase}%</span>
+                        房地产投资累计增长
+                    </li>
+                    <li class="list-group-item text-left ">
+                        <span class="badge badge-primary">{$Think.session.estate_homes_invest}亿元</span>
+                        房地产住宅投资累计值
+                    </li>
+                    <li class="list-group-item text-left panel-footer">
+                        <span class="badge badge-primary">{$Think.session.estate_homes_invest_increase}%</span>
+                        房地产住宅投资累计增长
+                    </li>
+
+                    <li class="list-group-item text-left ">
+                        <span class="badge badge-primary">{$Think.session.estate_construction_area}万㎡</span>
+                        房地产施工面积累计值
+                    </li>
+                    <li class="list-group-item text-left panel-footer">
+                        <span class="badge badge-primary">{$Think.session.estate_construction_area_increase}%</span>
+                        房地产施工面积累计增长
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xs-6 col-md-4 col-lg-6">
+                <ul class="list-group">
+
+                    <li class="list-group-item text-left ">
+                        <span class="badge badge-primary">{$Think.session.estate_new_area}万㎡</span>
+                        房地产新开工施工面积累计值
+                    </li>
+                    <li class="list-group-item text-left panel-footer">
+                        <span class="badge badge-primary">{$Think.session.estate_new_area_increase}%</span>
+                        房地产新开工施工面积累计增长
+                    </li>
+                    <li class="list-group-item text-left ">
+                        <span class="badge badge-primary">{$Think.session.estate_complete_area}万㎡</span>
+                        房地产竣工面积累计值
+                    </li>
+                    <li class="list-group-item text-left panel-footer">
+                        <span class="badge badge-primary">{$Think.session.estate_complete_area_increase}%</span>
+                        房地产竣工面积累计增长
+                    </li>
+                    <li class="list-group-item text-left ">
+                        <span class="badge badge-primary">{$Think.session.completed_area_of_commercial_residence_increase}%</span>
+                        商品住宅竣工面积累计增长
+                    </li>
+                    <li class="list-group-item text-left panel-footer">
+                        <span class="badge badge-primary">{$Think.session.install_fixed_assets}%</span>
+                        建筑安装工程固定资产投资完成额累计增长
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+&lt;!&ndash;    <div class="panel panel-default" >
+        <div class="panel-heading"><strong>➤各区域房地产投资累计金额对比(亿元)</strong></div>
+        <div id="realestate" style="width: 100%;height:250px;"></div>
+    </div>&ndash;&gt;
+    <div class="panel panel-default" style="page-break-after: always;">
+        <div class="panel-heading"><strong>➤土地成交面积同期对比(包括住宅、商业、公建用地-单位万㎡)</strong></div>
+        <div id="landarea" style="width: 100%;height:210px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤16地市本财年与上财年土地成交宗数同期对比</strong></div>
+        <div id="city_land_case" style="width: 100%;height:400px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤16地市本财年与上财年土地成交规划建筑面积同期对比</strong></div>
+        <div id="city_land_plan_area" style="width: 100%;height:400px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤房地产新开工施工面积累计值同期对比(万㎡)</strong></div>
+        <div id="newarea" style="width: 100%;height:250px;"></div>
+    </div>
+    <div class="panel panel-default" style="page-break-after: always;">
+        <div class="panel-heading"><strong>➤房地产竣工面积累计值同期对比(万㎡)</strong></div>
+        <div id="completearea" style="width: 100%;height:250px;"></div>
+    </div>
+    {else/}
+    {/eq}
+    &lt;!&ndash;-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;发货完工类-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;
+    {eq name="Think.session.install" value="1"}
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">发货完工类<small></small></span></h3>
+    &lt;!&ndash;新签合同&ndash;&gt;
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本财年与上财年发货台量按月对比(K台,按ERP上报出仓日期取值)</strong></div>
+        <div id="delivery" style="width: 100%;height:250px;"></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>➤本财年月度完工指标与完成情况(台)</strong></div>
+        <div id="install_complete" style="width: 100%;height:250px;"></div>
+    </div>
+    {else/}
+    {/eq}
+    &lt;!&ndash;-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;结束线-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;
+    <hr style="filter: progid:dximagetransform.microsoft.glow(color='#987cb9',strength=10)" width="80%" color="#987cb9" size=1>
+</div>
+&lt;!&ndash;/BI模块&ndash;&gt;
+&lt;!&ndash;营业模块&ndash;&gt;
+    <div class="tab-pane fade" id="sale" role="tabpanel" aria-labelledby="sale-tab">
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">KPI<small></small></span></h3>
+
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">生效类<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域生效/待生效/待签数据汇总</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="intoForcePreIntoForcePreSign" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域生效数据客户类型占比</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="intoForceByCustomerClassification" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域生效平均层站对比（仅直梯）</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">区域</th>
+                    <th class="text-right">上财年平均层站</th>
+                    <th class="text-right">本财年平均层站</th>
+                </tr>
+                {volist name="result26" id="result26"}
+                <tr>
+                    <td class="text-left">{$result26.belong_to}</td>
+                    <td class="text-right">{$result26.this_year}</td>
+                    <td class="text-right">{$result26.last_year}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域生效梯均价对比（K元）</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">区域</th>
+                    <th class="text-right">上财年设备均价</th>
+                    <th class="text-right">本财年设备均价</th>
+                    <th class="text-right">设备均价指标</th>
+                    <th class="text-right">上财年安装均价</th>
+                    <th class="text-right">本财年安装均价</th>
+                    <th class="text-right">调验占比(A)</th>
+                    <th class="text-right">调验占比(B)</th>
+                </tr>
+                {volist name="result24" id="result24"}
+                <tr>
+                    <td class="text-left">{$result24.belong_to}</td>
+                    <td class="text-right">{$result24.lastyear_eq_avg}</td>
+                    <td class="text-right">{$result24.thisyear_eq_avg}</td>
+                    <td class="text-right">{$result24.eq_average_target}</td>
+                    <td class="text-right">{$result24.lastyear_in_avg}</td>
+                    <td class="text-right">{$result24.thisyear_in_avg}</td>
+                    <td class="text-right">{$result24.check_per}</td>
+                    <td class="text-right">{$result24.check_per1}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">新签及待生效类<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域新签数据客户类型占比</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="newSignByCustomerClassification" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域新签平均层站及单价对比</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="newSignByAvgFloor" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域待生效数据</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th class="text-right">累计</th>
+                    <th class="text-right">365天内</th>
+                    <th class="text-right">本月新增</th>
+                </tr>
+                {volist name="result" id="vo"}
+                <tr>
+                    <td>{$vo.scompany}</td>
+                    <td class="text-right">{$vo.pre_intoforce}</td>
+                    <td class="text-right">{$vo.365days}</td>
+                    <td class="text-right">{$vo.month_now}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>本地大客户新签电梯对比</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>本地大客户</th>
+                    <th class="text-right">区域</th>
+                    <th class="text-right">上财年</th>
+                    <th class="text-right">本财年</th>
+                </tr>
+                {volist name="result43" id="result43"}
+                <tr>
+                    <td>{$result43.short_name}</td>
+                    <td class="text-right">{$result43.company}</td>
+                    <td class="text-right">{$result43.lastyear}</td>
+                    <td class="text-right">{$result43.thisyear}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">待签订及报价类<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域待签订数据</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th class="text-right">累计</th>
+                    <th class="text-right">90天内</th>
+                </tr>
+                {volist name="result" id="vo"}
+                <tr>
+                    <td>{$vo.scompany}</td>
+                    <td class="text-right">{$vo.pre_sign}</td>
+                    <td class="text-right">{$vo.90days}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>本财年投标报价数据报表</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th class="text-right">市场容量</th>
+                    <th class="text-right">报价项目</th>
+                    <th class="text-right">报价台量</th>
+                    <th class="text-right">市场覆盖率</th>
+                    <th class="text-right">中标台量</th>
+                    <th class="text-right">中标率%</th>
+                    <th class="text-right">流失台量</th>
+                    <th class="text-right">流失率%</th>
+                    <th class="text-right">未出结果</th>
+                </tr>
+                {volist name="result42" id="result42"}
+                <tr>
+                    <td>{$result42.scompany}</td>
+                    <td class="text-right">{$result42.market_capacity}</td>
+                    <td class="text-right">{$result42.quote_num}</td>
+                    <td class="text-right">{$result42.quote_sum}</td>
+                    <td class="text-right">{$result42.market_coverage}</td>
+                    <td class="text-right">{$result42.bid}</td>
+                    <td class="text-right">{$result42.bid_rate}</td>
+                    <td class="text-right">{$result42.lost_sum}</td>
+                    <td class="text-right">{$result42.lost_rate}</td>
+                    <td class="text-right">{$result42.unknown}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    {eq name="Think.session.rivals" value="1"}
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>近三个月丢标项目竞争对手下浮情况</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th style=" white-space:nowrap" class="text-left">品牌</th>
+                    <th style=" white-space:nowrap" class="text-left">丢标日期</th>
+                    <th style=" white-space:nowrap" class="text-left">丢标原因</th>
+                    <th style=" white-space:nowrap" class="text-right">相对下浮</th>
+                    <th style=" white-space:nowrap" class="text-left">我司型号</th>
+                    <th style=" white-space:nowrap" class="text-left">台量</th>
+                    <th style=" white-space:nowrap" class="text-left">坐标</th>
+                    <th style=" white-space:nowrap" class="text-left">项目名称</th>
+
+                </tr>
+                {volist name="result22" id="result22"}
+                <tr>
+                    <td style=" white-space:nowrap" class="text-left">{$result22.winning_bid}</td>
+                    <td style=" white-space:nowrap" class="text-left">{$result22.not_winning_date}</td>
+                    <td style=" white-space:nowrap" class="text-left">{$result22.not_winning_reason}</td>
+                    <td style=" white-space:nowrap" class="text-right">{$result22.winning_bid_relative_float_downward}%</td>
+                    <td style=" white-space:nowrap" class="text-left">{$result22.elevator_model}</td>
+                    <td style=" white-space:nowrap" class="text-left">{$result22.quote_num}</td>
+                    <td style=" white-space:nowrap" class="text-left">{$result22.city}</td>
+                    <td style=" white-space:nowrap" class="text-left">{$result22.project_name}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">重点跟进类<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>过审超1个月未归档合同明细</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>合同号</th>
+                    <th class="text-right">台量</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-left">项目名称</th>
+                    <th class="text-right">过审日期</th>
+                </tr>
+                {volist name="result35" id="result35"}
+                <tr>
+                    <td>{$result35.contract_id}</td>
+                    <td class="text-right">{$result35.contract_num}</td>
+                    <td class="text-left">{$result35.branch}</td>
+                    <td class="text-left">{$result35.project_name}</td>
+                    <td class="text-right">{$result35.sd_approved_date}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>中标后超过两个月合同未邮寄总部明细</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>合同号</th>
+                    <th class="text-right">台量</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-left">项目名称</th>
+                    <th class="text-right">中标日期</th>
+                    <th class="text-right">审核日期</th>
+                </tr>
+                {volist name="result36" id="result36"}
+                <tr>
+                    <td>{$result36.contract_id}</td>
+                    <td class="text-right">{$result36.contract_num}</td>
+                    <td class="text-left">{$result36.branch}</td>
+                    <td class="text-left">{$result36.project_name}</td>
+                    <td class="text-right">{$result36.win_bidding_date}</td>
+                    <td class="text-right">{$result36.audit_date}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    {else/}
+    {/eq}
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>本财年建筑高度100m以上项目投标情况</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>项目名称</th>
+                    <th>区域</th>
+                    <th class="text-right">招标台量</th>
+                    <th class="text-right">建筑高度</th>
+                    <th class="text-right">投标梯型</th>
+                    <th class="text-right">开标日期</th>
+                    <th class="text-right">跟进人</th>
+                    <th class="text-right">是否丢标</th>
+                    <th class="text-right">丢标原因</th>
+                    <th class="text-right">中标厂家</th>
+                </tr>
+                {volist name="result28" id="result28"}
+                <tr>
+                    <td>{$result28.project_name}</td>
+                    <td>{$result28.branch_office}</td>
+                    <td class="text-right">{$result28.quote_num}</td>
+                    <td class="text-right">{$result28.building_height}</td>
+                    <td class="text-right">{$result28.elevator_model}</td>
+                    <td class="text-right">{$result28.bid_opening_date}</td>
+                    <td class="text-right">{$result28.sales_person}</td>
+                    <td class="text-right">{$result28.if_not_winning}</td>
+                    <td class="text-right">{$result28.not_winning_reason}</td>
+                    <td class="text-right">{$result28.winning_bid}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+</div>
+&lt;!&ndash;/营业模块&ndash;&gt;
+&lt;!&ndash;完工模块&ndash;&gt;
+    <div class="tab-pane fade" id="install" role="tabpanel" aria-labelledby="install-tab">
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">KPI<small></small></span></h3>
+
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">发货、完工类<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>发货指标完成情况(按ERP上报出仓日期取值)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="deliveryIndexComplete" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>本财年完工梯关闭情况(不含调验合同)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">区域</th>
+                    <th class="text-right">完工</th>
+                    <th class="text-right">安装关闭</th>
+                    <th class="text-right">安装关闭率</th>
+                    <th class="text-right">设备关闭</th>
+                    <th class="text-right">设备关闭率</th>
+
+                </tr>
+                {volist name="result" id="vo"}
+                <tr>
+                    <td class="text-left">{$vo.scompany}</td>
+                    <td class="text-right">{$vo.install_complete}</td>
+                    <td class="text-right">{$vo.close}</td>
+                    <td class="text-right">{$vo.close_rate|number_format=2}%</td>
+                    <td class="text-right">{$vo.equipment_close}</td>
+                    <td class="text-right">{$vo.equipment_close_rate|number_format=2}%</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>各区域预计发货与实际对比(按ERP上报出仓日期取值)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">区域</th>
+                    <th class="text-right">上月预计</th>
+                    <th class="text-right">上月实发</th>
+                    <th class="text-right">本月预计</th>
+                    <th class="text-right">本月实发</th>
+                    <th class="text-right">下月预计</th>
+
+                </tr>
+                {volist name="result" id="vo"}
+                <tr >
+                    <td class="text-left">{$vo.scompany}</td>
+                    <td class="text-right">{$vo.last_month_expect_delivery}</td>
+                    <td class="text-right">{$vo.last_month_actual_delivery}</td>
+                    <td class="text-right">{$vo.this_month_expect_delivery}</td>
+                    <td class="text-right">{$vo.this_month_actual_delivery}</td>
+                    <td class="text-right">{$vo.next_month_expect_delivery}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>各区域预计发货准确率(预测数据从2021年7月开始取数)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">区域</th>
+                    <th class="text-right">本财年预计</th>
+                    <th class="text-right">偏差30天内中签</th>
+                    <th class="text-right">中签率A</th>
+                    <th class="text-right">偏差60天内中签</th>
+                    <th class="text-right">中签率B</th>
+
+                </tr>
+                {volist name="result" id="vo"}
+                <tr >
+                    <td class="text-left">{$vo.scompany}</td>
+                    <td class="text-right">{$vo.this_year_expect_delivery}</td>
+                    <td class="text-right">{$vo.win_lottery_in_30days}</td>
+                    {eq name="$vo.this_year_expect_delivery" value=0}
+                    <td class="text-right">{$vo.win_lottery_in_30days*100/1|number_format=2}%</td>
+                    {else/}
+                    <td class="text-right">{$vo.win_lottery_in_30days*100/$vo.this_year_expect_delivery|number_format=2}%</td>
+                    {/eq}
+                    <td class="text-right">{$vo.win_lottery_in_60days}</td>
+                    {eq name="$vo.this_year_expect_delivery" value=0}
+                    <td class="text-right">{$vo.win_lottery_in_60days*100/1|number_format=2}%</td>
+                    {else/}
+                    <td class="text-right">{$vo.win_lottery_in_60days*100/$vo.this_year_expect_delivery|number_format=2}%</td>
+                    {/eq}
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>本财年在制情况</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">区域</th>
+                    <th class="text-right">在制</th>
+                    <th class="text-right">占比</th>
+                    <th class="text-right">180天内</th>
+                    <th class="text-right">占比</th>
+                    <th class="text-right">180~270天</th>
+                    <th class="text-right">占比</th>
+                    <th class="text-right">270~365天</th>
+                    <th class="text-right">占比</th>
+                    <th class="text-right">1年以上</th>
+                    <th class="text-right">占比</th>
+                    <th class="text-right">当年进场</th>
+
+                </tr>
+                {volist name="result8" id="result8"}
+                <tr>
+                    <td class="text-left">{$result8.company}</td>
+                    <td class="text-right">{$result8.making}</td>
+                    <td class="text-right">{$result8.per1}</td>
+                    <td class="text-right">{$result8.making1}</td>
+                    <td class="text-right">{$result8.per2}</td>
+                    <td class="text-right">{$result8.making2}</td>
+                    <td class="text-right">{$result8.per3}</td>
+                    <td class="text-right">{$result8.making3}</td>
+                    <td class="text-right">{$result8.per4}</td>
+                    <td class="text-right">{$result8.making4}</td>
+                    <td class="text-right">{$result8.per5}</td>
+                    <td class="text-right">{$result8.entry}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+</div>
+&lt;!&ndash;/完工模块&ndash;&gt;
+&lt;!&ndash;售后模块&ndash;&gt;
+    <div class="tab-pane fade" id="after" role="tabpanel" aria-labelledby="after-tab">
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">售后类<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>保养台量数据</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="maintainData" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>保养业务数据(K元)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="maintainBusinessData" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>维改业务数据(不含M0,K元)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="repairBusinessData" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域保养成本及毛利率(元)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="maintainCostData" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>保养站KPI完成情况</strong></div>
+        <div class="table-responsive">
+            <table
+                    id="stationmasterKpi"
+                    class="table table-striped table-sm"
+                    data-toggle="table"
+                    data-search="true" data-search-align="left"
+                    style="white-space: nowrap;">
+                <thead style="background-color: #d42d32;color: white" ></thead>
+            </table>
+        </div>
+    </div>
+</div>
+&lt;!&ndash;/售后模块&ndash;&gt;
+&lt;!&ndash;欠款模块&ndash;&gt;
+    <div class="tab-pane fade" id="arrears" role="tabpanel" aria-labelledby="arrears-tab">
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">KPI<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>设备入金完成情况(K元)(数据截止{$Think.session.equipment_income_date})</strong></div>
+        <div class="table-responsive">
+            <table
+                    class="table table-striped table-sm"
+                    id="equipmentIncomeIndexComplete"
+                    data-toggle="table"
+                    style="white-space: nowrap;"
+                    data-search="true"
+                    data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>安装入金完成情况(K元)(数据截止{$Think.session.install_income_date})</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="installIncomeIndexComplete" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域当年欠款(元)&ndash;&gt;目标值（设备≤10%,安装≤15%)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="thisYearArrearsIndexComplete" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>设备历史欠款与回收(元)&ndash;&gt;目标值≥85%</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="equipmentHistoryArrears" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>安装历史欠款与回收(元)&ndash;&gt;目标值≥85%</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="installHistoryArrears" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>731天以上欠款回收情况</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="historyArrearsOver731Days" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>366~730天以上欠款回收情况</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="historyArrearsBetween366And730Days" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">合同应收款管理<small></small></span></h3>
+    {eq name="Think.session.rate" value="1"}
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>出货前设备已收款比例</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th class="text-right">上财年</th>
+                    <th class="text-right">本财年</th>
+                </tr>
+                {volist name="result40" id="result40"}
+                <tr>
+                    <td>{$result40.company}</td>
+                    <td class="text-right">{$result40.last_year}</td>
+                    <td class="text-right">{$result40.this_year}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>在制电梯安装已收款比例(不含调验合同)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th class="text-right">在制台量</th>
+                    <th class="text-right">已收款比例</th>
+                    <th class="text-right">合同约定进场款比例</th>
+                    <th class="text-right">其中进场前比例</th>
+                </tr>
+                {volist name="result41" id="result41"}
+                <tr>
+                    <td>{$result41.company|mb_substr=0,2,'utf-8'}</td>
+                    <td class="text-right">{$result41.making}</td>
+                    {if $result41.fix_contract_installation_price===0.00}
+                    <td class="text-right"></td>
+                    {else /}
+                    <td class="text-right">{$result41.install_amount_collected*100/$result41.fix_contract_installation_price|number_format=2}%</td>
+                    {/if}
+                    {if $result41.fix_contract_installation_price===0.00}
+                    <td class="text-right"></td>
+                    {else /}
+                    <td class="text-right">{$result41.install_contract_amount_entry*100/$result41.fix_contract_installation_price|number_format=2}%</td>
+                    {/if}
+                    {if $result41.fix_contract_installation_price===0.00}
+                    <td class="text-right"></td>
+                    {else /}
+                    <td class="text-right">{$result41.install_contract_amount_before_entry*100/$result41.fix_contract_installation_price|number_format=2}%</td>
+                    {/if}
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    {else/}
+    {/eq}
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域欠款合计(元)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th class="text-right">设备欠款</th>
+                    <th class="text-right">安装欠款</th>
+                    <th class="text-right">合计</th>
+                </tr>
+                {volist name="result6" id="result6"}
+                <tr>
+                    <td>{$result6.scompany}</td>
+                    <td class="text-right">{$result6.equipment_arrears|number_format=2}</td>
+                    <td class="text-right">{$result6.install_arrears|number_format=2}</td>
+                    <td class="text-right">{$result6.all_arrears|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>入金完成情况(K元)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">区域</th>
+                    <th class="text-right">设备入金指标</th>
+                    <th class="text-right">设备入金</th>
+                    <th class="text-right">完成率</th>
+                    <th class="text-right">当月入账</th>
+                    <th class="text-right">安装入金指标</th>
+                    <th class="text-right">安装入金</th>
+                    <th class="text-right">完成率</th>
+                    <th class="text-right">当月入账</th>
+                </tr>
+                {volist name="result" id="vo"}
+                <tr>
+                    <td class="text-left">{$vo.company|mb_substr=0,2,'utf-8'}</td>
+                    <td class="text-right">{$vo.eq_income_index/1000|number_format=2}</td>
+                    <td class="text-right">{$vo.eq_income/1000|number_format=2}</td>
+                    <td class="text-right">{$vo.eq_income_rate*100|number_format=2}%</td>
+                    <td class="text-right">{$vo.eq_income_this_month_recorded/1000|number_format=2}</td>
+                    <td class="text-right">{$vo.in_income_index/1000|number_format=2}</td>
+                    <td class="text-right">{$vo.in_income/1000|number_format=2}</td>
+                    <td class="text-right">{$vo.in_income_rate*100|number_format=2}%</td>
+                    <td class="text-right">{$vo.in_income_this_month_recorded/1000|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>设备18个月以上欠款分配情况</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">区域</th>
+                    <th class="text-right">事业部18个月以上欠款</th>
+                    <th class="text-right">其中切给收款专员</th>
+                    <th class="text-right">未切割</th>
+                    <th class="text-right">收款专员跟进总欠款</th>
+
+
+                </tr>
+                {volist name="result" id="vo"}
+                <tr>
+                    <td class="text-left">{$vo.scompany}</td>
+                    <td class="text-right">{$vo.equipment_18_months_arrears|number_format=2 }</td>
+                    <td class="text-right">{$vo.equipment_18_months_arrears_segmentation|number_format=2}</td>
+                    <td class="text-right">{$vo.equipment_18_months_arrears-$vo.equipment_18_months_arrears_segmentation|number_format=2}</td>
+                    <td class="text-right">{$vo.equipment_payee_pro_arrears|number_format=2}</td>
+
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>安装18个月以上欠款分配情况</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">区域</th>
+                    <th class="text-right">事业部18个月以上欠款</th>
+                    <th class="text-right">其中切给收款专员</th>
+                    <th class="text-right">未切割</th>
+                    <th class="text-right">收款专员跟进总欠款</th>
+
+                </tr>
+                {volist name="result" id="vo"}
+                <tr>
+                    <td class="text-left">{$vo.scompany}</td>
+                    <td class="text-right">{$vo.install_18_months_arrears|number_format=2}</td>
+                    <td class="text-right">{$vo.install_18_months_arrears_segmentation|number_format=2}</td>
+                    <td class="text-right">{$vo.install_18_months_arrears-$vo.install_18_months_arrears_segmentation|number_format=2}</td>
+                    <td class="text-right">{$vo.install_payee_pro_arrears|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>本月至财年末预计新增欠款(元)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">区域</th>
+                    <th class="text-right">安装预计新增欠款</th>
+                    <th class="text-right">设备预计新增欠款</th>
+                    <th class="text-right">合计</th>
+                </tr>
+                {volist name="result57" id="result57"}
+                <tr>
+                    <td class="text-left">{$result57.scompany}</td>
+                    <td class="text-right">{$result57.install_predict_arrears|number_format=2}</td>
+                    <td class="text-right">{$result57.equipment_predict_arrears|number_format=2}</td>
+                    <td class="text-right">{$result57.all_predict|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>安装预计收款按月汇总</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th style="white-space:nowrap" class="text-right">5月当年</th>
+                    <th style="white-space:nowrap" class="text-right">5月历史</th>
+                    <th style="white-space:nowrap" class="text-right">6月当年</th>
+                    <th style="white-space:nowrap" class="text-right">6月历史</th>
+                    <th style="white-space:nowrap" class="text-right">7月当年</th>
+                    <th style="white-space:nowrap" class="text-right">7月历史</th>
+                    <th style="white-space:nowrap" class="text-right">8月当年</th>
+                    <th style="white-space:nowrap" class="text-right">8月历史</th>
+                    <th style="white-space:nowrap" class="text-right">9月当年</th>
+                    <th style="white-space:nowrap" class="text-right">9月历史</th>
+                    <th style="white-space:nowrap" class="text-right">10月当年</th>
+                    <th style="white-space:nowrap" class="text-right">10月历史</th>
+                    <th style="white-space:nowrap" class="text-right">11月当年</th>
+                    <th style="white-space:nowrap" class="text-right">11月历史</th>
+                    <th style="white-space:nowrap" class="text-right">12月当年</th>
+                    <th style="white-space:nowrap" class="text-right">12月历史</th>
+                    <th style="white-space:nowrap" class="text-right">1月当年</th>
+                    <th style="white-space:nowrap" class="text-right">1月历史</th>
+                    <th style="white-space:nowrap" class="text-right">2月当年</th>
+                    <th style="white-space:nowrap" class="text-right">2月历史</th>
+                    <th style="white-space:nowrap" class="text-right">3月当年</th>
+                    <th style="white-space:nowrap" class="text-right">3月历史</th>
+                    <th style="white-space:nowrap" class="text-right">4月当年</th>
+                    <th style="white-space:nowrap" class="text-right">4月历史</th>
+                    <th style="white-space:nowrap" class="text-right">当年合计</th>
+                    <th style="white-space:nowrap" class="text-right">历史合计</th>
+                </tr>
+                {volist name="result45" id="result45"}
+                <tr>
+                    <td class="text-left" style=" white-space:nowrap">{$result45.company}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month5_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month5_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month6_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month6_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month7_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month7_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month8_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month8_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month9_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month9_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month10_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month10_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month11_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month11_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month12_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month12_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month1_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month1_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month2_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month2_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month3_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result45.month3_2|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result45.month4_1|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result45.month4_2|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result45.total_1|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result45.total_2|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>设备预计收款按月汇总</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th style="white-space:nowrap" class="text-right">5月当年</th>
+                    <th style="white-space:nowrap" class="text-right">5月历史</th>
+                    <th style="white-space:nowrap" class="text-right">6月当年</th>
+                    <th style="white-space:nowrap" class="text-right">6月历史</th>
+                    <th style="white-space:nowrap" class="text-right">7月当年</th>
+                    <th style="white-space:nowrap" class="text-right">7月历史</th>
+                    <th style="white-space:nowrap" class="text-right">8月当年</th>
+                    <th style="white-space:nowrap" class="text-right">8月历史</th>
+                    <th style="white-space:nowrap" class="text-right">9月当年</th>
+                    <th style="white-space:nowrap" class="text-right">9月历史</th>
+                    <th style="white-space:nowrap" class="text-right">10月当年</th>
+                    <th style="white-space:nowrap" class="text-right">10月历史</th>
+                    <th style="white-space:nowrap" class="text-right">11月当年</th>
+                    <th style="white-space:nowrap" class="text-right">11月历史</th>
+                    <th style="white-space:nowrap" class="text-right">12月当年</th>
+                    <th style="white-space:nowrap" class="text-right">12月历史</th>
+                    <th style="white-space:nowrap" class="text-right">1月当年</th>
+                    <th style="white-space:nowrap" class="text-right">1月历史</th>
+                    <th style="white-space:nowrap" class="text-right">2月当年</th>
+                    <th style="white-space:nowrap" class="text-right">2月历史</th>
+                    <th style="white-space:nowrap" class="text-right">3月当年</th>
+                    <th style="white-space:nowrap" class="text-right">3月历史</th>
+                    <th style="white-space:nowrap" class="text-right">4月当年</th>
+                    <th style="white-space:nowrap" class="text-right">4月历史</th>
+                    <th style="white-space:nowrap" class="text-right">当年合计</th>
+                    <th style="white-space:nowrap" class="text-right">历史合计</th>
+                </tr>
+                {volist name="result46" id="result46"}
+                <tr>
+                    <td class="text-left" style=" white-space:nowrap">{$result46.company}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month5_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month5_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month6_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month6_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month7_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month7_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month8_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month8_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month9_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month9_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month10_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month10_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month11_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month11_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month12_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month12_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month1_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month1_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month2_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month2_2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month3_1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result46.month3_2|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result46.month4_1|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result46.month4_2|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result46.total_1|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result46.total_2|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>安装预收实收按月汇总(当年欠款)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th style=" white-space:nowrap" class="text-right">5月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">5月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">6月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">6月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">7月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">7月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">8月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">8月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">9月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">9月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">10月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">10月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">11月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">11月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">12月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">12月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">1月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">1月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">2月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">2月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">3月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">3月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">4月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">4月实际</th>
+                </tr>
+                {volist name="result49" id="result49"}
+                <tr>
+                    <td class="text-left" style=" white-space:nowrap">{$result49.company}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.actual_month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.actual_month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.actual_month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.actual_month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.actual_month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.actual_month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.actual_month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.actual_month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.actual_month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.actual_month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.month3|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result49.actual_month3|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result49.month4|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result49.actual_month4|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>安装预收实收按月汇总(历史欠款)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th style=" white-space:nowrap" class="text-right">5月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">5月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">6月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">6月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">7月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">7月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">8月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">8月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">9月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">9月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">10月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">10月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">11月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">11月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">12月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">12月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">1月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">1月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">2月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">2月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">3月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">3月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">4月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">4月实际</th>
+                </tr>
+                {volist name="result50" id="result50"}
+                <tr>
+                    <td class="text-left" style=" white-space:nowrap">{$result50.company}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.actual_month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.actual_month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.actual_month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.actual_month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.actual_month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.actual_month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.actual_month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.actual_month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.actual_month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.actual_month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.month3|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result50.actual_month3|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result50.month4|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result50.actual_month4|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>安装预收实收按月汇总(合计)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th style=" white-space:nowrap" class="text-right">5月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">5月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">6月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">6月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">7月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">7月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">8月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">8月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">9月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">9月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">10月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">10月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">11月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">11月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">12月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">12月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">1月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">1月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">2月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">2月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">3月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">3月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">4月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">4月实际</th>
+                </tr>
+                {volist name="result47" id="result47"}
+                <tr>
+                    <td class="text-left" style=" white-space:nowrap">{$result47.company}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.actual_month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.actual_month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.actual_month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.actual_month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.actual_month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.actual_month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.actual_month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.actual_month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.actual_month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.actual_month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.month3|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result47.actual_month3|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result47.month4|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result47.actual_month4|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>设备预收实收按月汇总(当年欠款)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th style=" white-space:nowrap" class="text-right">5月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">5月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">6月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">6月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">7月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">7月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">8月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">8月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">9月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">9月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">10月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">10月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">11月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">11月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">12月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">12月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">1月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">1月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">2月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">2月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">3月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">3月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">4月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">4月实际</th>
+                </tr>
+                {volist name="result51" id="result51"}
+                <tr>
+                    <td class="text-left" style=" white-space:nowrap">{$result51.company}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.actual_month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.actual_month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.actual_month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.actual_month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.actual_month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.actual_month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.actual_month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.actual_month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.actual_month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.actual_month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.month3|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result51.actual_month3|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result51.month4|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result51.actual_month4|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>设备预收实收按月汇总(历史欠款)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+
+                    <th style=" white-space:nowrap" class="text-right">5月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">5月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">6月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">6月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">7月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">7月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">8月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">8月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">9月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">9月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">10月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">10月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">11月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">11月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">12月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">12月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">1月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">1月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">2月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">2月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">3月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">3月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">4月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">4月实际</th>
+                </tr>
+                {volist name="result52" id="result52"}
+                <tr>
+                    <td class="text-left" style=" white-space:nowrap">{$result52.company}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.actual_month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.actual_month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.actual_month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.actual_month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.actual_month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.actual_month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.actual_month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.actual_month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.actual_month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.actual_month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.month3|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result52.actual_month3|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result52.month4|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result52.actual_month4|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>设备预收实收按月汇总(合计)</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th style=" white-space:nowrap" class="text-right">5月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">5月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">6月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">6月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">7月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">7月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">8月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">8月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">9月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">9月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">10月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">10月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">11月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">11月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">12月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">12月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">1月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">1月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">2月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">2月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">3月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">3月实际</th>
+                    <th style=" white-space:nowrap" class="text-right">4月预计</th>
+                    <th style=" white-space:nowrap" class="text-right">4月实际</th>
+                </tr>
+                {volist name="result48" id="result48"}
+                <tr>
+                    <td class="text-left" style=" white-space:nowrap">{$result48.company}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.actual_month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.actual_month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.actual_month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.actual_month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.actual_month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.actual_month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.actual_month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.actual_month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.actual_month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.actual_month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.month3|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result48.actual_month3|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result48.month4|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result48.actual_month4|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>KA客户欠款TOP20</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">客户</th>
+                    <th class="text-right">设备欠款</th>
+                    <th class="text-right">安装欠款</th>
+                    <th class="text-right">总欠款</th>
+                </tr>
+                {volist name="result54" id="result54"}
+                <tr>
+                    <td class="text-left">{$result54.customer_abbreviation}</td>
+                    <td class="text-right">{$result54.equipment|number_format=2}</td>
+                    <td class="text-right">{$result54.install|number_format=2}</td>
+                    <td class="text-right">{$result54.total|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>本地大客户欠款TOP20</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">客户</th>
+                    <th class="text-right">设备欠款</th>
+                    <th class="text-right">安装欠款</th>
+                    <th class="text-right">总欠款</th>
+                </tr>
+                {volist name="result53" id="result53"}
+                <tr>
+                    <td class="text-left">{$result53.customer_abbreviation}</td>
+                    <td class="text-right">{$result53.equipment|number_format=2}</td>
+                    <td class="text-right">{$result53.install|number_format=2}</td>
+                    <td class="text-right">{$result53.total|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>总包欠款TOP20</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">客户</th>
+                    <th class="text-right">设备欠款</th>
+                    <th class="text-right">安装欠款</th>
+                    <th class="text-right">总欠款</th>
+                </tr>
+                {volist name="result60" id="result60"}
+                <tr>
+                    <td class="text-left">{$result60.customer_abbreviation}</td>
+                    <td class="text-right">{$result60.equipment|number_format=2}</td>
+                    <td class="text-right">{$result60.install|number_format=2}</td>
+                    <td class="text-right">{$result60.total|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>普通客户欠款TOP20</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">客户</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-right">设备欠款</th>
+                    <th class="text-right">安装欠款</th>
+                    <th class="text-right">总欠款</th>
+                </tr>
+                {volist name="result59" id="result59"}
+                <tr>
+                    <td class="text-left">{$result59.customer}</td>
+                    <td class="text-left">{$result59.scompany}</td>
+                    <td class="text-right">{$result59.equipment|number_format=2}</td>
+                    <td class="text-right">{$result59.install|number_format=2}</td>
+                    <td class="text-right">{$result59.total|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>总欠款TOP20</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">合同号</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-left">买方单位</th>
+                    <th class="text-right">设备欠款</th>
+                    <th class="text-right">安装欠款</th>
+                    <th class="text-right">总欠款</th>
+                </tr>
+                {volist name="result38" id="result38"}
+                <tr>
+                    <td class="text-left">{$result38.contract_id}</td>
+                    <td class="text-left">{$result38.company|mb_substr=0,2,'utf-8'}</td>
+                    <td class="text-left">{$result38.clause_customer}</td>
+                    <td class="text-right">{$result38.equipment|number_format=2}</td>
+                    <td class="text-right">{$result38.install|number_format=2}</td>
+                    <td class="text-right">{$result38.total|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>安装当年欠款TOP10</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">合同号</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-left">买方单位</th>
+                    <th class="text-right">欠款总金额</th>
+                </tr>
+                {volist name="result29" id="result29"}
+                <tr>
+                    <td class="text-left">{$result29.contract_id}</td>
+                    <td class="text-left">{$result29.company|mb_substr=0,2,'utf-8'}</td>
+                    <td class="text-left">{$result29.clause_customer}</td>
+                    <td class="text-right">{$result29.expire_arrears|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>设备当年欠款TOP10</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">合同号</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-left">买方单位</th>
+                    <th class="text-right">欠款总金额</th>
+                </tr>
+                {volist name="result30" id="result30"}
+                <tr>
+                    <td class="text-left">{$result30.contract_id}</td>
+                    <td class="text-left">{$result30.company|mb_substr=0,2,'utf-8'}</td>
+                    <td class="text-left">{$result30.clause_customer}</td>
+                    <td class="text-right">{$result30.expire_arrears|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>安装历史欠款TOP10</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">合同号</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-left">买方单位</th>
+                    <th class="text-right">欠款总金额</th>
+                </tr>
+                {volist name="result31" id="result31"}
+                <tr>
+                    <td class="text-left">{$result31.contract_id}</td>
+                    <td class="text-left">{$result31.company|mb_substr=0,2,'utf-8'}</td>
+                    <td class="text-left">{$result31.clause_customer}</td>
+                    <td class="text-right">{$result31.expire_arrears|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>设备历史欠款TOP10</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">合同号</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-left">买方单位</th>
+                    <th class="text-right">欠款总金额</th>
+                </tr>
+                {volist name="result32" id="result32"}
+                <tr>
+                    <td class="text-left">{$result32.contract_id}</td>
+                    <td class="text-left">{$result32.company|mb_substr=0,2,'utf-8'}</td>
+                    <td class="text-left">{$result32.clause_customer}</td>
+                    <td class="text-right">{$result32.expire_arrears|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>区域催款函发函情况</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>区域</th>
+                    <th class="text-right">设备催款函应发</th>
+                    <th class="text-right">设备催款函实发</th>
+                    <th class="text-right">实发比例</th>
+                    <th class="text-right">安装催款函应发</th>
+                    <th class="text-right">安装催款函实发</th>
+                    <th class="text-right">实发比例</th>
+                </tr>
+                {volist name="result" id="vo"}
+                <tr>
+                    <td>{$vo.company|mb_substr=0,2,'utf-8'}</td>
+                    <td class="text-right">{$vo.eq_collection_letter_shall_send/1000|number_format=0}</td>
+                    <td class="text-right">{$vo.eq_collection_letter_sent/1000|number_format=0}</td>
+                    <td class="text-right">{$vo.eq_collection_letter_sent*100/$vo.eq_collection_letter_shall_send|number_format=0}%</td>
+                    <td class="text-right">{$vo.in_collection_letter_shall_send/1000|number_format=0}</td>
+                    <td class="text-right">{$vo.in_collection_letter_sent/1000|number_format=0}</td>
+                    <td class="text-right">{$vo.in_collection_letter_sent*100/$vo.in_collection_letter_shall_send|number_format=0}%</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    &lt;!&ndash;<div class="page-header">
+        <h4>❈恒大赶工奖欠款 <small> </small></h4>
+    </div>&ndash;&gt;
+</div>
+&lt;!&ndash;/欠款模块&ndash;&gt;
+&lt;!&ndash;事业部模块&ndash;&gt;
+    <div class="tab-pane fade" id="bu" role="tabpanel" aria-labelledby="bu-tab">
+    <h3 class="text-center"><span class="badge text-center" style="background-color: darksalmon;font-size: large">事业部得分情况<small></small></span></h3>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>事业部总体得分排名</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>排名</th>
+                    <th class="text-left">事业部</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-right">总得分</th>
+                    <th class="text-right">生效</th>
+                    <th class="text-right">完工</th>
+                    <th class="text-right">当年欠款</th>
+                    <th class="text-right">历史欠款</th>
+                    <th class="text-right">发货</th>
+                </tr>
+                {volist name="result17" id="result17"}
+                <tr>
+                    <td>{$result17.rank}</td>
+                    <td class="text-left">{$result17.bu_sname}</td>
+                    <td class="text-left">{$result17.company}</td>
+                    <td class="text-right">{$result17.score}</td>
+                    <td class="text-right">{$result17.intoforce_score}</td>
+                    <td class="text-right">{$result17.install_score}</td>
+                    <td class="text-right">{$result17.thisyear_score}</td>
+                    <td class="text-right">{$result17.history_score}</td>
+                    <td class="text-right">{$result17.delivery_score}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>事业部生效得分排名</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th>排名</th>
+                    <th class="text-left">事业部</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-right">得分</th>
+                    <th class="text-right">指标</th>
+                    <th class="text-right">生效</th>
+                    <th class="text-right">完成率</th>
+                </tr>
+                {volist name="result18" id="result18"}
+                <tr>
+                    <td>{$result18.intoforce_rank}</td>
+                    <td class="text-left">{$result18.bu_sname}</td>
+                    <td class="text-left">{$result18.company}</td>
+                    <td class="text-right">{$result18.intoforce_score|number_format=2}</td>
+                    <td class="text-right">{$result18.intoforce_index}</td>
+                    <td class="text-right">{$result18.intoforce_complete}</td>
+                    <td class="text-right">{$result18.intoforce_rate}%</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>事业部完工得分排名</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">排名</th>
+                    <th class="text-left">事业部</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-right">得分</th>
+                    <th class="text-right">指标</th>
+                    <th class="text-right">完工</th>
+                    <th class="text-right">完成率</th>
+
+                </tr>
+                {volist name="result19" id="result19"}
+                <tr>
+                    <td class="text-left">{$result19.install_rank}</td>
+                    <td class="text-left">{$result19.bu_sname}</td>
+                    <td class="text-left">{$result19.company}</td>
+                    <td class="text-right">{$result19.install_score|number_format=2}</td>
+                    <td class="text-right">{$result19.install_index}</td>
+                    <td class="text-right">{$result19.install_complete}</td>
+                    <td class="text-right">{$result19.install_rate}%</td>
+
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>事业部当年欠款得分排名</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">排名</th>
+                    <th class="text-left">事业部</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-right">得分</th>
+                    <th class="text-right">设备合同</th>
+                    <th class="text-right">设备欠款</th>
+                    <th class="text-right">欠款率</th>
+                    <th class="text-right">安装合同</th>
+                    <th class="text-right">安装欠款</th>
+                    <th class="text-right">欠款率</th>
+
+                </tr>
+                {volist name="result20" id="result20"}
+                <tr>
+                    <td class="text-left">{$result20.thisyear_rank}</td>
+                    <td class="text-left">{$result20.bu_sname}</td>
+                    <td class="text-left">{$result20.company}</td>
+                    <td class="text-right">{$result20.thisyear_score|number_format=2}</td>
+                    <td class="text-right">{$result20.eq_amount|number_format=2}</td>
+                    <td class="text-right">{$result20.eq_thisyear_arrears|number_format=2}</td>
+                    <td class="text-right">{$result20.eq_thisyear_rate*100}%</td>
+                    <td class="text-right">{$result20.in_amount|number_format=2}</td>
+                    <td class="text-right">{$result20.in_thisyear_arrears|number_format=2}</td>
+                    <td class="text-right">{$result20.in_thisyear_rate*100}%</td>
+
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>事业部历史欠款得分排名</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">排名</th>
+                    <th class="text-left">事业部</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-right">得分</th>
+                    <th class="text-right">设备入金</th>
+                    <th class="text-right">设备结余</th>
+                    <th class="text-right">设备未拆</th>
+                    <th class="text-right">回收率</th>
+                    <th class="text-right">安装入金</th>
+                    <th class="text-right">安装结余</th>
+                    <th class="text-right">安装未拆</th>
+                    <th class="text-right">回收率</th>
+                </tr>
+                {volist name="result21" id="result21"}
+                <tr>
+                    <td class="text-left">{$result21.history_rank}</td>
+                    <td class="text-left">{$result21.bu_sname}</td>
+                    <td class="text-left">{$result21.company}</td>
+                    <td class="text-right">{$result21.history_score|number_format=2}</td>
+                    <td class="text-right">{$result21.eq_recovery|number_format=2}</td>
+                    <td class="text-right">{$result21.eq_arrears_balance|number_format=2}</td>
+                    <td class="text-right">{$result21.eq_arrears_unsplit|number_format=2}</td>
+                    <td class="text-right">{$result21.eq_history_rate|number_format=2}%</td>
+                    <td class="text-right">{$result21.in_recovery|number_format=2}</td>
+                    <td class="text-right">{$result21.in_arrears_balance|number_format=2}</td>
+                    <td class="text-right">{$result21.in_arrears_unsplit|number_format=2}</td>
+                    <td class="text-right">{$result21.in_history_rate|number_format=2}%</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>事业部报价加分情况</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">排名</th>
+                    <th class="text-left">事业部</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-right">得分</th>
+                    <th class="text-right">报价指标</th>
+                    <th class="text-right">报价台量</th>
+                    <th class="text-right">中标指标</th>
+                    <th class="text-right">中标台量</th>
+
+                </tr>
+                {volist name="result39" id="result39"}
+                <tr>
+                    <td class="text-left">{$result39.quote_rank}</td>
+                    <td class="text-left">{$result39.bu_sname}</td>
+                    <td class="text-left">{$result39.company}</td>
+                    <td class="text-right">{$result39.quote_score}</td>
+                    <td class="text-right">{$result39.quote_index}</td>
+                    <td class="text-right">{$result39.quote_complete}</td>
+                    <td class="text-right">{$result39.bid_index}</td>
+                    <td class="text-right">{$result39.bid_complete}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>事业部发货加分情况</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr style="background-color: #d42d32;color: white">
+                    <th class="text-left">排名</th>
+                    <th class="text-left">事业部</th>
+                    <th class="text-left">区域</th>
+                    <th class="text-right">发货指标</th>
+                    <th class="text-right">发货台量</th>
+                    <th class="text-right">得分</th>
+
+                </tr>
+                {volist name="result58" id="result58"}
+                <tr>
+                    <td class="text-left">{$result58.delivery_rank}</td>
+                    <td class="text-left">{$result58.bu_sname}</td>
+                    <td class="text-left">{$result58.company}</td>
+                    <td class="text-right">{$result58.delivery_index}</td>
+                    <td class="text-right">{$result58.delivery_complete}</td>
+                    <td class="text-right">{$result58.delivery_score}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>事业部安装预计收款按月汇总</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="buInstallPredict" data-toggle="table" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>事业部设备预计收款按月汇总</strong></div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm" id="buEquipmentPredict" data-toggle="table" style="white-space: nowrap;" data-search="true" data-search-align="left">
+                <thead style="background-color: #d42d32;color: white" class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+</div>
+&lt;!&ndash;/事业部模块&ndash;&gt;
+</div>-->
+<!--<script>
+    //当代码加载到这里的时候,执行这个script,当代码加载到这里,说明loading该结束了
+    window.onload=function(){
+        let siteWelcome = document.getElementById('siteWelcome');
+        siteWelcome.classList.remove('active');
+    }
+</script>-->
+</body>
+<script src="<?php addVersion('__JS__/myjs/welcomeJsonData.js');?>"></script>
+<script src="<?php addVersion('__JS__/myjs/bi.js');?>"></script>
+<!--<script src="<?php addVersion('__JS__/echarts/5.4.3/dist/echarts.min.js');?>"></script>
+<script src="<?php addVersion('__JS__/echarts/5.4.3/theme/vintage.js');?>"></script>-->
+
+<!--<script src="__JS__/myjs/welcomeJsonData.js"></script>-->
+<!--{eq name="Think.session.sale" value="1"}
+<script src="<?php addVersion('__JS__/myjs/sale.js');?>"></script>
+{else/}
+{/eq}
+<script src="<?php addVersion('__JS__/myjs/install.js');?>"></script>
+</html>-->
+

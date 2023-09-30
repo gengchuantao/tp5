@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="#">设置</a></li>
+            <li class="active">大客户维护</li>
+            <li class="active">新增</li>
+        </ol>
+        <form class="form-inline" action="{:url('insert')}" method="post">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">大客户编码</span>
+                <input type="text" class="form-control" name="customer_id" placeholder="" aria-describedby="basic-addon1">
+            </div><br><br>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2">大客户全称</span>
+                <input type="text" class="form-control" name="full_name" placeholder="" aria-describedby="basic-addon2">
+            </div><br><br>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">大客户简称</span>
+                <input type="text" class="form-control" name="short_name" placeholder="" aria-describedby="basic-addon3">
+            </div><br><br>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon4">营业员</span>
+                <input type="text" class="form-control" name="salesperson" placeholder="" aria-describedby="basic-addon4">
+            </div><br><br>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon5">联系方式</span>
+                <input type="text" class="form-control" name="phone" placeholder="" aria-describedby="basic-addon5">
+            </div><br><br>
+            <hr />
+            <button type="submit">保存</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

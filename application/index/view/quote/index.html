@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>报价</title>
+</head>
+<body>
+<!--start page wrapper -->
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">合同部</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{:url('Index/main')}"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">报价信息管理</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <a class="btn btn-sm btn-danger bi bi-node-plus" data-bs-toggle="modal" data-bs-target="#NewProject" style="color: #ffffff">新建项目</a>
+                </div>
+                <hr>
+                <div class="row">
+
+                        <div class="col-auto">
+                            <label for="search_contract_id"></label><input id="search_contract_id" class="form-control" placeholder="合同号" />
+                        </div>
+                        <div class="col-auto">
+                            <label for="search_buyer_unit"></label><input id="search_buyer_unit" class="form-control" placeholder="买方单位" />
+                        </div>
+                        <div class="col-auto">
+                            <label for="search_project_name"></label><input id="search_project_name" class="form-control" placeholder="项目名称" />
+                        </div>
+                        <div class="col-auto">
+                            <label for="search_sales_person"></label><input id="search_sales_person" class="form-control" placeholder="营业员" />
+                        </div>
+                        <div class="col-auto">
+                            <label for="search_status"></label>
+                            <div class="input-group">
+                               <select id="search_status" class="form-select" >
+                                    <option value="">请选择状态</option>
+                                    <option value="跟进中">跟进中</option>
+                                    <option value="已报价">已报价</option>
+                                    <option value="已中标">已中标</option>
+                                    <option value="评审中">评审中</option>
+                                    <option value="已签订">已签订</option>
+                                    <option value="已丢标">已丢标</option>
+                                </select>
+                                <span class="input-group-btn">
+                    <a id="query" class="btn btn-md btn-default bi bi-search" title="查询"></a>
+              </span>
+                            </div>
+                        </div>
+
+
+                </div>
+                <div id="toolbar">
+                    {eq name="Think.session.admin" value="1"}
+                    <a class="btn btn-sm btn-default bi bi-eye" style="background-color: grey;color: white" data-bs-toggle="modal" data-bs-target="#QuotePreview" title="预览" onclick="getQuotePreviewID('id');">预览</a>
+                    <a class="btn btn-sm btn-danger bi bi-trash" data-bs-toggle="modal" data-bs-target="#DeleteModal" title="删除" onclick="GetDeleteID('id');">删除</a>
+                    <a class="btn btn-sm btn-primary bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#QuoteEdit" title="编辑" onclick="getQuoteUpdateID('id');">编辑</a>
+                    <a class="btn btn-sm btn-success bi bi-currency-dollar" data-bs-toggle="modal" data-bs-target="#ApplyBond" title="保证金" onclick="getQuoteApplyBondID('id');">保证金</a>
+                    <a class="btn btn-sm btn-warning bi bi-clipboard-check"  title="报价" onclick="getQuoteTenderOfferID('id');">报价</a>
+                    <a class="btn btn-sm btn-warning bi bi-diamond-half"  title="投标结果" onclick="getQuoteTenderResultID('id');">投标结果</a>
+                    <a class="btn btn-sm btn-warning bi bi-stickies-fill"  title="生成合同" onclick="getQuoteCreateContractID('id');">生成合同</a>
+                    {else/}
+                    <a class="btn btn-sm btn-primary bi bi-eye" data-bs-toggle="modal" data-bs-target="#QuotePreview" title="预览" onclick="getQuotePreviewID('id');">预览</a>
+                    <a class="btn btn-sm btn-warning bi bi-clipboard-check"  title="报价" onclick="getQuoteTenderOfferID('id');">报价</a>
+                    <a class="btn btn-sm btn-warning bi bi-diamond-half"  title="投标结果" onclick="getQuoteTenderResultID('id');">投标结果</a>
+                    <a class="btn btn-sm btn-warning bi bi-stickies-fill"  title="生成合同" onclick="getQuoteCreateContractID('id');">生成合同</a>
+                    <a class="btn btn-sm btn-success bi bi-currency-dollar" data-bs-toggle="modal" data-bs-target="#ApplyBond" title="保证金" onclick="getQuoteApplyBondID('id');">保证金</a>
+                    {/eq}
+
+                </div>
+                <div class="table-responsive">
+                    <table
+                            class="table table-striped table-sm"
+                            id="quoteIndex"
+                            data-toggle="table"
+                            data-buttons-class="sm"
+                            style="white-space: nowrap;"
+                            data-unique-id="id">
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!--end breadcrumb-->
+        <!--end row-->
+    </div>
+</div>
+<!--end page wrapper -->
+
+<!-- 模态框（新建项目-开始） -->
+<div class="modal fade" id="NewProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content animation-dot">
+            <div class="modal-header">
+                <h5 class="modal-title">※新建项目</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">项目名称:</a>
+                            <label for="project_name"></label><input class="form-control" type="text" id="project_name" name="project_name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">项目类型:</a>
+                            <select id="project_type" name="project_type" class="form-control selectpicker">
+                                <option value="">请选择项目类型</option>
+                                <option value="普通住宅">普通住宅</option>
+            　　                 <option value="商超写字楼">商超写字楼</option>
+                                <option value="酒店公寓">酒店公寓</option>
+                                <option value="公建">公建</option>
+                                <option value="医院">医院</option>
+            　　                 <option value="工业建筑">工业建筑</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">招标类型:</a>
+                            <select id="bidding_type" name="bidding_type" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择招标类型">
+                                <option value="正式招标">正式招标</option>
+            　　                 <option value="竞争性谈判">竞争性谈判</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">投标方式:</a>
+                            <select id="bid_type" name="bid_type" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择投标方式">
+                                <option value="厂家直投">厂家直投</option>
+            　　                 <option value="代理商">代理商</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+
+                            <label for="province" class="text-danger">安装省份:</label><select id="province" name="province" class="selectpicker form-control"  onchange="GetCity()">
+            　　             <option data-tokens="ketchup mustard" value="">请选择省</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="city" class="text-danger">安装地市:</label><select id="city" name="city" class="selectpicker form-control"  onchange="GetCounty()">
+            　　                 <option data-tokens="ketchup mustard" value="">请选择市</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="county" class="text-danger">安装区县:</label><select id="county" name="county" class="selectpicker form-control" >
+            　　                <option data-tokens="ketchup mustard" value="">请选择区县</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="quote_num" class="text-danger">招标台量:</label><input class="form-control" type="number" id="quote_num" name="quote_num" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">招标公司:</a>
+                            <input class="form-control" type="text" id="bidding_company" name="bidding_company" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">买方单位:</a>
+                            <input class="form-control" type="text" id="buyer_unit" name="buyer_unit" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">客户分类:</a>
+                            <select id="customer_classification" name="customer_classification" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择客户属性">
+                                <option value="普通客户">普通客户</option>
+            　　                 <option value="KA客户">KA客户</option>
+                                <option value="本地大客户">本地大客户</option>
+                                <option value="经销商">经销商</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            大客户编码(大客户必填):
+                            <input class="form-control" type="text" id="big_client_code" name="big_client_code" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">开标日期:</a>
+                            <div class='input-group date' id='q_bid_opening_date'>
+                                <input type='text' class="form-control" id='bid_opening_date' name='bid_opening_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">分公司:</a>
+                            <input class="form-control" type="text" id="branch_office" name="branch_office" value="{$Think.session.company}" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">营业员:</a>
+                            <select id="sales_person" name="sales_person" class="selectpicker form-control" value="">
+            　　             <option data-tokens="ketchup mustard" value="">请选择营业员</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">主要梯种型号(可多选):</a>
+                            <select id="select_elevator_model"  class="selectpicker form-control form-group-sm" multiple data-max-options="10"  title="请选择主要梯种">
+            　　                 <option value="HGE">HGE</option>
+            　　                 <option value="LGE">LGE</option>
+                                <option value="VGE">VGE</option>
+                                <option value="HGP">HGP</option>
+            　　                 <option value="MCA">MCA</option>
+                                <option value="LCA">LCA</option>
+                                <option value="HCA">HCA</option>
+        　　                     <option value="UCA">UCA</option>
+                                <option value="LF">LF</option>
+                                <option value="UVF">UVF</option>
+                                <option value="SX">SX</option>
+                                <option value="TX">TX</option>
+                                <option value="EX-BPG">EX-BPG</option>
+                            </select>
+                            <input type="text"  style="display:none;" id="elevator_model" name="elevator_model"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">建筑物最高高度(米):</a>
+                            <input class="form-control" type="number" id="building_height" name="building_height" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="AddNew()" class="btn btn-primary">新增</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新建项目-结束） -->
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">请确认是否删除？</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="DeleteForm">
+                <label for="delete_id"></label><input class="form-control" type="text" readonly="readonly" id="delete_id" name="delete_id" />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+<!-- 模态框（申请保证金-开始） -->
+<div class="modal fade" id="ApplyBond" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">保证金管理</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="ApplyBondForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            项目名称:
+                            <input class="form-control" type="hidden" id="apply_bond_id" name="apply_bond_id" />
+                            <input class="form-control input-sm" type="text" id="a_project_name"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            招标台量:
+                            <input class="form-control input-sm" type="text" id="a_quote_num"  readonly="readonly"/>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-3">
+                            招标公司:
+                            <input class="form-control input-sm" type="text" id="a_bidding_company"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            买方单位:
+                            <input class="form-control input-sm" type="text" id="a_buyer_unit"  readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            开标日期:
+                            <input class="form-control input-sm" type="text" id="a_bid_opening_date"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            分公司:
+                            <input class="form-control input-sm" type="text" id="a_branch_office"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            营业员:
+                            <input class="form-control input-sm" type="text" id="a_sales_person"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">保证金分类:</a>
+                            <select id="a_bond_assortment" name="a_bond_assortment" class="selectpicker form-control" >
+                                <option value="投标保证金">投标保证金</option>
+                                <option value="履约保证金">履约保证金</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">投标保证金金额:</a>
+                            <input class="form-control input-sm" type="number" id="a_bond" name="a_bond"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">履约保证金金额:</a>
+                            <input class="form-control input-sm" type="number" id="a_performance_bond" name="a_performance_bond"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">保证金申请日期:</a>
+                            <div class='input-group date' id='bond_apply_date'>
+                                <input type='text' class="form-control" id='a_bond_apply_date' name='a_bond_apply_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">保证金支付方:</a>
+                            <select id="a_bond_payer" name="a_bond_payer" class="selectpicker form-control" >
+                                <option value="总公司">总公司</option>
+                                <option value="分公司">分公司</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">保证金汇出日期:</a>
+                            <div class='input-group date' id='bond_remit_date'>
+                                <input type='text' class="form-control" id='a_bond_remit_date' name='a_bond_remit_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;"> 保证金受益人:</a>
+                            <input class="form-control input-sm" type="text" id="a_bond_beneficiary" name="a_bond_beneficiary" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">招标文件是否盖章:</a>
+                            <select id="a_if_seal" name="a_if_seal" class="selectpicker form-control" >
+                                <option value="是">是</option>
+                                <option value="否">否</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">应退回日期:</a>
+                            <div class='input-group date' id='band_expect_date'>
+                                <input style="background: #8ed1fc" type='text' class="form-control" id='a_band_expect_date' name='a_band_expect_date' />
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">保证金退回日期:</a>
+                            <div class='input-group date' id='bond_return_date'>
+                                <input style="background: #8ed1fc" type='text' class="form-control" id='a_bond_return_date' name='a_bond_return_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">核销金额:</a>
+                            <input style="background: #8ed1fc" class="form-control input-sm" type="number" id="a_verification_money" name="a_verification_money" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">保证金是否转履约:</a>
+                            <select style="background: #8ed1fc" id="a_if_agreement" name="a_if_agreement" class="selectpicker form-control" >
+                                <option value="是">是</option>
+                                <option value="否">否</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">承诺收回日期:</a>
+                            <div class='input-group date' id='agreement_back_date'>
+                                <input style="background: #8ed1fc" type='text' class="form-control" id='a_agreement_back_date' name='a_agreement_back_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">催款函寄出日期:</a>
+                            <div class='input-group date' id='reminder_letter_date'>
+                                <input style="background: #8ed1fc" type='text' class="form-control" id='a_reminder_letter_date' name='a_reminder_letter_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">律师函寄出日期:</a>
+                            <div class='input-group date' id='lawyer_letter_date'>
+                                <input style="background: #8ed1fc" type='text' class="form-control" id='a_lawyer_letter_date' name='a_lawyer_letter_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            备注:
+                            <textarea style="background: #8ed1fc" class="form-control" type="text" id="a_bond_remarks" name="a_bond_remarks" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="ApplyBond()" class="btn btn-primary">
+                        保证金申请
+                    </button>
+                    {eq name="Think.session.super_admin" value="1"}
+                    <button type="button" onclick="VerifyBond()" class="btn btn-danger">
+                        保证金审核
+                    </button>
+                    {else/}
+                    {/eq}
+
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（申请保证金-结束） -->
+<!-- 模态框（投标报价-开始） -->
+<div class="modal fade" id="TenderOffer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">投标报价</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="TenderOfferForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            项目名称:
+                            <input class="form-control" type="hidden" id="tender_offer_id" name="tender_offer_id" />
+                            <input class="form-control input-sm" type="text" id="t_project_name"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            项目类型:
+                            <input class="form-control input-sm" type="text" id="t_project_type"  readonly="readonly"/>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-3">
+                            招标类型:
+                            <input class="form-control input-sm" type="text" id="t_bidding_type"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            投标方式:
+                            <input class="form-control input-sm" type="text" id="t_bid_type"  readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            招标公司:
+                            <input class="form-control input-sm" type="text" id="t_bidding_company"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            买方单位:
+                            <input class="form-control input-sm" type="text" id="t_buyer_unit"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            客户分类:
+                            <input class="form-control input-sm" type="text" id="t_customer_classification"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            大客户编码(大客户必填):
+                            <input class="form-control input-sm" type="text" id="t_big_client_code"  readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            开标日期:
+                            <input class="form-control input-sm" type="text" id="t_bid_opening_date"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            营业员:
+                            <input class="form-control input-sm" type="text" id="t_sales_person"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            主要梯种型号:
+                            <input class="form-control input-sm" type="text" id="t_elevator_model"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            建筑物最高高度(米):
+                            <input class="form-control input-sm" type="text" id="t_building_height"  readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">报价日期:</a>
+                            <div class='input-group date' id='quote_date'>
+                                <input type='text' class="form-control" id='t_quote_date' name='t_quote_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">设备SPL价(元):</a>
+                            <input class="form-control input-sm" type="number" id="standard_equipment_price" name="standard_equipment_price" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">最终设备报价(元):</a>
+                            <input class="form-control input-sm" type="number" id="final_equipment_quotation" name="final_equipment_quotation" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">最终运费报价(元):</a>
+                            <input class="form-control input-sm" type="number" id="total_transport_price" name="total_transport_price" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">最终安装报价(元):</a>
+                            <input class="form-control input-sm" type="number" id="final_installation_quote" name="final_installation_quote" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="TenderOffer()" class="btn btn-primary">
+                       投标报价
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（投标报价-结束） -->
+<!-- 模态框（投标结果-开始） -->
+<div class="modal fade" id="TenderResult" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">投标结果</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="TenderResultForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            项目名称:
+                            <input class="form-control" type="hidden" id="tender_result_id" name="tender_result_id" />
+                            <input class="form-control input-sm" type="text" id="r_project_name"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            开标日期:
+                            <input class="form-control input-sm" type="text" id="r_bid_opening_date"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            营业员:
+                            <input class="form-control input-sm" type="text" id="r_sales_person"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            报价台量:
+                            <input class="form-control input-sm" type="text" id="r_quote_num"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">设备SPL价(元):</a>
+                            <input class="form-control input-sm" type="number" id="r_standard_equipment_price" name="r_standard_equipment_price" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">最终设备报价(元):</a>
+                            <input class="form-control input-sm" type="number" id="r_final_equipment_quotation" name="r_final_equipment_quotation" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">最终运费报价(元):</a>
+                            <input class="form-control input-sm" type="number" id="r_total_transport_price" name="r_total_transport_price" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">最终安装报价(元):</a>
+                            <input class="form-control input-sm" type="number" id="r_final_installation_quote" name="r_final_installation_quote" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">中标厂家:</a>
+                            <select id="winning_bid" name="winning_bid" class="selectpicker form-control form-group-sm"   title="请选择中标厂家">
+                                <option value="日立">日立</option>
+                                　　                 <option value="三菱">三菱</option>
+                                <option value="通力">通力</option>
+                                　　                 <option value="蒂森">蒂森</option>
+                                <option value="奥的斯">奥的斯</option>
+                                <option value="奥的斯机电">奥的斯机电</option>
+                                　　                 <option value="迅达">迅达</option>
+                                <option value="西奥">西奥</option>
+                                <option value="东芝">东芝</option>
+                                <option value="富士达">富士达</option>
+                                <option value="西子">西子</option>
+                                <option value="巨人通力">巨人通力</option>
+                                <option value="永大">永大</option>
+                                <option value="康力">康力</option>
+                                <option value="沃克斯">沃克斯</option>
+                                <option value="博林特">博林特</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">我司中标台量:</a>
+                            <input class="form-control input-sm" type="number" id="bid_num" name="bid_num" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">丢标原因:</a>
+                            <select id="not_winning_reason" name="not_winning_reason" class="selectpicker form-control form-group-sm"   title="请选择丢标原因">
+                                <option value="" selected style="display:none"></option>
+                                <option value="价格">价格</option>
+            　　                 <option value="关系">关系</option>
+    　　                         <option value="条款">条款</option>
+                                <option value="其它">其它</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">中标对手总报价:</a>
+                            <input class="form-control input-sm" type="number" id="competitor_quote" name="competitor_quote" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="TenderResult()" class="btn btn-primary">
+                        提交投标结果
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（投标结果-结束） -->
+<!-- 模态框（生成合同-开始） -->
+<div class="modal fade" id="CreateContract" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">生成合同</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="CreateContractForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            项目名称:
+                            <input class="form-control" type="hidden" id="create_contract_id" name="create_contract_id" />
+                            <input class="form-control input-sm" type="text" id="c_project_name" name="c_project_name"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            分公司:
+                            <input class="form-control input-sm" type="text" id="c_branch_office" name="c_branch_office" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            营业员:
+                            <input class="form-control input-sm" type="text" id="c_sales_person" name="c_sales_person" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            项目属性:
+                            <input class="form-control input-sm" type="text" id="c_project_type" name="c_project_type" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            安装省份:
+                            <input class="form-control input-sm" type="text" id="c_province" name="c_province"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            安装地市:
+                            <input class="form-control input-sm" type="text" id="c_city" name="c_city" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            安装区县:
+                            <input class="form-control input-sm" type="text" id="c_county" name="c_county" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            买方单位:
+                            <input class="form-control input-sm" type="text" id="c_buyer_unit" name="c_buyer_unit"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            使用单位:
+                            <input class="form-control input-sm" type="text" id="c_use_unit" name="c_use_unit" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            客户分类:
+                            <input class="form-control input-sm" type="text" id="c_customer_classification" name="c_customer_classification" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            大客户编码:
+                            <input class="form-control input-sm" type="text" id="c_big_client_code" name="c_big_client_code" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            合同号:
+                            <input class="form-control input-sm" type="text" id="c_contract_id" name="c_contract_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            中标台量:
+                            <input class="form-control input-sm" type="text" id="c_bid_num" name="c_bid_num" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="GetTempContractID()" class="btn btn-warning">
+                        获取临时合同号
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="CreateContract()" class="btn btn-success">
+                        生成合同
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（生成合同-结束） -->
+<!-- 模态框（报价预览-开始） -->
+<div class="modal fade" id="QuotePreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">报价信息预览</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="QuotePreviewForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            项目名称:
+                            <input class="form-control" type="hidden" id="quote_preview_id" name="quote_preview_id" />
+                            <label for="q_project_name"></label><input class="form-control input-sm" type="text" id="q_project_name" name="q_project_name" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_project_type">项目类型:</label><input class="form-control input-sm" type="text" id="q_project_type" name="q_project_type" readonly="readonly"/>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_bidding_type">招标类型:</label><input class="form-control input-sm" type="text" id="q_bidding_type" name="q_bidding_type" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_bid_type">投标方式:</label><input class="form-control input-sm" type="text" id="q_bid_type" name="q_bid_type" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_province">安装省份:</label><input class="form-control input-sm" type="text" id="q_province" name="q_province" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_city">安装地市:</label><input class="form-control input-sm" type="text" id="q_city" name="q_city" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_county">安装区县:</label><input class="form-control input-sm" type="text" id="q_county" name="q_county" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_quote_num">招标台量:</label><input class="form-control input-sm" type="text" id="q_quote_num" name="q_quote_num" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_bidding_company">招标公司:</label><input class="form-control input-sm" type="text" id="q_bidding_company" name="q_bidding_company" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_buyer_unit">买方单位:</label><input class="form-control input-sm" type="text" id="q_buyer_unit" name="q_buyer_unit" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_customer_classification">客户分类:</label><input class="form-control input-sm" type="text" id="q_customer_classification" name="q_customer_classification" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_big_client_code">大客户编码(大客户必填):</label><input class="form-control input-sm" type="text" id="q_big_client_code" name="q_big_client_code" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="p_bid_opening_date">开标日期:</label><input class="form-control input-sm" type="text" id="p_bid_opening_date" name="p_bid_opening_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_branch_office">分公司:</label><input class="form-control input-sm" type="text" id="q_branch_office" name="q_branch_office" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_sales_person">营业员:</label><input class="form-control input-sm" type="text" id="q_sales_person" name="q_sales_person" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_elevator_model">主要梯种型号:</label><input class="form-control input-sm" type="text" id="q_elevator_model" name="q_elevator_model" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_building_height">建筑物最高高度(米):</label><input class="form-control input-sm" type="text" id="q_building_height" name="q_building_height" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_quote_date">报价日期:</label><input class="form-control input-sm" type="text" id="q_quote_date" name="q_quote_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_standard_equipment_price">设备SPL价:</label><input class="form-control input-sm" type="text" id="q_standard_equipment_price" name="q_standard_equipment_price" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_final_equipment_quotation">最终设备报价:</label><input class="form-control input-sm" type="text" id="q_final_equipment_quotation" name="q_final_equipment_quotation" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_total_transport_price">最终运费报价:</label><input class="form-control input-sm" type="text" id="q_total_transport_price" name="q_total_transport_price" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_final_installation_quote">最终安装报价:</label><input class="form-control input-sm" type="text" id="q_final_installation_quote" name="q_final_installation_quote" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_winning_bid">中标厂家:</label><input class="form-control input-sm" type="text" id="q_winning_bid" name="q_winning_bid" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_competitor_quote">中标厂家总报价:</label><input class="form-control input-sm" type="text" id="q_competitor_quote" name="q_competitor_quote" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="q_not_winning_reason">丢标原因:</label><input class="form-control input-sm" type="text" id="q_not_winning_reason" name="q_not_winning_reason" readonly="readonly"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（报价预览-结束） -->
+<!-- 模态框（报价编辑-开始） -->
+<div class="modal fade" id="QuoteEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">报价信息修改</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="QuoteEditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+
+                            <input class="form-control" type="hidden" id="quote_edit_id" name="quote_edit_id" />
+                            <label for="e_project_name">项目名称:</label><input class="form-control input-sm" type="text" id="e_project_name" name="e_project_name" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            项目类型:
+                            <select id="e_project_type" name="e_project_type" class="selectpicker form-control form-group-sm"   title="请选择项目类型">
+                                <option value="普通住宅">普通住宅</option>
+            　　                 <option value="商超写字楼">商超写字楼</option>
+                                <option value="酒店公寓">酒店公寓</option>
+            　　                 <option value="公建">公建</option>
+                                <option value="医院">医院</option>
+            　　                 <option value="工业建筑">工业建筑</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_bidding_type">招标类型:</label><input class="form-control input-sm" type="text" id="e_bidding_type" name="e_bidding_type" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_bid_type">投标方式:</label><input class="form-control input-sm" type="text" id="e_bid_type" name="e_bid_type" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_province">安装省份:</label><input class="form-control input-sm" type="text" id="e_province" name="e_province" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_city">安装地市:</label><input class="form-control input-sm" type="text" id="e_city" name="e_city" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_county">安装区县:</label><input class="form-control input-sm" type="text" id="e_county" name="e_county" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_quote_num">招标台量:</label><input class="form-control input-sm" type="text" id="e_quote_num" name="e_quote_num" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_bidding_company">招标公司:</label><input class="form-control input-sm" type="text" id="e_bidding_company" name="e_bidding_company" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_buyer_unit">买方单位:</label><input class="form-control input-sm" type="text" id="e_buyer_unit" name="e_buyer_unit" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            客户分类:
+                            <select id="e_customer_classification" name="e_customer_classification" class="selectpicker form-control form-group-sm"  title="请选择客户分类">
+                                <option value="普通客户">普通客户</option>
+            　　                <option value="KA客户">KA客户</option>
+                                <option value="本地大客户">本地大客户</option>
+                                <option value="经销商">经销商</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_big_client_code">大客户编码(大客户必填):</label><input class="form-control input-sm" type="text" id="e_big_client_code" name="e_big_client_code" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_elevator_model">主要梯种型号:</label><input class="form-control input-sm" type="text" id="e_elevator_model" name="e_elevator_model" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_branch_office">分公司:</label><input class="form-control input-sm" type="text" id="e_branch_office" name="e_branch_office" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_sales_person">营业员:</label><input class="form-control input-sm" type="text" id="e_sales_person" name="e_sales_person" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_standard_equipment_price">设备SPL价:</label><input class="form-control input-sm" type="text" id="e_standard_equipment_price" name="e_standard_equipment_price" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_final_equipment_quotation">最终设备报价:</label><input class="form-control input-sm" type="text" id="e_final_equipment_quotation" name="e_final_equipment_quotation" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_total_transport_price">最终运费报价:</label><input class="form-control input-sm" type="text" id="e_total_transport_price" name="e_total_transport_price" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_final_installation_quote">最终安装报价:</label><input class="form-control input-sm" type="text" id="e_final_installation_quote" name="e_final_installation_quote" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_quote_date">报价日期:</label><input class="form-control input-sm" type="text" id="e_quote_date" name="e_quote_date" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_bid_opening_date">开标日期:</label><input class="form-control input-sm" type="text" id="e_bid_opening_date" name="e_bid_opening_date" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_win_bidding_date">中标日期:</label><input class="form-control" type="text" id="e_win_bidding_date" name="e_win_bidding_date" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            中标厂家:
+                            <select id="e_winning_bid" name="e_winning_bid" class="selectpicker form-control form-group-sm"  title="请选择中标厂家">
+                                <option value="日立">日立</option>
+                                　　                 <option value="三菱">三菱</option>
+                                <option value="通力">通力</option>
+                                　　                 <option value="蒂森">蒂森</option>
+                                <option value="奥的斯">奥的斯</option>
+                                <option value="奥的斯机电">奥的斯机电</option>
+                                　　                 <option value="迅达">迅达</option>
+                                <option value="西奥">西奥</option>
+                                <option value="东芝">东芝</option>
+                                <option value="富士达">富士达</option>
+                                <option value="西子">西子</option>
+                                <option value="巨人通力">巨人通力</option>
+                                <option value="永大">永大</option>
+                                <option value="康力">康力</option>
+                                <option value="沃克斯">沃克斯</option>
+                                <option value="博林特">博林特</option>
+                                <option value="其他">其他</option>
+                                <option value="">无</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_competitor_quote">竞争对手总报价:</label><input class="form-control " type="text" id="e_competitor_quote" name="e_competitor_quote" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_contract_id">合同编号:</label><input class="form-control " type="text" id="e_contract_id" name="e_contract_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            状态:
+                            <select id="e_status" name="e_status" class="selectpicker form-control form-group-sm"  title="请选择状态" onchange="ChangeQuoteStatus()">
+                                <option value="跟进中">跟进中</option>
+                                　　                 <option value="已报价">已报价</option>
+                                <option value="已中标">已中标</option>
+                                　　                 <option value="评审中">评审中</option>
+                                <option value="已签订">已签订</option>
+                                　　                 <option value="已丢标">已丢标</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_bid_num">中标台量:</label><input class="form-control " type="text" id="e_bid_num" name="e_bid_num" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            是否丢标:
+                            <select id="e_if_not_winning" name="e_if_not_winning" class="selectpicker form-control form-group-sm"  title="是否丢标">
+                                 <option value="否">否</option>
+        　　                 <option value="是">是</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="e_not_winning_date">丢标日期:</label><input class="form-control " type="text" id="e_not_winning_date" name="e_not_winning_date" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            丢标原因:
+                            <select id="e_not_winning_reason" name="e_not_winning_reason" class="selectpicker form-control form-group-sm"  title="请选择丢标原因">
+                                <option value="价格">价格</option>
+                                　　                 <option value="关系">关系</option>
+                                <option value="条款">条款</option>
+                                　　                 <option value="其它">其它</option>
+                                <option value="">无</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="QuoteEdit()" class="btn btn-success">
+                        修改
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（报价编辑-结束） -->
+</body>
+<script src="<?php addVersion('__JS__/myjs/quote.js');?>"></script>
+<script src="<?php addVersion('__JS__/myjs/address.js');?>"></script>
+</html>

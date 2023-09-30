@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <form class="form-inline" action="{:url('Product/batchupdate')}" id="forms">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">合同号</span>
+                <input type="text" class="form-control" name="batch_contract_id" placeholder="" aria-describedby="basic-addon1">
+            </div><br><br>
+            <div class="form-group">
+                <select class="form-control selectpicker" name="batch_company" title="请选择绩效归属地" >
+                    <option value="济南大区">济南大区</option>
+                    <option value="青岛分公司">青岛分公司</option>
+                    <option value="潍坊分公司">潍坊分公司</option>
+                    <option value="烟台分公司">烟台分公司</option>
+                    <option value="临沂分公司">临沂分公司</option>
+                    <option value="济宁分公司">济宁分公司</option>
+                    <option value="德州分公司">德州分公司</option>
+                    <option value="东营分公司">东营分公司</option>
+                    <option value="菏泽办事处">菏泽办事处</option>
+                </select>
+            </div><br><br>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2">工号起</span>
+                <input type="text" class="form-control" name="batch_product_id_start" placeholder="" aria-describedby="basic-addon2">
+            </div><br><br>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">工号止</span>
+                <input type="text" class="form-control" name="batch_product_id_end" placeholder="" aria-describedby="basic-addon3">
+            </div><br><br>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon4">生效日期</span>
+                <input type="text" class="form-control" name="batch_into_force_date" placeholder="" aria-describedby="basic-addon4">
+            </div><br><br>
+            <label>生效日期：</label>
+            <div class='input-group date' id='datetimepicker1'>
+                <input type='text' class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div><br><br>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon5">营业员</span>
+                <input type="text" class="form-control" name="batch_sales_person" placeholder="" aria-describedby="basic-addon5">
+            </div><br><br>
+            <div class="form-group">
+                <select class="form-control selectpicker" name="batch_enough_5_percent" title="生效款超过5%" >
+                    <option value="是">是</option>
+                    <option value="否">否</option>
+                </select>
+            </div><br><br>
+            <div class="form-group">
+                <select class="form-control selectpicker" name="batch_if_split" title="是否拆分" >
+                    <option value="是">是</option>
+                    <option value="否">否</option>
+                </select>
+            </div><br><br>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon6">收款编号</span>
+                <input type="text" class="form-control" name="batch_receipt_id" placeholder="" aria-describedby="basic-addon6">
+            </div><br><br>
+            <hr />
+            <button type="submit" class = "btn btn-success" ><i class = "glyphicon glyphicon-floppy-disk"></i>批量处理</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

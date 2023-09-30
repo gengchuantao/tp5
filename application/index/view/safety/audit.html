@@ -1,0 +1,155 @@
+<ol class="breadcrumb">
+    <li><a href="{:url('index')}"><span class = "glyphicon glyphicon-option-vertical"></span>项目列表</a></li>
+    <li class="active">项目审核</li>
+</ol>
+<body class="container">
+<form action="{:url('auditing')}" class="form-horizontal center-block" method="post" enctype="multipart/form-data">
+    <div class="form-group ">
+        <label class="col-sm-2 control-label" >合同号：</label>
+        <div  class="col-sm-8 ">
+            <input type="hidden" name="id" value="{$Safety->getData('id')}" />
+            <input class="form-control" id="contract_id" type="text" disabled="disabled" value="{$Safety->getData('contract_id')}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label" >审核状态：</label>
+        <div class="col-sm-8">
+            <input class="form-control"  type="text" disabled="disabled"  value="{$Safety->getData('audit_status')}"/>
+        </div>
+    </div>
+    <div class="form-group ">
+        <label class="col-sm-2 control-label" >项目名称：</label>
+        <div class="col-sm-8">
+            <input class="form-control" id="project_name" type="text" disabled="disabled" value="{$Safety->getData('project_name')}"/>
+        </div>
+    </div>
+    {eq name="Think.session.admin" value="1"}
+    <div class="form-group ">
+        <label class="col-sm-2 control-label" >区域审核人：</label>
+        <div class="col-sm-8">
+            <input class="form-control"  readonly="true" type="text" value="{$Safety->getData('company_auditor')}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label" >区域审核日期：</label>
+        <div class="col-sm-8">
+            <div class='input-group date' >
+                <input  type='text' class="form-control" readonly="true"  value="{$Safety->getData('company_audit_date')}"/>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label" >区域审核意见：</label>
+        <div class="col-sm-8">
+            <input class="form-control"  type="text"  readonly="true" required="required" value="{$Safety->getData('company_remarks')}"/>
+        </div>
+    </div>
+    <div class="form-group ">
+        <label class="col-sm-2 control-label" >山东司审核人：</label>
+        <div class="col-sm-8">
+            <input class="form-control"  readonly="true" type="text" value="{$Safety->getData('auditor')}"/>
+            <input type="hidden" name="auditor" value="{$Think.session.staff_name}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label" >山东司审核日期：</label>
+        <div class="col-sm-8">
+            <div class='input-group date' >
+                <input  type='text' class="form-control" readonly="true"  value="{$Safety->getData('audit_date')}"/>
+                <input id='audit_date' type='hidden' class="form-control"  name='audit_date' />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label" >山东司审核意见：</label>
+        <div class="col-sm-8">
+            <input class="form-control" id="opinion" name="opinion" type="text"  required="required" value="{$Safety->getData('opinion')}"/>
+        </div>
+    </div>
+    {else/}
+    <div class="form-group ">
+        <label class="col-sm-2 control-label" >山东司审核人：</label>
+        <div class="col-sm-8">
+            <input class="form-control"  readonly="true" type="text" value="{$Safety->getData('auditor')}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label" >山东司审核日期：</label>
+        <div class="col-sm-8">
+            <div class='input-group date' >
+                <input  type='text' class="form-control" readonly="true"  value="{$Safety->getData('audit_date')}"/>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label" >山东司审核意见：</label>
+        <div class="col-sm-8">
+            <input class="form-control"  type="text"  readonly="true" required="required" value="{$Safety->getData('opinion')}"/>
+        </div>
+    </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label" >区域审核人：</label>
+            <div class="col-sm-8">
+                <input class="form-control" readonly="true" type="text" value="{$Safety->getData('company_auditor')}"/>
+                <input type="hidden" name="company_auditor" value="{$Think.session.staff_name}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" >区域审核日期：</label>
+            <div class="col-sm-8">
+                <div class='input-group date' >
+                    <input  type='text' class="form-control" readonly="true"  value="{$Safety->getData('company_audit_date')}"/>
+                    <input id='company_audit_date' type='hidden' class="form-control" readonly="true" name='company_audit_date' />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" >区域审核意见：</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="company_remarks" name="company_remarks" type="text"  required="required" value="{$Safety->getData('company_remarks')}"/>
+            </div>
+        </div>
+    {/eq}
+    <div class="form-group">
+    <div class="col-sm-10 text-right">
+        <label >审核操作：</label>
+            <select name="audit_status" class="selectpicker" multiple data-max-options="1" data-live-search="false" data-live-search-placeholder="搜索" data-actions-box="false">
+                　　                  <optgroup label="请选择：">
+                <option value="{$Think.session.audit_status}">{$Think.session.audit_status}</option>
+                　　                  <option selected value="已审核">通过</option>
+                　　                  <option value="已拒绝">驳回</option>
+                　　                  </optgroup>
+            </select>
+        <button type="submit" class="btn btn-success" >提交</button>
+    </div>
+    </div>
+</form>
+</body>
+<script>
+    /*获取当前时间*/
+    var time = new Date();
+    /*格式化日，如果小于9，则补0*/
+    var day = ("0" + time.getDate()).slice(-2);
+    /*格式化月，如果小于9，则补0*/
+    var month = ("0" + (time.getMonth() + 1)).slice(-2);
+    /*拼接日期*/
+    var today = time.getFullYear() + "-" + (month) + "-" + (day);
+    /*完成赋值操作*/
+    document.getElementById("audit_date").value=today;
+</script>
+<script>
+    /*获取当前时间*/
+    var time = new Date();
+    /*格式化日，如果小于9，则补0*/
+    var day = ("0" + time.getDate()).slice(-2);
+    /*格式化月，如果小于9，则补0*/
+    var month = ("0" + (time.getMonth() + 1)).slice(-2);
+    /*拼接日期*/
+    var today = time.getFullYear() + "-" + (month) + "-" + (day);
+    /*完成赋值操作*/
+    document.getElementById("company_audit_date").value=today;
+</script>

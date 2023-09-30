@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>总部待处理合同</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--查询条件-->
+                <form class="form-group-md">
+                    <div class="col-xs-6 col-sm-2 form-group">
+                        <input name="contract_id" type="text" class="form-control" placeholder="合同号..."value="{:input('get.contract_id')}">
+                    </div>
+                    <div class="col-xs-6 col-sm-2 text-right">
+                        <button type="submit" class="btn btn-md btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </form>
+            </div>
+            <!--表单显示-->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <tr class="info">
+                        <th>序号</th>
+                        <th>合同号</th>
+                        <th>状态</th>
+                        <th>台量</th>
+                        <th>买方单位</th>
+                        <th>接收日期</th>
+                        <th>寄出日期</th>
+                        <th>处理人</th>
+                        <th class="text-center">处理</th>
+                    </tr>
+                    {volist name="contracts" id="_Contract" key="key"}
+
+                    <tr>
+                        <td>{$_Contract->getData('id')}</td>
+                        <td>{$_Contract->getData('contract_id')}</td>
+                        <td>{$_Contract->getData('process')}</td>
+                        <td>{$_Contract->getData('contract_num')}</td>
+                        <td>{$_Contract->getData('buyer_unit')}</td>
+                        <td>{$_Contract->getData('delivery_date')}</td>
+                        <td>{$_Contract->getData('send_date')}</td>
+                        <td>{$_Contract->getData('head_auditor')}</td>
+                        {eq name="_Contract.delivery_date" value="0000-00-00"}
+                        <td  class="text-center">&nbsp;
+                            <a class="btn btn-xs btn-primary" data-toggle="modal" data-target="#headprocess" onclick="GetID('{$_Contract.id}');">
+                                <i class="glyphicon glyphicon-import"></i>
+                                接收
+                            </a>
+                        </td>
+                        {else/}
+                        <td  class="text-center">&nbsp;
+                            <a class="btn btn-xs btn-danger" data-toggle="modal" data-target="#headsend" onclick="GetID('{$_Contract.id}');">
+                                <i class="glyphicon glyphicon-export"></i>
+                                寄出
+                            </a>
+                        </td>
+                        {/eq}
+                    </tr>
+                    {/volist}
+                </table>
+                {$contracts->render()}
+            </div>
+        </div>
+        <!-- 模态框（总部接收） -->
+        <div class="modal fade" id="headprocess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" >
+                            总部接收
+                        </h4>
+                    </div>
+                    <form id="updateform">
+                        <div class="modal-body">
+                            ID: <input class="form-control" type="text" id="r_receive_id" name="r_receive_id" />
+                            接收日期: <div class='input-group date' id='r_delivery_date' >
+                                        <input type='text' class="form-control" name='r_delivery_date' />
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                    </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" onclick="ajaxPost()" class="btn btn-primary">
+                                提交更改
+                            </button>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    </div>
+</div>
+<!-- 模态框（总部寄出） -->
+<div class="modal fade" id="headsend" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    总部寄出
+                </h4>
+            </div>
+            <form id="sendform">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            ID: <input class="form-control" type="text" id="s_send_id" name="s_send_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            是否非标:
+                            <select name="if_nonstandard" class="selectpicker form-control" >
+            　　                  <option selected value="否">否</option>
+            　　                  <option value="是">是</option>
+                            </select><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            资料齐全:
+                            <select name="readiness" class="selectpicker form-control">
+                                　　                  <option selected value="是">是</option>
+                                　　                  <option value="否">否</option>
+                            </select><br>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            资料齐全过合同日期:
+                            <div class='input-group date' id='readiness_date' >
+                                <input type='text' class="form-control" name='readiness_date' />
+                                <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            总部技术驳回日期:
+                            <div class='input-group date' id='rejection_date' >
+                                <input type='text' class="form-control" name='rejection_date' />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            总部技术通过日期:
+                            <div class='input-group date' id='pass_date' >
+                                <input type='text' class="form-control" name='pass_date' />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            寄出日期:
+                            <div class='input-group date' id='s_send_date' >
+                                <input type='text' class="form-control" name='s_send_date' />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            寄出单号:
+                            <input class="form-control" type="text"  name="send_number"/>
+                        </div>
+                    </div>
+                    寄出备注:
+                    <textarea class="form-control" type="text"  name="send_remarks">
+                    </textarea>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="sendPost()" class="btn btn-primary">提交更改</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</div>
+</div>
+</body>
+<script>
+    $(function () {
+        $('#r_delivery_date').datetimepicker({
+            minDate: moment(),
+            showTodayButton: true,
+            format: 'YYYY-MM-DD',
+            locale: moment.locale('zh-cn')
+        });
+        $('#readiness_date').datetimepicker({
+            minDate: moment(),
+            showTodayButton: true,
+            format: 'YYYY-MM-DD',
+            locale: moment.locale('zh-cn')
+        });
+        $('#rejection_date').datetimepicker({
+            minDate: moment(),
+            showTodayButton: true,
+            format: 'YYYY-MM-DD',
+            locale: moment.locale('zh-cn')
+        });
+        $('#pass_date').datetimepicker({
+            minDate: moment(),
+            showTodayButton: true,
+            format: 'YYYY-MM-DD',
+            locale: moment.locale('zh-cn')
+        });
+        $('#s_send_date').datetimepicker({
+            minDate: moment(),
+            showTodayButton: true,
+            format: 'YYYY-MM-DD',
+            locale: moment.locale('zh-cn')
+        });
+    });
+    //获取ID值
+    function GetID(id){
+        //var id =$(e.relatedTarget).data("example-id");
+        $("#r_receive_id").val(id);
+        $("#s_send_id").val(id);
+    }
+    function ajaxPost(){
+        //获取当前点击行的id
+        var r_contract_id=$("input[name='r_contract_id']").val();
+        var r_delivery_date=$("input[name='r_delivery_date']").val();
+        if(r_delivery_date==''){
+            alert('接收日期不能为空！');
+            r_delivery_date.focus();
+            return ;
+        }
+        var formData = $("#updateform").serialize();
+        //alert(formData);
+        $.ajax({
+            type:"get",
+            async:false,
+            url:"{:url('Index/contract/HeadUpdate')}",  //数据传输的控制器方法
+            data:formData,//这里data传递过去的是序列化以后的字符串
+            success:function(date){
+                if(date==0){
+                    alert("没有此合同号！");
+                    return false;
+                }
+                if(date==1){
+                    alert("更新成功！");
+                    window.location.reload();
+                }
+            },
+            error:function(){alert('出错了')},
+        });
+    }
+    function sendPost(){
+        var s_contract_id=$("input[name='s_contract_id']").val();
+        var if_nonstandard=$("input[name='if_nonstandard']").val();
+        var readiness=$("input[name='readiness']").val();
+        var readiness_date=$("input[name='readiness_date']").val();
+        var rejection_date=$("input[name='rejection_date']").val();
+        var pass_date=$("input[name='pass_date']").val();
+        var s_send_date=$("input[name='s_send_date']").val();
+        var send_number=$("input[name='send_number']").val();
+        var send_remarks=$("input[name='send_remarks']").val();
+        if(s_send_date==''){
+            alert('寄出日期不能为空！');
+            s_send_date.focus();
+            return ;
+        }
+        if(send_number==''){
+            alert('寄出单号不能为空！');
+            send_number.focus();
+            return ;
+        }
+        var formData = $("#sendform").serialize();
+        $.ajax({
+            type:"get",
+            async:false,
+            url:"{:url('Index/contract/HeadSend')}",  //数据传输的控制器方法
+            data:formData,//这里data传递过去的是序列化以后的字符串
+            success:function(date){
+                if(date==0){
+                    alert("没有此合同号！");
+                    return false;
+                }
+                if(date==1){
+                    alert("更新成功！");
+                    window.location.reload();
+                }
+            },
+            error:function(){alert('出错了')},
+        });
+    }
+</script>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>事业部入金按月汇总</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>事业部入金按月汇总</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- 查询（开始） -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="col-xs-2 col-sm-2">
+                                    <input style="width: 100%;" name="bu_name" type="text" class="form-control form-group-sm" placeholder="事业部..." value="{:input('get.bu_name')}" />
+                                </div>
+                                <div class="col-xs-2 col-sm-2">
+                                    <select name="expenditure_type" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="收支类型">
+                                        　　                  <optgroup label="请选择收支类型：">
+                                        　　                  <option value="普通">普通</option>
+                                        　　                  <option value="逾期提货">逾期提货</option>
+                                        <option value="延迟产出">延迟产出</option>
+                                        <option value="营业不良">营业不良</option>
+                                        <option value="大项目">大项目</option>
+                                        　　                  </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col-xs-2 col-sm-2 text-right">
+                                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>查询</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <!-- 查询（结束） -->
+            </div>
+            <!-- 表单（开始） -->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <tr class="info">
+                        <th>序号</th>
+                        <th>财年</th>
+                        <th>月份</th>
+                        <th>事业部名称</th>
+                        <th>分公司</th>
+                        <th>季度绩效</th>
+                        <th>年终奖</th>
+                        <th>收支类型</th>
+                        <th>责任人</th>
+                        <th>备注</th>
+                    </tr>
+                    {volist name="bufdetails" id="_Bufdetail" key="key"}
+                    <tr>
+                        <td>{$_Bufdetail->getData('id')}</td>
+                        <td>{$_Bufdetail->getData('year')}</td>
+                        <td>{$_Bufdetail->getData('month')}</td>
+                        <td>{$_Bufdetail->getData('bu_name')}</td>
+                        <td>{$_Bufdetail->getData('scompany')}</td>
+                        <td class="text-right">{$_Bufdetail->getData('quarter_pay')|number_format=2}</td>
+                        <td class="text-right">{$_Bufdetail->getData('year_pay')|number_format=2}</td>
+                        <td class="text-right">{$_Bufdetail->getData('expenditure_type')}</td>
+                        <td class="text-right">{$_Bufdetail->getData('liable_person')}</td>
+                        <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{$_Bufdetail->getData('remarks')}</td>
+                    </tr>
+                    {/volist}
+                </table>
+            </div>
+            {$bufdetails->render()}
+            <!-- 表单（结束） -->
+        </div>
+    </div>
+</div>
+</body>
+<script src="/../tp5/public/static/js/myjs/buFinanceDetail.js" type="text/javascript"></script>
+</html>

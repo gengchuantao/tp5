@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container-fluid">
+<h3 class="page-header text-center" style="color:darkred;">营业数据月报<small></small></h3>
+<div class="panel panel-default container-fluid">
+    <div class="panel-heading"><strong>区域生效/待生效/待签数据汇总</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th>区域</th>
+                <th class="text-right">指标</th>
+                <th class="text-right">生效</th>
+                <th class="text-right">完成率</th>
+            </tr>
+            {volist name="result" id="vo"}
+            <tr>
+                <td>{$vo.company|mb_substr=0,2,'utf-8'}</td>
+                <td class="text-right">{$vo.into_force_index}</td>
+                <td class="text-right">{$vo.into_force_complete}</td>
+                <td class="text-right">{$vo.into_force_rate*100}%</td>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+</body>
+</html>

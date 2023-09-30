@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>工号分包价格查询</title>
+    <link href="/../tp5/public/static/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input name="contract_id" type="text" class="form-control" placeholder="合同号..."value="{:input('get.contract_id')}">
+                        <input name="product_id" type="text" class="form-control" placeholder="工号..."value="{:input('get.product_id')}">
+                        <input id="complete_date_from" name="complete_date_from" type="text" class="form-control" placeholder="完工日期从..."value="{:input('get.complete_date_from')}">
+                        <input id="complete_date_to" name="complete_date_to" type="text" class="form-control" placeholder="完工日期至..."value="{:input('get.complete_date_to')}">
+                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
+                        <a href="{:url('CompleteDetailExport')}" class="btn btn-danger"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <hr />
+        <!-- 表单（开始） -->
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr class="info">
+                    <th>操作</th>
+                    <th>ID</th>
+                    <th>工号</th>
+                    <th>合同号</th>
+                    <th>安装区域</th>
+                    <th>项目经理</th>
+                    <th>事业部</th>
+                    <th>进场日期</th>
+                    <th>完工日期</th>
+                    <th>完工日期(临梯)</th>
+                </tr>
+                {volist name="products" id="_Products" key="key"}
+                <tr>
+                    <td>
+                        <a title="完工登记" class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#EditModal" onclick="GetCompleteID('{$_Products.id}');"><i class="glyphicon glyphicon-edit"></i></a>
+                    </td>
+                    <td>{$_Products->getData('id')}</td>
+                    <td>{$_Products->getData('product_id')}</td>
+                    <td>{$_Products->getData('contract_id')}</td>
+                    <td>{$_Products->getData('install_company')}</td>
+                    <td>{$_Products->getData('supervisor')}</td>
+                    <td>{$_Products->getData('complete_bu')}</td>
+                    <td>{$_Products->getData('entry_date')}</td>
+                    <td>{$_Products->getData('complete_date')}</td>
+                    <td>{$_Products->getData('temp_elevator_date')}</td>
+                </tr>
+                {/volist}
+            </table>
+            {$products->render()}
+        </div>
+        <!-- 表单（结束） -->
+    </div>
+</div>
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    完工信息修改
+                </h4>
+            </div>
+            <form id="CompleteForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            工号:
+                            <input class="form-control" type="hidden" id="complete_id" name="complete_id" />
+                            <input class="form-control" type="text" readonly="readonly" id="product_id" name="product_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            项目经理:
+                            <input class="form-control" type="text" id="supervisor" name="supervisor" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            事业部:
+                            <input class="form-control" type="text" id="complete_bu" name="complete_bu" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            进场日期:
+                            <div class='input-group date' id='c_entry_date'>
+                                <input type='text' class="form-control" id='entry_date' name='entry_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            完工日期:
+                            <div class='input-group date' id='c_complete_date' >
+                                <input type='text' class="form-control" id='complete_date' name='complete_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            完工日期(临梯):
+                            <div class='input-group date' id='c_temp_elevator_date'>
+                                <input type='text' class="form-control" id='temp_elevator_date' name='temp_elevator_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="CompleteUpdate()" class="btn btn-warning">提交</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/product.js"></script>
+<script src="/../tp5/public/static/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+</html>

@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>发票申请</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>发票申请</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#AddInvoice"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增</a>
+                        <a href="{:url('export')}" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--查询条件-->
+                <form class="form-inline text-right">
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-2">
+                            <input style="width: 100%;" name="contract_id" type="text" class="form-control form-group-sm" placeholder="合同号..." value="{:input('get.contract_id')}" />
+                        </div>
+                        <div class="col-xs-4 col-sm-2">
+                            <select name="check_status" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择审核状态">
+            　　                 <optgroup label="请选择审核状态：">
+            　　                 <option value="区域主管审核">区域主管审核</option>
+                                <option value="区域财务审核">区域财务审核</option>
+                                <option value="山东司核算审核">山东司核算审核</option>
+                                <option value="山东司税务岗A审核">山东司税务岗A审核</option>
+                                <option value="山东司税务岗B审核">山东司税务岗B审核</option>
+                                <option value="待上传">待上传</option>
+                                <option value="已拒绝">已拒绝</option>
+                                <option value="已结束">已结束</option>
+                                　　                     </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-xs-4 col-sm-2">
+                            <select name="business_type" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择业务类型">
+                                　　                 <optgroup label="请选择业务类型：">
+                                　　                <option  value="安装">安装</option>
+                                <option value="调试">调试</option>
+                                <option value="设备">设备</option>
+                                <option value="保养">保养</option>
+                                <option value="维改">维改</option>
+                                <option value="配件、材料">配件、材料</option>
+                                <option value="工程技术服务">工程技术服务</option>
+                                　　                     </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+                            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>查询</button>
+
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- 表单（开始） -->
+            <div class="table-responsive">
+                <table id="table" class="table table-hover table-bordered table-striped table-condensed">
+                    <!--<tr class="info" style="white-space:nowrap">----不想标题换行时用这个-->
+                    <tr class="info">
+                        <th></th>
+                        <th>ID</th>
+                        <th class="text-center">操作</th>
+                        <th class="text-center" style="white-space:nowrap;overflow:hidden;word-break:keep-all;">状态</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">发票种类</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">业务类型</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">区域</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">合同号</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">合同类型</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">单位名称</th>
+                        <th class="text-right" style="white-space:nowrap;overflow:hidden;word-break:keep-all;">合同总额</th>
+                        <th class="text-right" style="white-space:nowrap;overflow:hidden;word-break:keep-all;">已收款金额</th>
+                        <th class="text-right" style="white-space:nowrap;overflow:hidden;word-break:keep-all;">累计开票金额</th>
+                        <th class="text-right" style="white-space:nowrap;overflow:hidden;word-break:keep-all;">本次开票金额</th>
+                        <th class="text-right" style="white-space:nowrap;overflow:hidden;word-break:keep-all;">本次开票比例</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">税率</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">上传人</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">上传时间</th>
+                    </tr>
+                    {volist name="invoices" id="_Invoice" key="key"}
+                    <tr>
+                        {eq name="Think.session.super_admin" value="1"}
+                        <td><label><input type="checkbox" name="invoice_check" value="{$_Invoice.id}"></label></td>
+                        {else/}
+                        <td><input type="checkbox"  onclick="return false;"></td>
+                        {/eq}
+                        <td>{$_Invoice->getData('id')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">
+                            {eq name="Think.session.admin" value="1"}
+                            <a title="删除" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#DeleteModal" onclick="GetDeleteID('{$_Invoice.id}');"><i class="bi bi-x-square"></i></a>
+                            {else/}
+                            {/eq}
+                            {eq name="Think.session.approval_authority" value="1"}
+                            <a title="审核" class="btn btn-xs btn-success" data-toggle="modal" data-target="#CheckModal" onclick="GetCheckID('{$_Invoice.id}');"><i class="bi bi-check2-square"></i></a>
+                            {switch name="$_Invoice.status"}
+                            {case value="待上传"}
+                                <a title="上传" class="btn btn-xs btn-info" data-toggle="modal" data-target="#uploadModal" onclick="GetUploadID('{$_Invoice.id}');"><i class="bi bi-upload"></i></a>
+                            {/case}
+                            {case value="已结束"}
+                                <a title="上传" class="btn btn-xs btn-info" data-toggle="modal" data-target="#uploadModal" onclick="GetUploadID('{$_Invoice.id}');"><i class="bi bi-upload"></i></a>
+                            {/case}
+                            {default /}
+                            {/switch}
+                            {else/}
+                            <a title="查看" class="btn btn-xs btn-success" data-toggle="modal" data-target="#CheckModal" onclick="GetCheckID('{$_Invoice.id}');"><i class="glyphicon glyphicon-eye-open"></i></a>
+                            <a title="上传" class="btn btn-xs btn-info" data-toggle="modal" data-target="#uploadModal" onclick="GetUploadID('{$_Invoice.id}');"><i class="glyphicon glyphicon-upload"></i></a>
+                            <a title="取回重提" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#EditModal" onclick="GetEditID('{$_Invoice.id}');"><i class="glyphicon glyphicon-repeat"></i></a>
+                            {/eq}
+                        </td>
+                        {switch name="$_Invoice.status"}
+                        {case value="待上传"}
+                            <td class="text-center" style="white-space:nowrap"><span class="badge" style="background-color: orange">{$_Invoice->getData('status')}</span></td>
+                        {/case}
+                        {case value="已结束"}
+                            <td class="text-center" style="white-space:nowrap"><span class="badge" style="background-color: green">{$_Invoice->getData('status')}</span></td>
+                        {/case}
+                        {case value="已拒绝"}
+                            <td class="text-center" style="white-space:nowrap"><span class="badge" style="background-color: red">{$_Invoice->getData('status')}</span></td>
+                        {/case}
+                        {default /}
+                            <td class="text-center" style="white-space:nowrap"><span class="badge" style="background-color: deepskyblue">{$_Invoice->getData('status')}</span></td>
+                        {/switch}
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('invoice_type')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('business_type')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('company')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('contract_id')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('contract_type')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('unit_name')}</td>
+                        <td class="text-right" style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('contract_amount')|number_format=2}</td>
+                        <td class="text-right" style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('collection_amount')|number_format=2}</td>
+                        <td class="text-right" style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('invoice_total')|number_format=2}</td>
+                        <td class="text-right" style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('invoice_amount')|number_format=2}</td>
+                        <td class="text-right" style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('invoice_per')|number_format=2}%</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('tax_rate')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('upload_person')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Invoice->getData('upload_date')}</td>
+                    </tr>
+                    {/volist}
+                </table>
+                {$invoices->render()}
+            </div>
+            <!-- 表单（结束） -->
+            <div class="panel-footer">
+                <input type="checkbox" id="check_all" onclick="CheckAll()">全选/全不选
+                {eq name="Think.session.super_admin" value="1"}
+                <button class="btn-warning btn-xs" onclick="SelectInvoice();">批量审核</button>
+                {else/}
+                {/eq}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（新增发票申请-开始） -->
+<div class="modal fade" id="AddInvoice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title text-danger" >
+                    发票申请
+                </h4>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            发票种类:
+                            <select id="invoice_type" name="invoice_type" class="selectpicker form-control" >
+            　　                  <option selected value="增值税专用发票">增值税专用发票</option>
+            　　                  <option value="增值税普通发票">增值税普通发票</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            业务类型:
+                            <select id="business_type" name="business_type" class="selectpicker form-control" >
+            　　                <option selected value="安装">安装</option>
+                                <option value="调试">调试</option>
+                                <option value="设备">设备</option>
+                                <option value="保养">保养</option>
+                                <option value="维改">维改</option>
+                                <option value="配件、材料">配件、材料</option>
+                                <option value="工程技术服务">工程技术服务</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            合同号:
+                            <input class="form-control" type="text" id="contract_id" name="contract_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            工号:
+                            <input class="form-control" type="text" id="product_id" name="product_id"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            单位名称:
+                            <input class="form-control" type="text" id="unit_name" name="unit_name" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            本次开票金额:
+                            <input class="form-control" type="number" id="invoice_amount" name="invoice_amount" onblur="delSubstring();" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            项目所在地(外经证须填写具体到区县):
+                            <input class="form-control" type="text" id="project_location" name="project_location" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            税号:
+                            <input class="form-control" type="text" id="taxpayer_id" name="taxpayer_id" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            单位地址:
+                            <input class="form-control" type="text" id="address" name="address" required="required"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            电话号码:
+                            <input class="form-control" type="text" id="phone_number" name="phone_number" required="required"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            开户银行:
+                            <input class="form-control" type="text" id="deposit_bank" name="deposit_bank" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            银行账户:
+                            <input class="form-control" type="text" id="bank_account" name="bank_account" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            发票备注(项目名称/地址):
+                            <textarea class="form-control" type="text" id="invoice_remarks" name="invoice_remarks" ></textarea>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            税率:
+                            <select id="tax_rate" name="tax_rate" class="selectpicker form-control" >
+        　　                  <option selected value="3%">3%</option>
+        　　                  <option value="6%">6%</option>
+                                <option value="9%">9%</option>
+                                <option value="13%">13%</option>
+                                <option value="17%">17%</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            特殊要求(运输费或明细):
+                            <textarea class="form-control" type="text" id="special_request" name="special_request" rows="1" ></textarea>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            申请人:
+                            <input class="form-control" type="text" id="applicant" name="applicant" />
+                        </div>
+                    </div>
+
+                    <div class="form-group has-warning">
+                    <label class="control-label" for="vanke_model">万科开票模式(万科项目必选)：</label>
+                    <select id='vanke_model' name="vanke_model" class="selectpicker form-control" >
+                     <option value="">无</option>
+　　                  <option value="线上">线上</option>
+　　                  <option value="线下">线下</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="AddPost()" class="btn btn-primary">
+                        提交审批
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新增收款拆分-结束） -->
+<!-- 模态框（审核-开始） -->
+<div class="modal fade" id="CheckModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 90%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    审核流程
+                </h4>
+            </div>
+            <form id="CheckForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <input class="form-control" type="hidden" id="check_id" name="check_id" />
+                        <div class="col-xs-6 col-sm-3">
+                            发票种类:
+                            <input class="form-control" type="text" readonly="readonly" id="check_invoice_type"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            业务类型:
+                            <input class="form-control" type="text" readonly="readonly" id="check_business_type"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            合同号:
+                            <input class="form-control" type="text" readonly="readonly" id="check_contract_id"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            工号:
+                            <input class="form-control" type="text" readonly="readonly" id="check_product_id" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            单位名称:
+                            <input class="form-control" type="text" readonly="readonly" id="check_unit_name"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            本次开票金额:
+                            <input class="form-control" type="number" readonly="readonly" id="check_invoice_amount"  onblur="delSubstring();" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            项目所在地:
+                            <input class="form-control" type="text" readonly="readonly" id="check_project_location" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            税号:
+                            <input class="form-control" type="text" readonly="readonly" id="check_taxpayer_id" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            单位地址:
+                            <input class="form-control" type="text" readonly="readonly" id="check_address" required="required"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            电话号码:
+                            <input class="form-control" type="text" readonly="readonly" id="check_phone_number" required="required"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            开户银行:
+                            <input class="form-control" type="text" readonly="readonly" id="check_deposit_bank" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            银行账户:
+                            <input class="form-control" type="text" readonly="readonly" id="check_bank_account" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            发票备注(项目名称/地址):
+                            <textarea class="form-control" type="text" readonly="readonly" id="check_invoice_remarks" rows="1"></textarea>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            特殊要求(运输费或明细):
+                            <textarea class="form-control" type="text" readonly="readonly" id="check_special_request" rows="1" ></textarea>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            申请人:
+                            <input class="form-control" type="text" readonly="readonly" id="check_applicant" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            万科开票模式:
+                            <input class="form-control" type="text" readonly="readonly" id="check_vanke_model" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            经办人:
+                            <input class="form-control" type="text" id="check_agent" readonly="readonly"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            提交时间:
+                            <input class="form-control" type="text" id="check_application_date" readonly="true" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            税率:
+                            <input class="form-control" type="text" id="check_tax_rate" name="check_tax_rate" style="background: #f1c40f" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            流程状态:
+                            <input class="form-control" type="text" id="check_status" name="check_status" style="background: #44ee44" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            区域主管:
+                            <input class="form-control" type="text" readonly="readonly" id="check_section_chief"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            提交时间:
+                            <input class="form-control" type="text" readonly="readonly" id="section_chief_approve_date" />
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            区域主管审核意见:
+                            {eq name="Think.session.regional_head" value="1"}
+                            <input class="form-control" style="background: #8ed1fc" type="text"  id="check_section_chief_approve1" name="check_section_chief_approve" />
+                            {else/}
+                            <input class="form-control" type="text" readonly="readonly" id="check_section_chief_approve" name="check_section_chief_approve" />
+                            {/eq}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            区域财务:
+                            <input class="form-control" type="text" readonly="readonly" id="check_regional_finance" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            提交时间:
+                            <input class="form-control" type="text" readonly="readonly" id="check_regional_finance_date" />
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            区域财务审核意见:
+                            {eq name="Think.session.regional_finance" value="1"}
+                            <input class="form-control" type="text" style="background: #8ed1fc"  id="check_regional_finance_remarks1" name="check_regional_finance_remarks" />
+                            {else/}
+                            <input class="form-control" type="text" readonly="readonly" id="check_regional_finance_remarks" name="check_regional_finance_remarks"/>
+                            {/eq}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            山东司核算:
+                            <input class="form-control" type="text" readonly="true" id="check_sd_accounting"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            提交时间:
+                            <input class="form-control" type="text" readonly="true" id="check_sd_accounting_date" />
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            山东司核算审核意见:
+                            {eq name="Think.session.sd_accounting" value="1"}
+                            <input class="form-control" type="text" style="background: #8ed1fc"  id="check_sd_accounting_remarks1" name="check_sd_accounting_remarks" />
+                            {else/}
+                            <input class="form-control" type="text" readonly="readonly" id="check_sd_accounting_remarks" name="check_sd_accounting_remarks" />
+                            {/eq}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            山东司税务A:
+                            <input class="form-control" type="text" readonly="true" id="check_sd_taxation_a" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            提交时间:
+                            <input class="form-control" type="text" readonly="true" id="check_sd_taxation_a_date" />
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            山东司税务A审核意见:
+                            {eq name="Think.session.sd_taxation_a" value="1"}
+                            <input class="form-control" type="text" style="background: #8ed1fc"  id="check_sd_taxation_a_remarks1" name="check_sd_taxation_a_remarks" />
+                            {else/}
+                            <input class="form-control" type="text" readonly="readonly" id="check_sd_taxation_a_remarks" name="check_sd_taxation_a_remarks" />
+                            {/eq}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            山东司税务B:
+                            <input class="form-control" type="text" readonly="true" id="check_sd_taxation_b" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            提交时间:
+                            <input class="form-control" type="text" readonly="true" id="check_sd_taxation_b_date" />
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            山东司税务B审核意见:
+                            {eq name="Think.session.sd_taxation_b" value="1"}
+                            <input class="form-control" type="text" style="background: #8ed1fc"  id="check_sd_taxation_b_remarks1" name="check_sd_taxation_b_remarks" />
+                            {else/}
+                            <input class="form-control" type="text" readonly="readonly" id="check_sd_taxation_b_remarks" name="check_sd_taxation_b_remarks" />
+                            {/eq}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {eq name="Think.session.approval_authority" value="1"}
+                    <button id="reject_btn" type="button" onclick="RejectPost()" class="btn btn-success">拒绝</button>
+                    <button id="agree_btn" type="button" onclick="AgreePost()" class="btn btn-danger">同意</button>
+                    {else/}
+                    {/eq}
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（审核-结束） -->
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    取回重新提交
+                </h4>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            发票种类:
+                            <input class="form-control" type="hidden" id="edit_id" name="edit_id" />
+                            <select id="edit_invoice_type" name="edit_invoice_type" class="selectpicker form-control" >
+                            　　                  <option value="增值税专用发票">增值税专用发票</option>
+                            　　                  <option value="增值税普通发票">增值税普通发票</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            业务类型:
+                            <select id="edit_business_type" name="edit_business_type" class="selectpicker form-control" >
+                                <option selected value="安装">安装</option>
+                                <option value="调试">调试</option>
+                                <option value="设备">设备</option>
+                                <option value="保养">保养</option>
+                                <option value="维改">维改</option>
+                                <option value="配件、材料">配件、材料</option>
+                                <option value="工程技术服务">工程技术服务</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            合同号:
+                            <input class="form-control" type="text" id="edit_contract_id" name="edit_contract_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            工号:
+                            <input class="form-control" type="text" id="edit_product_id" name="edit_product_id"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            单位名称:
+                            <input class="form-control" type="text" id="edit_unit_name" name="edit_unit_name" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            本次开票金额:
+                            <input class="form-control" type="number" id="edit_invoice_amount" name="edit_invoice_amount" onblur="delSubstring();" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            项目所在地(外经证须填写具体到区县):
+                            <input class="form-control" type="text" id="edit_project_location" name="edit_project_location" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            税号:
+                            <input class="form-control" type="text" id="edit_taxpayer_id" name="edit_taxpayer_id" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            单位地址:
+                            <input class="form-control" type="text" id="edit_address" name="edit_address" required="required"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            电话号码:
+                            <input class="form-control" type="text" id="edit_phone_number" name="edit_phone_number" required="required"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            开户银行:
+                            <input class="form-control" type="text" id="edit_deposit_bank" name="edit_deposit_bank" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            银行账户:
+                            <input class="form-control" type="text" id="edit_bank_account" name="edit_bank_account" />
+
+                        </div>
+                    </div>
+                    发票备注(项目名称/地址):
+                    <textarea class="form-control" type="text" id="edit_invoice_remarks" name="edit_invoice_remarks" ></textarea>
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4">
+                            税率:
+                            <select id="edit_tax_rate" name="edit_tax_rate" class="selectpicker form-control" >
+        　　                  <option selected value="3%">3%</option>
+        　　                  <option value="6%">6%</option>
+                                <option value="9%">9%</option>
+                                <option value="13%">13%</option>
+                                <option value="17%">17%</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            特殊要求(运输费或明细):
+                            <textarea class="form-control" type="text" id="edit_special_request" name="edit_special_request" rows="1" ></textarea>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            申请人:
+                            <input class="form-control" type="text" id="edit_applicant" name="edit_applicant" />
+                        </div>
+                    </div>
+
+                    <div class="form-group has-warning">
+                        <label class="control-label" for="edit_vanke_model">万科开票模式(万科项目必选)：</label>
+                        <select id='edit_vanke_model' name="edit_vanke_model" class="selectpicker form-control" >
+                            <option value="">无</option>
+                            　　                  <option value="线上">线上</option>
+                            　　                  <option value="线下">线下</option>
+                        </select>
+                    </div>
+                    <input class="form-control" type="hidden" id="edit_status" name="edit_status" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="EditPost()" class="btn btn-primary">
+                        修改并重新提交
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    请确认是否删除？
+                </h4>
+            </div>
+            <form id="DeleteForm">
+                <input class="form-control" type="hidden" readonly="readonly" id="delete_id" name="delete_id" />
+<!--                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <input class="form-control" type="hidden" readonly="readonly" id="delete_id" name="delete_id" />请确认是否删除？
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                        </div>
+                    </div>
+                </div>-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+<!-- 模态框（税务B批量审核-开始） -->
+<div class="modal fade" id="BatchInvoice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    批量审核
+                </h4>
+            </div>
+            <form id="BatchInvoiceForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            批量操作的ID:
+                            <input class="form-control" type="text" id="batch_invoice_id" name="batch_invoice_id" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            审核意见:
+                            <input class="form-control" type="text" id="b_sd_taxation_b_remarks" name="b_sd_taxation_b_remarks" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row text-right">
+                        <div class="col-xs-12 col-sm-12 ">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            {eq name="Think.session.sd_taxation_a" value="1"}
+                            <button type="button" onclick="BatchInvoiceVerifyA()" class="btn btn-danger">税务A审核</button>
+                            {else/}
+                            {/eq}
+                            {eq name="Think.session.sd_taxation_b" value="1"}
+                            <button type="button" onclick="BatchInvoiceVerifyB()" class="btn btn-danger">税务B审核</button>
+                            {else/}
+                            {/eq}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（税务B批量审核-结束） -->
+<!-- 模态框（上传-开始） -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 90%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    上传发票回执/报告
+                </h4>
+            </div>
+            <form id="uploadForm" method="post" name="uploadForm" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><strong>开票信息</strong></div>
+
+                            <div class="row">
+                                <input class="form-control" type="hidden" id="upload_id" name="upload_id" />
+                                <div class="col-xs-6 col-sm-4">
+                                    合同号：
+                                    <input class="form-control" type="text" id="upload_contract_id" name="upload_contract_id" readonly="readonly" />
+                                </div>
+                                <div class="col-xs-6 col-sm-4">
+                                    单位名称：
+                                    <input class="form-control" type="text" id="upload_unit_name" name="upload_unit_name" readonly="readonly" />
+                                </div>
+                                <div class="col-xs-6 col-sm-4">
+                                    开票金额：
+                                    <input class="form-control" type="text" id="upload_invoice_amount" name="upload_invoice_amount" readonly="readonly" />
+                                </div>
+                            </div>
+
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><strong>回执/报告预览</strong></div>
+                        <div class="table-responsive" id="uploadedImg">
+
+                        </div>
+                    </div>
+                    <input class="file" id="fileUpload" name="image[]"  type="file">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button id="submitBtn" type="submit" class="btn btn-success" >上传</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（上传-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/invoice.js"></script>
+</html>

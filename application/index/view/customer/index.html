@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>客户关系管理</title>
+</head>
+<body>
+<!--start page wrapper -->
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">合同部</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{:url('Index/main')}"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">客户信息管理</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+        <hr class="border border-secondary border-1opacity-50">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-auto">
+                        <label for="search_full_name" style="display: none;"></label><input type="text" class="form-control" id="search_full_name" name="search_full_name" placeholder="客户全称">
+                    </div>
+                    <div class="col-auto">
+                        <label for="search_short_name" style="display: none;"></label><input type="text" class="form-control" id="search_short_name" name="search_short_name" placeholder="客户简称">
+                    </div>
+                    <div class="col-auto">
+                        <div class="input-group">
+                            <select class="selectpicker form-control" id="search_customer_classification" name="search_customer_classification" aria-label="Example select with button addon">
+                                <option value="">请选择客户分类</option>
+                                <option value="普通客户">普通客户</option>
+                                <option value="KA客户">KA客户</option>
+                                <option value="本地大客户">本地大客户</option>
+                                <option value="经销商">经销商</option>
+                                <option value="总包">总包</option>
+                                <option value="城投">城投</option>
+                            </select>
+                            <button class="btn btn-outline-info bi bi-search" type="button" id="query"></button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div id="toolbar">
+                    <a class="btn btn-sm btn-primary bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#NewCustomer" title="新增">新增</a>
+                    <a class="btn btn-sm btn-danger bi bi-trash text-white"   title="删除" onclick="GetDeleteID('id');">删除</a>
+                    <a class="btn btn-sm btn-secondary bi bi-pencil-square text-white"   title="编辑" onclick="GetUpdateID('id');">修改</a>
+                </div>
+                <div class="table-responsive">
+                    <table
+                            class="table table-hover table-sm table-no-bordered table-striped table-condensed"
+                            id="customerIndex"
+                            data-show-button-icons="true"
+                            data-toggle="table"
+                            data-buttons-class="sm"
+                            style="white-space: nowrap;"
+                            data-unique-id="id">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <!--end breadcrumb-->
+    </div>
+</div>
+<!--end page wrapper -->
+
+<!-- 模态框（新建客户-开始） -->
+<div class="modal fade" id="NewCustomer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">※新建客户</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            客户分类:
+                            <select id="customer_classification" name="customer_classification" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择客户分类">
+                                <option value="普通客户">普通客户</option>
+            　　                 <option value="KA客户">KA客户</option>
+                                <option value="本地大客户">本地大客户</option>
+                                <option value="经销商">经销商</option>
+                                <option value="总包">总包</option>
+                                <option value="城投">城投</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="full_name">客户全称:</label><input class="form-control" type="text" id="full_name" name="full_name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="short_name">客户简称:</label><input class="form-control" type="text" id="short_name" name="short_name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="key_account_code">KA编码:</label><input class="form-control" type="text" id="key_account_code" name="key_account_code" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="company">区域:</label><input class="form-control" type="text" id="company" name="company" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="AddNew()" class="btn btn-primary">
+                        新增
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新建客户-结束） -->
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">请确认是否删除</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="DeleteForm">
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="input-group">
+                                <span class="input-group-text">ID:</span>
+                                <input id="delete_id" name="delete_id" class="form-control" aria-label="With textarea"  readonly="readonly"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">更新</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="update_id">ID:</label><input class="form-control" type="text" id="update_id" name="update_id" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            客户分类:
+                            <select id="update_customer_classification" name="update_customer_classification" class="selectpicker form-control form-group-sm"  title="请选择客户分类">
+                                <option value="普通客户">普通客户</option>
+            　　                 <option value="KA客户">KA客户</option>
+                                <option value="本地大客户">本地大客户</option>
+            　　                 <option value="经销商">经销商</option>
+                                <option value="总包">总包</option>
+                                <option value="城投">城投</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            大客户编码:
+                            <input class="form-control" type="text" id="update_key_account_code" name="update_key_account_code" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            客户全称:
+                            <input class="form-control" type="text" id="update_full_name" name="update_full_name" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            客户简称:
+                            <input class="form-control" type="text" id="update_short_name" name="update_short_name" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            区域:
+                            <input class="form-control" type="text" id="update_company" name="update_company" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="UpdatePost()" class="btn btn-primary">修改</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+</body>
+<script src="<?php addVersion('__JS__/myjs/customer.js');?>"></script>
+</html>

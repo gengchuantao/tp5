@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>维改业务数据</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>维改业务数据</span></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+            </div>
+            <!--表单显示-->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <tr class="info">
+                        <th style="white-space:nowrap">ID</th>
+                        <th style="white-space:nowrap">操作</th>
+                        <th style="white-space:nowrap">区域</th>
+                        <th style="white-space:nowrap">财年</th>
+                        <th style="white-space:nowrap">销售指标</th>
+                        <th style="white-space:nowrap">销售完成</th>
+                        <th style="white-space:nowrap">入金指标</th>
+                        <th style="white-space:nowrap">入金完成</th>
+                        <th style="white-space:nowrap">欠款指标</th>
+                        <th style="white-space:nowrap">欠款实绩</th>
+                        <th style="white-space:nowrap">M0指标</th>
+                        <th style="white-space:nowrap">M0实绩</th>
+                        <th style="white-space:nowrap">维改类收入指标(PPM)</th>
+                        <th style="white-space:nowrap">维改类收入完成(PPM)</th>
+                        <th style="white-space:nowrap">大修改造历史欠款指标(PPM)</th>
+
+                    </tr>
+                    {volist name="maintains" id="_Maintain" key="key"}
+                    <tr>
+                        <td>{$_Maintain->getData('id')}</td>
+                        <td>
+                            <a title="编辑" class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#EditModal" onclick="GetUpdateID('{$_Maintain.id}');"><i class="glyphicon glyphicon-pencil"></i></a>
+                        </td>
+                        <td>{$_Maintain->getData('company')|mb_substr=0,2,'utf-8'}</td>
+                        <td>{$_Maintain->getData('fyear')}</td>
+                        <td>{$_Maintain->getData('repair_sale_index')}</td>
+                        <td>{$_Maintain->getData('repair_sale')}</td>
+                        <td>{$_Maintain->getData('repair_income_index')}</td>
+                        <td>{$_Maintain->getData('repair_income')}</td>
+                        <td>{$_Maintain->getData('repair_history_arrears_index')}</td>
+                        <td>{$_Maintain->getData('repair_history_arrears_complete')}</td>
+                        <td>{$_Maintain->getData('m0_index')}</td>
+                        <td>{$_Maintain->getData('m0_complete')}</td>
+                        <td>{$_Maintain->getData('maintenance_reform_income_index')}</td>
+                        <td>{$_Maintain->getData('maintenance_reform_income_complete')}</td>
+                        <td>{$_Maintain->getData('repair_history_arrears_season_index')}</td>
+
+                    </tr>
+                    {/volist}
+                </table>
+                {$maintains->render()}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- 模态框（编辑保养台量数据-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    修改
+                </h4>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            区域:
+                            <input class="form-control" type="hidden" id="update_id" name="update_id" />
+                            <input class="form-control" type="text" id="update_company" name="update_company" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            销售指标:
+                            <input class="form-control" type="text" id="update_repair_sale_index" name="update_repair_sale_index" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            销售完成:
+                            <input class="form-control" type="text" id="update_repair_sale" name="update_repair_sale" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            入金指标:
+                            <input class="form-control" type="text" id="update_repair_income_index" name="update_repair_income_index" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            入金完成:
+                            <input class="form-control" type="text" id="update_repair_income" name="update_repair_income" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            历史欠款指标:
+                            <input class="form-control" type="text" id="update_repair_history_arrears_index" name="update_repair_history_arrears_index" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            历史欠款完成:
+                            <input class="form-control" type="text" id="update_repair_history_arrears_complete" name="update_repair_history_arrears_complete" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            M0指标:
+                            <input class="form-control" type="text" id="update_m0_index" name="update_m0_index" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            M0完成:
+                            <input class="form-control" type="text" id="update_m0_complete" name="update_m0_complete" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            维改类收入指标(PPM):
+                            <input class="form-control" type="text" id="update_maintenance_reform_income_index" name="update_maintenance_reform_income_index" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            维改类收入完成(PPM):
+                            <input class="form-control" type="text" id="update_maintenance_reform_income_complete" name="update_maintenance_reform_income_complete" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            大修改造历史欠款指标(PPM):
+                            <input class="form-control" type="text" id="update_repair_history_arrears_season_index" name="update_repair_history_arrears_season_index" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="UpdateMaintainRepair()" class="btn btn-primary">修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- 模态框（编辑保养台量数据-结束） -->
+<script src="/../tp5/public/static/js/myjs/maintainRepair.js"></script>
+</html>

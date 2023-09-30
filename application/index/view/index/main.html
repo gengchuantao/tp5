@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+</head>
+<body>
+<!--start page wrapper -->
+<div class="page-wrapper" >
+    <div id="report" class="page-content" style="display: none">
+        <div  class="row row-cols-2 row-cols-lg-4 row-cols-xl-4">
+            <div class="col">
+                <div class="card radius-10">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">生效台量</p>
+                                <h4 class="my-1" id="intoForceNum"></h4>
+                                <p class="mb-0 font-13 text-success" id="intoForcePhrase"><i class='bx bxs-up-arrow align-middle' id="intoForceImg"></i></p>
+                            </div>
+                            <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-bar-chart-square'></i>
+                            </div>
+                        </div>
+                        <div id="chart1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">发货台量</p>
+                                <h4 class="my-1" id="deliveryNum"></h4>
+                                <p class="mb-0 font-13 text-success" id="deliveryPhrase"><i class='bx bxs-up-arrow align-middle' id="deliveryImg"></i></p>
+                            </div>
+                            <div class="widgets-icons bg-light-warning text-warning ms-auto"><i class='bx bxs-car-garage'></i>
+                            </div>
+                        </div>
+                        <div id="chart2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">完工台量</p>
+                                <h4 class="my-1" id="installNum"></h4>
+                                <p class="mb-0 font-13 text-success" id="installPhrase"><i class='bx bxs-up-arrow align-middle' id="installImg"></i></p>
+                            </div>
+                            <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-wrench'></i>
+                            </div>
+                        </div>
+                        <div id="chart3"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">有偿台量</p>
+                                <h4 class="my-1" id="paidNum"></h4>
+                                <p class="mb-0 font-13 text-danger" id="paidPhrase"><i class='bx bxs-down-arrow align-middle' id="paidImg"></i></p>
+                            </div>
+                            <div class="widgets-icons bg-light-primary text-danger ms-auto"><i class='bx bxs-buildings'></i>
+                            </div>
+                        </div>
+                        <div id="chart31"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end row-->
+        <div  class="row row-cols-2 row-cols-lg-4 row-cols-xl-4">
+            <div class="col">
+                <div class="card radius-10">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">报价台量</p>
+                                <h4 class="my-1" id="quoteNum"></h4>
+                                <p class="mb-0 font-13 text-success" id="quotePhrase"><i class='bx bxs-up-arrow align-middle' id="quoteImg"></i></p>
+                            </div>
+                            <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-bar-chart-alt-2'></i>
+                            </div>
+                        </div>
+                        <div id="chart5"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">新签台量</p>
+                                <h4 class="my-1" id="newSignNum"></h4>
+                                <p class="mb-0 font-13 text-success" id="newSignPhrase"><i class='bx bxs-up-arrow align-middle' id="newSignImg"></i></p>
+                            </div>
+                            <div class="widgets-icons bg-light-warning text-warning ms-auto"><i class='bx bxs-duplicate'></i>
+                            </div>
+                        </div>
+                        <div id="chart6"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">设备入金</p>
+                                <h4 class="my-1" id="equipmentIncome"></h4>
+                                <p class="mb-0 font-13 text-success" id="equipmentIncomePhrase"><i class='bx bxs-up-arrow align-middle' id="equipmentIncomeImg"></i></p>
+                            </div>
+                            <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bx-dollar'></i>
+                            </div>
+                        </div>
+                        <div id="chart7"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">安装入金</p>
+                                <h4 class="my-1" id="installIncome"></h4>
+                                <p class="mb-0 font-13 text-danger" id="installIncomePhrase"><i class='bx bxs-up-arrow align-middle' id="installIncomeImg"></i></p>
+                            </div>
+                            <div class="widgets-icons bg-light-primary text-danger ms-auto"><i class='bx bx-yen'></i>
+                            </div>
+                        </div>
+                        <div id="chart8"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end row-->
+        <div  class="row row-cols-1 row-cols-xl-2">
+            <div class="col d-flex">
+                <div class="card radius-10 w-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h5 class="mb-1">主要指标完成进度 </h5>
+                                <p class="mb-0 font-13 text-secondary"><i class='bx bxs-calendar'></i>按财年统计</p>
+                            </div>
+                            <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                            </div>
+                        </div>
+                        <div class="row row-cols-1 row-cols-sm-1 mt-4"  id="MainIndex" style="width: 100%;height:400px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-flex">
+                <div class="card radius-10 w-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h5 class="mb-1">近10年销售趋势 </h5>
+                                <p class="mb-0 font-13 text-secondary"><i class='bx bxs-calendar'></i>单位:K台</p>
+                            </div>
+                            <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                            </div>
+                        </div>
+                        <div class="row row-cols-1 row-cols-sm-1 mt-4"  id="salesTrend" style="width: 100%;height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end row-->
+        <div  class="row">
+            <div class="col-xl-6 d-flex">
+                <div class="card radius-10 w-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h5 class="mb-1">区域生效/待生效/待签数据(台)</h5>
+                                <p class="mb-0 font-13 text-secondary"><i class='bx bxs-calendar'></i>按财年统计</p>
+                            </div>
+                            <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                            </div>
+                        </div>
+                        <div class="row row-cols-1 row-cols-sm-1 mt-4"  id="intoForceData" style="width: 100%;height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 d-flex">
+                <div class="card radius-10 w-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h5 class="mb-1">本财年与上财年生效台量按月对比</h5>
+                                <p class="mb-0 font-13 text-secondary"><i class='bx bxs-calendar'></i>单位:K台</p>
+                            </div>
+                            <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                            </div>
+                        </div>
+                        <div class="row row-cols-1 row-cols-sm-1 mt-4"  id="intoforce_sum_compare" style="width: 100%;height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end row-->
+        <div  class="row">
+            <div class="col-xl-6 d-flex">
+                <div class="card radius-10 w-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h5 class="mb-1">16地市生效/待生效/待签数据</h5>
+                                <p class="mb-0 font-13 text-secondary"><i class='bx bxs-calendar'></i>单位:台</p>
+                            </div>
+                            <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                            </div>
+                        </div>
+                        <div class="row row-cols-1 row-cols-sm-1 mt-4"  id="cityIntoForceData" style="width: 100%;height:460px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 d-flex">
+                <div class="card radius-10 w-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h5 class="mb-1">本财年与上财年生效台量按月对比</h5>
+                                <p class="mb-0 font-13 text-secondary"><i class='bx bxs-calendar'></i>单位:K台</p>
+                            </div>
+                            <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                            </div>
+                        </div>
+                        <div class="row row-cols-1 row-cols-sm-1 mt-4"  id="intoforce_compare" style="width: 100%;height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end row-->
+        <div class="card radius-10">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h5 class="mb-0">近两年生效+待生效+待签订台量趋势</h5>
+                    </div>
+                    <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                    </div>
+                </div>
+                <hr>
+                <div class="row row-cols-1 row-cols-sm-1 mt-4"  id="preIntoForceTrend" style="width: 100%;height:200px;"></div>
+            </div>
+        </div>
+
+    </div>
+    <div class="page-content">
+        <div class="card radius-10">
+            <div class="card-body">
+                <h5 class="mb-1">系统运行状态</h5>
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>更新开始时间</th>
+                            <th>更新结束时间</th>
+                            <th>状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="ms-2">
+                                        <h6 class="mb-0 font-14">1</h6>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{$Think.session.event_start_time}</td>
+                            <td>{$Think.session.event_end_time}</td>
+                            <td><div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3"><i class='bx bxs-circle me-1'></i>Normal</div></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="<?php addVersion('__JS__/echarts/5.4.3/dist/echarts.min.js');?>"></script>
+<script src="<?php addVersion('__JS__/myjs/main.js');?>"></script>
+</html>

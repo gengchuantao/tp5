@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>法务管理</title>
+</head>
+<body class="bg-white">
+<!--start page wrapper -->
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">合同部</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{:url('Index/main')}"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">法务信息管理</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+        <hr class="border border-secondary border-1opacity-50">
+        <div class="card">
+            <div class="card-body">
+                <!--查询条件-->
+                <div class="row">
+                    <div class="col-auto">
+                        <label for="search_contract_id" style="display: none;"></label><input type="text" class="form-control" id="search_contract_id" name="search_contract_id" placeholder="合同号">
+                    </div>
+                    <div class="col-auto">
+                        <label for="search_company" style="display: none;"></label><input type="text" class="form-control" id="search_company" name="search_company" placeholder="分公司">
+                    </div>
+                    <div class="col-auto">
+                        <label for="search_buyer_unit" style="display: none;"></label><input type="text" class="form-control" id="search_buyer_unit" name="search_buyer_unit" placeholder="买方单位">
+                    </div>
+                    <div class="col-auto">
+                        <label for="search_customer_abbreviation" style="display: none;"></label><input type="text" class="form-control" id="search_customer_abbreviation" name="search_customer_abbreviation" placeholder="客户简称">
+                    </div>
+                    <div class="col-auto">
+                        <div class="input-group">
+                            <select class="selectpicker form-control" id="search_litigation_type"  name="search_litigation_type" aria-label="search_litigation_type">
+                                <option value="">请选择类型</option>
+                                <option value="催款函">催款函</option>
+                                <option value="律师函">律师函</option>
+                                <option value="诉讼">诉讼</option>
+                            </select>
+                            <button class="btn btn-outline-info bi bi-search" type="button" id="query"></button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div id="toolbar">
+                    {eq name="Think.session.admin" value="1"}
+                    <a class="btn btn-sm btn-outline-primary " data-bs-toggle="modal" data-bs-target="#NewProject"><span class="bi bi-journal-plus"></span>新建</a>
+                    <a class="btn btn-sm btn-danger bi bi-trash text-white"  title="删除" onclick="GetDeleteID('id');">删除</a>
+                    <a class="btn btn-sm btn-info bi bi-eye text-white"  title="编辑" onclick="getLitigationEditID('id');" aria-disabled="true">编辑</a>
+                    <a class="btn btn-sm btn-secondary bi bi-messenger text-white"  title="发函" onclick="GetLetterEditID('id');">发函</a>
+                    <a class="btn btn-sm btn-primary bx bxs-church text-white"  title="诉讼" onclick="getFillingEditID('id');">诉讼</a>
+                    <a class="btn btn-sm btn-success bi bi-printer text-white"  title="付款通知书" onclick="printPaymentNotification('id');">付款通知书</a>
+                    <a class="btn btn-sm btn-warning bi bi-printer text-white" title="催款函" onclick="printCollectionLetters('id');">催款函</a>
+                    <a href="{:url('exportToExcel')}" class="btn btn-sm btn-secondary bx bxs-file-export"  title="导出">导出</a>
+                    {else/}
+                    <a class="btn btn-sm btn-info bi bi-eye text-white"  title="预览" onclick="GetContractPreviewID('id');" aria-disabled="true">预览</a>
+                    <a class="btn btn-sm btn-success bi bi-caret-up text-white"  title="提交" onclick="GetSubmitReviewID('id');">提交</a>
+                    {/eq}
+                </div>
+                <div class="table-responsive">
+                    <table
+                            class="table table-hover table-sm table-no-bordered table-striped table-condensed"
+                            id="litigationIndex"
+                            data-show-button-icons="true"
+                            data-toggle="table"
+                            data-buttons-class="sm"
+                            style="white-space: nowrap;"
+                            data-unique-id="id">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--end row-->
+    </div>
+</div>
+<!--end page wrapper -->
+<!-- 模态框（新建项目-开始） -->
+<div class="modal fade" id="NewProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content animation-dot">
+            <div class="modal-header">
+                <h5 class="modal-title">※新建</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">类型:</a>
+                            <select id="litigation_type" name="litigation_type" class="selectpicker form-control " multiple data-max-options="1"  title="请选择类型">
+                                <option value="催款函">催款函</option>
+            　　                 <option value="律师函">律师函</option>
+                                <option value="诉讼">诉讼</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">区域:</a>
+                            <select id="company" name="company" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择区域">
+                                <option value="济南大区">济南大区</option>
+                                <option value="青岛分公司">青岛分公司</option>
+                                <option value="潍坊分公司">潍坊分公司</option>
+                                <option value="烟台分公司">烟台分公司</option>
+                                <option value="临沂分公司">临沂分公司</option>
+                                <option value="济宁分公司">济宁分公司</option>
+                                <option value="东营分公司">东营分公司</option>
+                                <option value="德州分公司">德州分公司</option>
+                                <option value="菏泽办事处">菏泽办事处</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">合同号:</a>
+                            <input style="text-transform: uppercase" class="form-control" type="text" id="contract_id" name="contract_id" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">买方单位:</a>
+                            <input class="form-control" type="text" id="buyer_unit" name="buyer_unit" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">大客户编码:</a>
+                            <input class="form-control" type="text" id="big_client_code" name="big_client_code" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">客户简称:</a>
+                            <input class="form-control" type="text" id="customer_abbreviation" name="customer_abbreviation" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">设备欠款:</a>
+                            <input class="form-control" type="number" id="eq_litigation" name="eq_litigation" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">安装欠款:</a>
+                            <input class="form-control" type="number" id="in_litigation" name="in_litigation" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">售后欠款:</a>
+                            <input class="form-control" type="number" id="ma_litigation" name="ma_litigation" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">保证金欠款:</a>
+                            <input class="form-control" type="number" id="bid_bond" name="bid_bond" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="max_issuing_date">最大技监发证日期:</label><input class="form-control" type="text" id="max_issuing_date" name="max_issuing_date" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">申请人:</a>
+                            <input class="form-control" type="text" id="applicant" name="applicant" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">联系方式:</a>
+                            <input class="form-control" type="text" id="applicant_contact" name="applicant_contact" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <input class="form-control" type="hidden" id="session_company"  value="{$Think.session.company}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="getContractInfo()" class="btn btn-warning">
+                        获取合同信息
+                    </button>
+                    </button>
+                    <button id="litigationAddButton" type="button" onclick="AddNew()" class="btn btn-primary">
+                        新增
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新建项目-结束） -->
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">请确认是否删除？</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="DeleteForm">
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="input-group">
+                                <span class="input-group-text">ID:</span>
+                                <input id="delete_id" name="delete_id" class="form-control" aria-label="With textarea"  readonly="readonly"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="litigationEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">编辑</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="litigationEditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            类型:
+                            <input class="form-control" type="hidden" id="litigation_edit_id" name="litigation_edit_id" />
+                            <select id="e_litigation_type" name="e_litigation_type" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择类型">
+                                <option value="催款函">催款函</option>
+                                <option value="律师函">律师函</option>
+                                <option value="诉讼">诉讼</option>　　
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            状态:
+                            <select id="e_litigation_status" name="e_litigation_status" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择状态">
+                                <option value="新建">新建</option>
+                                <option value="已发函">已发函</option>
+                                <option value="流程中">流程中</option>
+                                <option value="诉讼流程驳回">诉讼流程驳回</option>
+                                <option value="提交诉讼资料">提交诉讼资料</option>
+                                <option value="已立案">已立案</option>
+                                <option value="已开庭">已开庭</option>
+                                <option value="已撤诉">已撤诉</option>
+                                <option value="已结案">已结案</option>　　
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_contract_id">合同号:</label><input class="form-control input-sm" type="text" id="e_contract_id" name="e_contract_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_company">区域:</label><input class="form-control input-sm" type="text" id="e_company" name="e_company" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_buyer_unit">买方单位:</label><input class="form-control input-sm" type="text" id="e_buyer_unit" name="e_buyer_unit" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_use_unit">使用单位:</label><input class="form-control input-sm" type="text" id="e_use_unit" name="e_use_unit" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_big_client_code">KA编号:</label><input class="form-control input-sm" type="text" id="e_big_client_code" name="e_big_client_code" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_customer_abbreviation">客户简称:</label><input class="form-control input-sm" type="text" id="e_customer_abbreviation" name="e_customer_abbreviation" />
+                        </div>
+
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_eq_litigation">设备起诉金额:</label><input class="form-control input-sm" type="text" id="e_eq_litigation" name="e_eq_litigation" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_in_litigation">安装起诉金额:</label><input class="form-control input-sm" type="text" id="e_in_litigation" name="e_in_litigation" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_ma_litigation">维保起诉金额:</label><input class="form-control input-sm" type="text" id="e_ma_litigation" name="e_ma_litigation" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_bid_bond">投标保证金:</label><input class="form-control input-sm" type="text" id="e_bid_bond" name="e_bid_bond" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_submission_process_date">提交流程时间:</label><input class="form-control input-sm" type="text" id="e_submission_process_date" name="e_submission_process_date" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_process_end_date">流程结束时间:</label><input class="form-control input-sm" type="text" id="e_process_end_date" name="e_process_end_date" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_courier_number">快递单号:</label><input class="form-control input-sm" type="text" id="e_courier_number" name="e_courier_number" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_submit_information_to_lawyer_date">提交资料至律师时间:</label><input class="form-control input-sm" type="text" id="e_submit_information_to_lawyer_date" name="e_submit_information_to_lawyer_date" />
+                        </div>
+
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_filling_date">立案时间:</label><input class="form-control input-sm" type="text" id="e_filling_date" name="e_filling_date" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_target_amount">标的额:</label><input class="form-control input-sm" type="text" id="e_target_amount" name="e_target_amount" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_case_no">案号:</label><input class="form-control input-sm" type="text" id="e_case_no" name="e_case_no" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_hearing_date">开庭日期:</label><input class="form-control input-sm" type="text" id="e_hearing_date" name="e_hearing_date" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_close_date">结案日期:</label><input class="form-control input-sm" type="text" id="e_close_date" name="e_close_date" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_close_type">结案方式:</label><input class="form-control input-sm" type="text" id="e_close_type" name="e_close_type" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_judgment">判决/裁定书:</label><input class="form-control input-sm" type="text" id="e_judgment" name="e_judgment" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_apply_execution_date">申请执行日期:</label><input class="form-control input-sm" type="text" id="e_apply_execution_date" name="e_apply_execution_date" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_court_costs">案件受理费:</label><input class="form-control input-sm" type="text" id="e_court_costs" name="e_court_costs" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="e_arbitration_costs">仲裁费:</label><input class="form-control input-sm" type="text" id="e_arbitration_costs" name="e_arbitration_costs" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            保全费:
+                            <input class="form-control input-sm" type="text" id="e_maintenamce_costs" name="e_maintenamce_costs" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            律师费:
+                            <input class="form-control input-sm" type="text" id="e_lawyer_costs" name="e_lawyer_costs" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            申请人:
+                            <input class="form-control input-sm" type="text" id="e_applicant" name="e_applicant" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            联系方式:
+                            <input class="form-control input-sm" type="text" id="e_applicant_contact" name="e_applicant_contact" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            申请时间:
+                            <input class="form-control input-sm" type="text" id="e_apply_date" name="e_apply_date" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            律师:
+                            <input class="form-control input-sm" type="text" id="e_lawyer" name="e_lawyer" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            经办人:
+                            <input class="form-control input-sm" type="text" id="e_agent" name="e_agent" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            进展情况:
+                            <textarea class="form-control" type="text" id="e_progress" name="e_progress" rows="8" ></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            备注:
+                            <textarea class="form-control" type="text" id="e_remarks" name="e_remarks" rows="8" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    {eq name="Think.session.super_admin" value="1"}
+                    <button type="button" onclick="UpdateLitigation()" class="btn btn-success">修改</button>
+                    {/eq}
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+<!-- 模态框（立案-开始） -->
+<div class="modal fade" id="fillingEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">诉讼信息更新</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="fillingEditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <input class="form-control" type="hidden" id="filling_edit_id" name="filling_edit_id" />
+                            <label for="f_litigation_type"> 类型:</label><input class="form-control input-sm" type="text" id="f_litigation_type" name="f_litigation_type" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_litigation_status">状态:</label><input class="form-control input-sm" type="text" id="f_litigation_status" name="f_litigation_status" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_contract_id">合同号:</label><input class="form-control input-sm" type="text" id="f_contract_id" name="f_contract_id" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_company">区域:</label><input class="form-control input-sm" type="text" id="f_company" name="f_company" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_buyer_unit">买方单位:</label><input class="form-control input-sm" type="text" id="f_buyer_unit" name="f_buyer_unit" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_use_unit">使用单位:</label><input class="form-control input-sm" type="text" id="f_use_unit" name="f_use_unit" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_eq_litigation">设备金额:</label><input class="form-control input-sm" type="text" id="f_eq_litigation" name="f_eq_litigation" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_in_litigation">安装金额:</label><input class="form-control input-sm" type="text" id="f_in_litigation" name="f_in_litigation" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_ma_litigation">维保金额:</label><input class="form-control input-sm" type="text" id="f_ma_litigation" name="f_ma_litigation" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_bid_bond">投标保证金:</label><input class="form-control input-sm" type="text" id="f_bid_bond" name="f_bid_bond" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_applicant">申请人:</label><input class="form-control input-sm" type="text" id="f_applicant" name="f_applicant" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_apply_date">申请日期:</label><input class="form-control input-sm" type="text" id="f_apply_date" name="f_apply_date" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-3 col-lg-2">
+                            <label for='f_submission_process_date'>提交流程时间:</label>
+                            <input type='text' class="result form-control" data-provide="datepicker-input" id='f_submission_process_date' name='f_submission_process_date' />
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-2">
+                            <label for='f_process_end_date'>流程结束时间:</label>
+                            <input type='text' class="result form-control" data-provide="datepicker-input" id='f_process_end_date' name='f_process_end_date' />
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-2">
+                            <label for='f_submit_information_to_lawyer_date'>提交资料至律师时间:</label>
+                            <input type='text' class="result form-control" data-provide="datepicker-input" id='f_submit_information_to_lawyer_date' name='f_submit_information_to_lawyer_date' />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_lawyer">律师:</label><input class="form-control input-sm" type="text" id="f_lawyer" name="f_lawyer" style="background-color: lightgreen" />
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-2">
+                            <label for='f_filling_date'>立案时间:</label>
+                            <input type='text' class="result form-control" data-provide="datepicker-input" id='f_filling_date' name='f_filling_date' />
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-2">
+                            <label for='f_filling_date'>缴费日期:</label>
+                            <input type='text' class="result form-control" data-provide="datepicker-input" id='f_payment_date' name='f_payment_date' />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_case_no">案号:</label><input class="form-control input-sm" type="text" id="f_case_no" name="f_case_no" style="background-color: #5acde2" />
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-2">
+                            <label for='f_hearing_date'>开庭日期:</label>
+                            <input type='text' class="result form-control" data-provide="datepicker-input" id='f_hearing_date' name='f_hearing_date' />
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-2">
+                            <label for='f_hearing_date'>结案日期:</label>
+                            <input type='text' class="result form-control" data-provide="datepicker-input" id='f_close_date' name='f_close_date' />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            结案方式:
+                            <select id="f_close_type" name="f_close_type" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择结案方式">
+                                <option value="一审判决">一审判决</option>
+                                <option value="和解">和解</option>
+                                <option value="调解">调解</option>
+                                <option value="仲裁">仲裁</option>
+                                <option value="撤诉">撤诉</option>
+                                <option value="二审判决">二审判决</option>
+                                <option value="败诉">败诉</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_judgment">判决/裁定书:</label><input class="form-control input-sm" type="text" id="f_judgment" name="f_judgment" style="background-color: #e7c3c3" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_collection_status">收款情况:</label><input class="form-control input-sm" type="text" id="f_collection_status" name="f_collection_status" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_eq_litigation_collection">设备收回金额:</label><input class="form-control input-sm" type="text" id="f_eq_litigation_collection" name="f_eq_litigation_collection"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_in_litigation_collection">安装收回金额:</label><input class="form-control input-sm" type="text" id="f_in_litigation_collection" name="f_in_litigation_collection"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_ma_litigation_collection">维保收回金额:</label><input class="form-control input-sm" type="text" id="f_ma_litigation_collection" name="f_ma_litigation_collection"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="f_bid_bond_collection">保证金收回金额:</label><input class="form-control input-sm" type="text" id="f_bid_bond_collection" name="f_bid_bond_collection"  />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <label for="f_progress">进展情况:</label><textarea class="form-control" type="text" id="f_progress" name="f_progress" rows="8" ></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <label for="f_remarks">备注:</label><textarea class="form-control" type="text" id="f_remarks" name="f_remarks" rows="8" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="submitFillingEdit()" class="btn btn-success">提交流程</button>
+                    <button type="button" onclick="submitRegisterEdit()" class="btn btn-info">立案</button>
+                    <button type="button" onclick="holdCourtEdit()" class="btn btn-warning">开庭</button>
+                    <button type="button" onclick="closeCaseEdit()" class="btn btn-danger">结案</button>
+                    <button type="button" onclick="onlyEdit()" class="btn btn-primary">仅修改</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（立案-结束） -->
+<!-- 模态框（发函-开始） -->
+<div class="modal fade" id="letterEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">催款函/律师函编辑</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="letterEditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <input class="form-control" type="hidden" id="letter_edit_id" name="letter_edit_id" />
+                            <label for="l_litigation_type">类型:</label><input class="form-control input-sm" type="text" id="l_litigation_type" name="l_litigation_type" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_litigation_status">状态:</label><input class="form-control input-sm" type="text" id="l_litigation_status" name="l_litigation_status" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_contract_id">合同号:</label><input class="form-control input-sm" type="text" id="l_contract_id" name="l_contract_id" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_company">区域:</label><input class="form-control input-sm" type="text" id="l_company" name="l_company" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_buyer_unit">买方单位:</label><input class="form-control input-sm" type="text" id="l_buyer_unit" name="l_buyer_unit" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_use_unit">使用单位:</label><input class="form-control input-sm" type="text" id="l_use_unit" name="l_use_unit" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_eq_litigation">设备金额:</label><input class="form-control input-sm" type="text" id="l_eq_litigation" name="l_eq_litigation" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_in_litigation">安装金额:</label><input class="form-control input-sm" type="text" id="l_in_litigation" name="l_in_litigation" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_ma_litigation">维保金额:</label><input class="form-control input-sm" type="text" id="l_ma_litigation" name="l_ma_litigation" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_bid_bond">投标保证金:</label><input class="form-control input-sm" type="text" id="l_bid_bond" name="l_bid_bond" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_applicant">申请人:</label><input class="form-control input-sm" type="text" id="l_applicant" name="l_applicant" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_apply_date">申请日期:</label><input class="form-control input-sm" type="text" id="l_apply_date" name="l_apply_date" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_letter_no">函字:</label><input class="form-control input-sm" type="text" id="l_letter_no" name="l_letter_no" />
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-2">
+                            <label for='l_letter_date'>流程提交日期:</label>
+                            <input type='text' class="result form-control" data-provide="datepicker-input" id='l_submission_process_date' name='l_submission_process_date' />
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-2">
+                            <label for='l_letter_date'>流程结束日期:</label>
+                            <input type='text' class="result form-control" data-provide="datepicker-input" id='l_process_end_date' name='l_process_end_date' />
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-2">
+                            <label for='l_letter_date'>发函日期:</label>
+                            <input type='text' class="result form-control" data-provide="datepicker-input" id='l_letter_date' name='l_letter_date' />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            投递方式:
+                            <select id="l_delivery_methods" name="l_delivery_methods" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择类型">
+                                <option value="直接送达">直接送达</option>
+            　　                 <option value="邮寄">邮寄</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="l_courier_number">快递单号:</label><input class="form-control input-sm" type="text" id="l_courier_number" name="l_courier_number"  />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <label for="l_progress">进展情况:</label><textarea class="form-control" type="text" id="l_progress" name="l_progress" rows="6" ></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <label for="l_remarks">备注:</label><textarea class="form-control" type="text" id="l_remarks" name="l_remarks" rows="6" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" >
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="letterButton" onclick="letterEdit()" class="btn btn-success">发催款函</button>
+                        <button type="button" id="lawyerButton" onclick="lawyerLetterEdit()" class="btn btn-danger">发律师函</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（发函-结束） -->
+<!-- 模态框（打印付款通知书-开始） -->
+<div class="modal fade" id="printPaymentNotification" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">付款通知函打印</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <select class="form-select text-danger" id="sendingSubject" aria-label="sendingSubject">
+                <option selected value="">如需更换发函主体请点击此处</option>
+                <option value="日立电梯(中国)有限公司">日立电梯(中国)有限公司</option>
+                <option value="日立电梯(中国)有限公司山东分公司">日立电梯(中国)有限公司山东分公司</option>
+                <option value="日立电梯(中国)有限公司青岛分公司">日立电梯(中国)有限公司青岛分公司</option>
+                <option value="日立电梯(中国)有限公司潍坊分公司">日立电梯(中国)有限公司潍坊分公司</option>
+                <option value="日立电梯(中国)有限公司烟台分公司">日立电梯(中国)有限公司烟台分公司</option>
+                <option value="日立电梯(中国)有限公司临沂分公司">日立电梯(中国)有限公司临沂分公司</option>
+                <option value="日立电梯(中国)有限公司济宁分公司">日立电梯(中国)有限公司济宁分公司</option>
+                <option value="日立电梯(中国)有限公司德州分公司">日立电梯(中国)有限公司德州分公司</option>
+                <option value="日立电梯(中国)有限公司东营分公司">日立电梯(中国)有限公司东营分公司</option>
+            </select>
+            <div class="modal-body bg-white" id="printPaymentNotificationBody">
+                <div class="d-flex flex-row-reverse">
+                   <img src="__STATIC__/img/logo.png" class="img-responsive text-right" width="120" height="45"  alt="">
+                </div>
+                <hr style="border: 1px solid black">
+                <p id="paymentNotificationBuyerUnit" style="font-size: small;line-height:50%;"></p>
+                <p id="paymentNotificationFrom" style="font-size: small;line-height:50%;"></p>
+                <p id="paymentNotificationApplicantContact" style="font-size: small;line-height:50%;"></p>
+                <p id="paymentNotificationApplicant" style="font-size: small;line-height:50%;"></p>
+                <h1 class="text-center" id="titleText"></h1><br>
+                <h6 id="subTitleText" class="text-center" style="font-size: x-small;"></h6>
+                <p style="font-size: medium">敬启者：</p><br>
+                <p style="font-size: medium;line-height:180%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp贵司与我司签订的编号为<a id="contractId1"></a>的电梯买卖及安装合同,我司已按合同约定完成了电（扶）梯产品的供货和安装工程，并于<a id="maxIssuingDate"></a>通过了当地质量技术监督部门的验收，但贵司仍未将<a id="contractId2"></a>合同应付<a id="arrearsAmount"></a>为使合同得到彻底的完结，保障我司合法权益，值此诚意致函，敬请贵司于见函后的十个工作日内将所欠付的款项付至我司帐户。<a id="collectionLettersText"></a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp以上内容如有异议，请于本函发出之日起20天内以书面的形式予以回复，以供核对，承蒙合作。</p><br>
+                <p style="font-size: medium">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp专此函告，多谢合作!</p><br>
+                特别提示：<br>
+                1、汇款、汇票请尽量通过对口银行办理，避免因跨行导致兑现时间的延长。<br>
+                2、付款时，属《买卖合同》部分的款项，请按以下帐号付款：<br>
+                <strong>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp日立电梯（中国）有限公司</strong><br>
+                <strong>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp开户银行：中国工商银行广州华南支行</strong><br>
+                <strong>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp帐    号：3602024409000182842</strong><br>
+                3、付款时，属《安装合同》部分的款项，请按以下帐号付款<br>
+                <strong>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp收款单位：日立电梯（中国）有限公司山东分公司</strong><br>
+                <strong>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp开户银行：招商银行济南分行营业部</strong><br>
+                <strong>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp帐    号：632082053610002</strong><br><br><br>
+                <div class="d-flex flex-row-reverse">
+                    <p class="text-right" id="paymentNotificationFrom1"></p><br>
+                </div>
+                <div class="d-flex flex-row-reverse">
+                    <p class="text-right" id="todayDate"></p>
+                </div>
+            </div>
+            <div class="modal-footer" >
+                <div class="btn-group">
+                    <a type="button" class="btn btn-sm btn-secondary bx bx-printer" id="printPaymentNotificationButton" >打印</a>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（打印付款通知书-结束） -->
+</body>
+<script src="<?php addVersion('__JS__/myjs/litigation.js');?>"></script>
+</html>

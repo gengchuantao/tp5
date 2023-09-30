@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>生效处理</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="#"><span class = "glyphicon glyphicon-option-vertical"></span>安装管理部</a></li>
+            <li class="active">待生效明细</li>
+        </ol>
+        <div class="row">
+            <div class="col-md-14">
+                <div class="col-md-10">
+                    <form class="form-inline">
+                        <div class="form-group form-group-sm">
+                            <label class="sr-only" id="undintoforce_product_id">工号</label>
+                            <input name="product_id" type="text" class="form-control" placeholder="工号..."value="{:input('get.undelivery_product_id')}">
+                            <label class="sr-only" id="undintoforce_contract_id">合同号</label>
+                            <input name="contract_id" type="text" class="form-control" placeholder="合同号..."value="{:input('get.undintoforce_contract_id')}">
+                        </div>
+                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
+                    </form>
+                </div>
+                <div class="col-md-2 text-right">
+                    <a href="{:url('unintoforce_export')}" class="btn btn-danger"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</a>
+                </div>
+            </div>
+            <hr />
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr class="info">
+                    <th>序号</th>
+                    <th>工号</th>
+                    <th>合同号</th>
+                    <th>状态</th>
+                    <th>生效日期</th>
+                    <th>业绩归属</th>
+                    <th>营业员</th>
+                    <th>电梯型号</th>
+                    <th>电梯简称</th>
+                    <th>载重</th>
+                    <th>速度</th>
+                    <th>层</th>
+                    <th>站</th>
+                    <th>门</th>
+                    <th>有无机房</th>
+                    <th>提升高度</th>
+                    <th>井道总高</th>
+                    <th>出仓日期</th>
+                    <th>合同安装价</th>
+                    <th>安装支出</th>
+                    <th>标准委托价</th>
+                    <th>吊装价</th>
+                    <th>搭棚价</th>
+                    <th>水电费</th>
+                </tr>
+                {volist name="products" id="_Products" key="key"}
+                <tr>
+                    <td>{$key}</td>
+                    <td>{$_Products->getData('product_id')}</td>
+                    <td>{$_Products->getData('contract_id')}</td>
+                    <td>{$_Products->getData('status')}</td>
+                    <td>{$_Products->getData('into_force_date')}</td>
+                    <td>{$_Products->getData('belong_to')}</td>
+                    <td>{$_Products->getData('sales_person')}</td>
+                    <td>{$_Products->getData('elevator_model')}</td>
+                    <td>{$_Products->getData('elevator_short')}</td>
+                    <td>{$_Products->getData('weight')}</td>
+                    <td>{$_Products->getData('speed')}</td>
+                    <td>{$_Products->getData('floor')}</td>
+                    <td>{$_Products->getData('stop')}</td>
+                    <td>{$_Products->getData('door')}</td>
+                    <td>{$_Products->getData('elevator_room')}</td>
+                    <td>{$_Products->getData('hoist_height')}</td>
+                    <td>{$_Products->getData('hoistway_height')}</td>
+                    <td>{$_Products->getData('delivery_date')}</td>
+                    <td>{$_Products->getData('contract_installation_price')}</td>
+                    <td>{$_Products->getData('average_installation_expenditure')}</td>
+                    <td>{$_Products->getData('model_repair')}</td>
+                    <td>{$_Products->getData('entrust_spl')}</td>
+                    <td>{$_Products->getData('hoisting_cost')}</td>
+                    <td>{$_Products->getData('shed')}</td>
+                    <td>{$_Products->getData('water_electricity')}</td>
+                </tr>
+                {/volist}
+            </table>
+            {$products->render()}
+        </div>
+    </div>
+</div>
+</body>
+</html>

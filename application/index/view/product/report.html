@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body >
+<!--start page wrapper -->
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">合同部</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{:url('Index/main')}"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">常用报表导出</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+        <div class="card">
+            <div class="card-body">
+                <div>
+                    <h5 class="card-title">常用报表</h5>
+                </div>
+                <hr>
+                <div class="row row-cols-auto g-3">
+                    <div class="col">
+                        <a type="button" class="btn btn-outline-primary px-5" onclick="BondArrears()">保证金欠款明细</a>
+                    </div>
+                    <div class="col">
+                        <a type="button" class="btn btn-outline-secondary px-5" onclick="PreSign()">待签订明细</a>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-success px-5" onclick="PreIntoForceExport()">待生效明细</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-danger px-5" data-bs-toggle="modal" data-bs-target="#IntoForceModal">生效明细</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-warning px-5" data-bs-toggle="modal" data-bs-target="#SignModal">签梯明细</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-info px-5" data-bs-toggle="modal" data-bs-target="#DeliveryModal">发货明细</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-primary px-5" onclick="intoForceUnDelivery()">已生效未发货明细</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-secondary px-5" onclick="AllQuote()">报价明细</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-success px-5" onclick="AllContract()">合同明细</button>
+                    </div>
+                </div>
+                <!--end row-->
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div>
+                    <h5 class="card-title">常用计算</h5>
+                </div>
+                <hr>
+                <div class="row row-cols-auto g-3">
+                    <!-- Example single danger button -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            常用计算
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" onclick="TaxToNoTax()">含税下浮转不含税下浮</a></li>
+                            <li><a class="dropdown-item" onclick="NoFeeToFee()">已知不扣服务费下浮计算扣服务费下浮</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!--end row-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--end page wrapper -->
+
+
+<!--生效明细模态框查询开始-->
+<div class="modal fade" id="IntoForceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">生效明细导出</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="IntoForceForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            <label for="export_condition">导出条件:</label><select id="export_condition" name="export_condition" class="form-select" >
+                                <option value="">请选择导出条件</option>
+                                <option value="生效日期">生效日期</option>
+                                <option value="上报日期">上报日期</option>
+                                <option value="统计日期">统计日期</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            日期从:
+                            <input class="form-control" type="text" id="IntoForceFrom" name="IntoForceFrom" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            日期至:
+                            <input class="form-control" type="text" id="IntoForceTo" name="IntoForceTo" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="add_btn" type="button" onclick="IntoForceReport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--生效明细模态框查询结束-->
+<!--签梯模态框查询开始-->
+<div class="modal fade" id="SignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">签梯明细导出</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="SignForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            <label for="BothSealFrom">双方盖章日期从:</label><input class="form-control" type="text" id="BothSealFrom" name="BothSealFrom" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            <label for="BothSealTo">双方盖章日期至:</label><input class="form-control" type="text" id="BothSealTo" name="BothSealTo" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="SignReport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--签梯模态框查询结束-->
+<!--发货模态框查询开始-->
+<div class="modal fade" id="DeliveryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">发货明细导出</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="DeliveryForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            <label for="export_delivery_condition">导出条件:</label><select id="export_delivery_condition" name="export_delivery_condition" class="form-select" >
+                                <option value="">请选择导出条件</option>
+                                <option value="上报出仓日期">上报出仓日期</option>
+                                <option value="预计发货日期">预计发货日期</option>
+                                <option value="监理预计发货日期">监理预计发货日期</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <label for="DeliveryFrom">发货日期从:</label><input class="form-control" type="text" id="DeliveryFrom" name="DeliveryFrom" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <label for="DeliveryTo">发货日期至:</label><input class="form-control" type="text" id="DeliveryTo" name="DeliveryTo" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="DeliveryReport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--发货模态框查询结束-->
+</body>
+<script src="<?php addVersion('__JS__/myjs/report.js');?>"></script>
+</html>

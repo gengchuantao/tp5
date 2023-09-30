@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>合同安装信息</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>合同安装信息</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a href="{:url('Product/MakingExport')}" class="btn btn-warning btn-xs" title="在制明细导出"><i class="glyphicon glyphicon-saved"></i></a>
+                        <a data-toggle="modal" data-target="#CompleteExport" class="btn btn-success btn-xs" title="完工明细导出"><i class="glyphicon glyphicon-export"></i></a>
+                        <i class="glyphicon glyphicon-option-vertical"></i>
+                        <a data-toggle="modal" data-target="#DeliveryPredictModal" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-share
+" title="导出发货预测"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--查询条件-->
+                <form class="form-group-md">
+                    <div class="col-xs-6 col-sm-2 form-group">
+                        <input name="buyer_unit" type="text" class="form-control" placeholder="买方单位..." value="{:input('get.buyer_unit')}">
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                        <div class="input-group">
+                            <input name="contract_id" type="text" class="form-control" placeholder="合同号..." value="{:input('get.contract_id')}">
+                            <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                                    </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--表单显示-->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <tr class="info">
+                        <th style=" white-space:nowrap">操作</th>
+                        <th style=" white-space:nowrap">序号</th>
+                        <th style=" white-space:nowrap">合同号</th>
+                        <th style=" white-space:nowrap">状态</th>
+                        <th style="white-space:nowrap">台量</th>
+                        <th style=" white-space:nowrap">销售区域</th>
+                        <th style=" white-space:nowrap">安装区域</th>
+                        <th style=" white-space:nowrap">跨区域</th>
+                        <th style="white-space:nowrap">营业员</th>
+                        <th style=" white-space:nowrap" class="text-right">调验</th>
+                        <th style=" white-space:nowrap" class="text-right">澄清</th>
+                        <th style=" white-space:nowrap" class="text-right">安装预收</th>
+                        <th style=" white-space:nowrap" class="text-right">安装实收</th>
+                        <th style=" white-space:nowrap" class="text-right">安装欠款</th>
+                        <th style=" white-space:nowrap">买方单位</th>
+                    </tr>
+                    {volist name="contracts" id="_Contract" key="key"}
+                    <tr>
+                        <td style=" white-space:nowrap">
+                            <a title="合同预览" class="btn btn-info btn-xs" data-toggle="modal" data-target="#installContractPreview" onclick="getInstallContractPreviewID('{$_Contract.id}');"><i class="glyphicon glyphicon-eye-open"></i></a>
+                        </td>
+                        <td>{$_Contract->getData('id')}</td>
+                        <td style="white-space:nowrap"><a href="{:url('Product/install')}?contract_id={$_Contract->getData('contract_id')}">{$_Contract->getData('contract_id')}</a></td>
+                        <td style="white-space:nowrap">{$_Contract->getData('contract_status')}</td>
+                        <td style="white-space:nowrap;" class="text-right">{$_Contract->getData('contract_num')}</td>
+                        <td style="white-space:nowrap">{$_Contract->getData('branch')}</td>
+                        <td style="white-space:nowrap">{$_Contract->getData('install_company')}</td>
+                        <td style="white-space:nowrap">{$_Contract->getData('cross_company')}</td>
+                        <td style="white-space:nowrap">{$_Contract->getData('sales_clerk')}</td>
+                        <td style=" white-space:nowrap">{$_Contract->getData('if_check')}</td>
+                        <td style=" white-space:nowrap" class="text-right">{$_Contract->getData('clarify_cost')|number_format=2}</td>
+                        <td style=" white-space:nowrap" class="text-right">{$_Contract->getData('install_contract_advance')|number_format=2}</td>
+                        <td style=" white-space:nowrap" class="text-right">{$_Contract->getData('install_contract_received')|number_format=2}</td>
+                        <td style=" white-space:nowrap" class="text-right">{$_Contract->getData('install_contract_arrears')|number_format=2}</td>
+                        <td style="white-space:nowrap">{$_Contract->getData('buyer_unit')}</td>
+                    </tr>
+                    {/volist}
+                </table>
+                {$contracts->render()}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    请确认是否删除？
+                </h4>
+            </div>
+            <form id="DeleteForm">
+                <input class="form-control" type="hidden" readonly="readonly" id="delete_id" name="delete_id" />
+                <input class="form-control" type="hidden" readonly="readonly" id="delete_contract_id" name="delete_contract_id" />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    更新
+                </h4>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            合同号:
+                            <input class="form-control" type="hidden" id="update_id" name="update_id" />
+                            <input class="form-control" type="text" id="update_contract_id" name="update_contract_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            合同台量:
+                            <input class="form-control" type="text" id="update_contract_num" name="update_contract_num" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            买方单位:
+                            <input class="form-control" type="text" id="update_buyer_unit" name="update_buyer_unit" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            使用单位:
+                            <input class="form-control" type="text" id="update_use_unit" name="update_use_unit" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            营业员:
+                            <input class="form-control" type="text" id="update_sales_clerk" name="update_sales_clerk" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            收款人:
+                            <input class="form-control" type="text" id="update_collection_person" name="update_collection_person" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="UpdatePost()" class="btn btn-primary">
+                        修改
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+<!-- 模态框（修改合同号-开始） -->
+<div class="modal fade" id="ChangeContractID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    更新
+                </h4>
+            </div>
+            <form id="ChangeContractIDForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            合同号:
+                            <input class="form-control" type="hidden" id="change_contract_id" name="change_contract_id" />
+                            <input class="form-control" type="text" id="old_contract_id" name="old_contract_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            新合同号:
+                            <input class="form-control" type="text" id="new_contract_id" name="new_contract_id" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="ChangeContractID()" class="btn btn-primary">
+                        修改
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（修改合同号-结束） -->
+<!-- 模态框（提交商务审核-开始） -->
+<div class="modal fade" id="SubmitReview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 95%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    提交商务审核
+                </h4>
+            </div>
+            <form id="SubmitReviewForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            合同号:
+                            <input class="form-control" type="hidden" id="submit_review_id" name="submit_review_id" />
+
+                            <input class="form-control" type="text" id="s_contract_id" name="s_contract_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            台量:
+                            <input class="form-control" type="text" id="s_contract_num" name="s_contract_num" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            签订分公司:
+                            <input class="form-control" type="text" id="s_branch" name="s_branch" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            营业员:
+                            <input class="form-control" type="text" id="s_sales_clerk" name="s_sales_clerk" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            项目名称:
+                            <input class="form-control" type="text" id="s_project_name" name="s_project_name" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            安装省份:
+                            <input class="form-control" type="text" id="s_province" name="s_province" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            安装地市:
+                            <input class="form-control" type="text" id="s_area" name="s_area" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            安装区县:
+                            <input class="form-control" type="text" id="s_county" name="s_county" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            项目类型:
+                            <input class="form-control" type="text" id="s_project_type" name="s_project_type" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            买方单位:
+                            <input class="form-control" type="text" id="s_buyer_unit" name="s_buyer_unit" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            使用单位:
+                            <input class="form-control" type="text" id="s_use_unit" name="s_use_unit" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            客户属性:
+                            <input class="form-control" type="text" id="s_client_attributes" name="s_client_attributes" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            大客户编码:
+                            <input class="form-control" type="text" id="s_big_client_code" name="s_big_client_code" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            大客户简称:
+                            <input class="form-control" type="text" id="s_big_client_short" name="s_big_client_short" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">三方合同:</a>
+                            <select id="s_if_three_party" name="s_if_three_party" class="selectpicker form-control" >
+                                <option value="否" selected>否</option>
+                                <option value="是">是</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">调验合同:</a>
+                            <select id="s_if_check" name="s_if_check" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择是否为调验合同">
+                                <option value="否" selected>否</option>
+                                <option value="是">是</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">设备提货前支付比例:</a>
+                            <select id="s_before_delivery_per" name="s_before_delivery_per" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择提货前支付比例">
+                                <option value="100%">100%</option>
+                                <option value="95%">95%</option>
+                                <option value="90%">90%</option>
+                                <option value="85%">85%</option>
+                                <option value="80%">80%</option>
+                                <option value="75%">75%</option>
+                                <option value="70%">70%</option>
+                                <option value="65%">65%</option>
+                                <option value="60%">60%</option>
+                                <option value="55%">55%</option>
+                                <option value="50%">50%</option>
+                                <option value="45%">45%</option>
+                                <option value="40%">40%</option>
+                                <option value="35%">35%</option>
+                                <option value="30%">30%</option>
+                                <option value="25%">25%</option>
+                                <option value="20%">20%</option>
+                                <option value="15%">15%</option>
+                                <option value="10%">10%</option>
+                                <option value="5%">5%</option>
+                                <option value="0%">0%</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">设备质保金比例:</a>
+                            <select id="s_quality_assurance_per" name="s_quality_assurance_per" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择设备质保金比例">
+                                <option value="0%">0%</option>
+                                <option value="3%">3%</option>
+                                <option value="5%">5%</option>
+                                <option value="10%">10%</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">安装合同签订方:</a>
+                            <select id="s_install_contract_sign" name="s_install_contract_sign" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择安装合同签订方">
+                                <option value="山东司" selected>山东司</option>
+                                <option value="总公司">总公司</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">分公司服务费申请点数:</a>
+                            <input class="form-control" type="number" id="s_branch_service_points" name="s_branch_service_points" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">经销商A:</a>
+                            <input class="form-control" type="text" id="s_first_distributor" name="s_first_distributor" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">服务费点数A:</a>
+                            <input class="form-control" type="number" id="s_service_charge_points1" name="s_service_charge_points1" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">经销商B:</a>
+                            <input class="form-control" type="text" id="s_second_distributor" name="s_second_distributor" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">服务费点数B:</a>
+                            <input class="form-control" type="number" id="s_service_charge_points2" name="s_service_charge_points2" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            营业澄清:
+                            <textarea class="form-control" type="text" id="s_clarify" name="s_clarify" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            总部接收日期:
+                            <input class="form-control" type="text" id="s_delivery_date" readonly="readonly" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="SubmitReview()" class="btn btn-primary">
+                        提交审核
+                    </button>
+                    <button type="button" class="btn btn-warning" onclick="CompanyEdit()" class="btn btn-primary">
+                        修改信息
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（提交商务审核-结束） -->
+<!-- 模态框（商务审核-开始） -->
+<div class="modal fade" id="CommerceReview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 95%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    商务审核
+                </h4>
+            </div>
+            <form id="CommerceReviewForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            合同号:
+                            <input class="form-control" type="hidden" id="commerce_review_id" name="commerce_review_id" />
+                            <input class="form-control" type="hidden" id="c_delivery_date" name="c_delivery_date" />
+                            <input class="form-control" type="text" id="c_contract_id" name="c_contract_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            台量:
+                            <input class="form-control" type="text" id="c_contract_num" name="c_contract_num" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            签订分公司:
+                            <input class="form-control" type="text" id="c_branch" name="c_branch" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            营业员:
+                            <input class="form-control" type="text" id="c_sales_clerk" name="c_sales_clerk" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            项目名称:
+                            <input class="form-control" type="text" id="c_project_name" name="c_project_name" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            买方单位:
+                            <input class="form-control" type="text" id="c_buyer_unit" name="c_buyer_unit" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            使用单位:
+                            <input class="form-control" type="text" id="c_use_unit" name="c_use_unit" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            客户属性:
+                            <input class="form-control" type="text" id="c_client_attributes" name="c_client_attributes" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            大客户编码:
+                            <input class="form-control" type="text" id="c_big_client_code" name="s_big_client_code" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            大客户简称:
+                            <input class="form-control" type="text" id="c_big_client_short" name="s_big_client_short" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            设备SPL价:
+                            <input class="form-control" type="text" id="c_equipment_spl" name="c_equipment_spl" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            设备签约价:
+                            <input  class="form-control" type="text" id="c_equipment_sign" name="c_equipment_sign" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            运费SPL价:
+                            <input  class="form-control" type="text" id="c_transport_spl" name="c_transport_spl" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            运费签约价:
+                            <input  class="form-control" type="text" id="c_transport_sign" name="c_transport_sign" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装SPL价:
+                            <input  class="form-control" type="text" id="c_installation_spl" name="c_installation_spl" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装签约价:
+                            <input  class="form-control" type="text" id="c_installation_sign" name="c_installation_sign" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">三方合同:</a>
+                            <select style="background-color: #8ed1fc" id="c_if_three_party" name="c_if_three_party" class="selectpicker form-control" >
+                                <option value="否" selected>否</option>
+                                <option value="是">是</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">调验合同:</a>
+                            <select id="c_if_check" name="c_if_check" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择是否为调验合同">
+                                <option value="否" selected>否</option>
+                                <option value="是">是</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">设备提货前支付比例:</a>
+                            <select id="c_before_delivery_per" name="c_before_delivery_per" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择提货前支付比例">
+                                <option value="100%">100%</option>
+                                <option value="95%">95%</option>
+                                <option value="90%">90%</option>
+                                <option value="85%">85%</option>
+                                <option value="80%">80%</option>
+                                <option value="75%">75%</option>
+                                <option value="70%">70%</option>
+                                <option value="65%">65%</option>
+                                <option value="60%">60%</option>
+                                <option value="55%">55%</option>
+                                <option value="50%">50%</option>
+                                <option value="45%">45%</option>
+                                <option value="40%">40%</option>
+                                <option value="35%">35%</option>
+                                <option value="30%">30%</option>
+                                <option value="25%">25%</option>
+                                <option value="20%">20%</option>
+                                <option value="15%">15%</option>
+                                <option value="10%">10%</option>
+                                <option value="5%">5%</option>
+                                <option value="0%">0%</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">设备质保金比例:</a>
+                            <select id="c_quality_assurance_per" name="c_quality_assurance_per" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择设备质保金比例">
+                                <option value="0%">0%</option>
+                                <option value="3%">3%</option>
+                                <option value="5%">5%</option>
+                                <option value="10%">10%</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">安装合同签订方:</a>
+                            <select id="c_install_contract_sign" name="c_install_contract_sign" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择安装合同签订方">
+                                <option value="山东司" selected>山东司</option>
+                                <option value="总公司">总公司</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            分公司服务费申请点数:
+                            <input class="form-control" type="text" id="c_branch_service_points" name="c_branch_service_points" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            经销商A:
+                            <input class="form-control" type="text" id="c_first_distributor" name="c_first_distributor" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            服务费点数A:
+                            <input class="form-control" type="number" id="c_service_charge_points1" name="c_service_charge_points1" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            经销商B:
+                            <input class="form-control" type="text" id="c_second_distributor" name="c_second_distributor" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            服务费点数B:
+                            <input class="form-control" type="number" id="c_service_charge_points2" name="c_service_charge_points2" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            营业澄清:
+                            <textarea class="form-control" type="text" id="c_clarify" name="c_clarify" rows="3"></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            商审备注:
+                            <textarea class="form-control" type="text" id="c_contract_remarks" name="c_contract_remarks" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            澄清费用:
+                            <input style="background: #8ed1fc" class="form-control" type="number" id="c_clarify_cost" name="c_clarify_cost" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            配套费用:
+                            <input style="background: #8ed1fc" class="form-control" type="number" id="c_supporting_cost" name="c_supporting_cost" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">分公司提交日期:</a>
+                            <input  class="form-control" type="text" id="c_branch_submit_date" name="c_branch_submit_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">首次资料接收日期:</a>
+                            <div class='input-group date' id='contract_rec_date'>
+                                <input type='text' class="form-control" id='c_contract_rec_date' name='c_contract_rec_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-2">
+                            最终审核日期:
+                            <input class="form-control" type="text" id="c_audit_date" name="c_audit_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            审核版本:
+                            <input class="form-control" type="text" id="c_audit_version" name="c_audit_version" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            安装合同(2)金额:
+                            <input class="form-control" type="number" id="c_supporting_contract_amount" name="c_supporting_contract_amount" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装合同(2)支出:
+                            <input class="form-control" type="number" id="c_supporting_expenditure" name="c_supporting_expenditure" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            调验保证金:
+                            <input class="form-control" type="number" id="c_check_bail" name="c_check_bail" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">调验保证金收款日期:</a>
+                            <div class='input-group date' id='check_bail_rec_date'>
+                                <input type='text' class="form-control" id='c_check_bail_rec_date' name='c_check_bail_rec_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">调验保证金退回日期:</a>
+                            <div class='input-group date' id='check_bail_bac_date'>
+                                <input type='text' class="form-control" id='c_check_bail_bac_date' name='c_check_bail_bac_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">合同双方盖章日期:</a>
+                            <div class='input-group date' id='both_seal_date'>
+                                <input type='text' class="form-control" id='c_both_seal_date' name='c_both_seal_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="CommerceReview()" class="btn btn-warning">
+                        商务审核
+                    </button>
+                    <button type="button" onclick="SupportingEdit()" class="btn btn-danger">
+                        信息修改
+                    </button>
+                    <button type="button" onclick="ContractFile()" class="btn btn-primary">
+                        合同归档
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（商务审核-结束） -->
+<!-- 模态框（合同预览-开始） -->
+<div class="modal fade" id="installContractPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 95%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    合同预览
+                </h4>
+            </div>
+            <form id="ContractPreviewForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            合同号:
+                            <input class="form-control" type="hidden" id="contract_preview_id" name="contract_preview_id" />
+                            <input class="form-control" type="text" id="p_contract_id" name="p_contract_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            台量:
+                            <input class="form-control" type="text" id="p_contract_num" name="p_contract_num" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            签订分公司:
+                            <input class="form-control" type="text" id="p_branch" name="p_branch" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            营业员:
+                            <input class="form-control" type="text" id="p_sales_clerk" name="p_sales_clerk" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            项目名称:
+                            <input class="form-control" type="text" id="p_project_name" name="p_project_name" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装省份:
+                            <input class="form-control" type="text" id="p_province" name="p_province" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            安装地市:
+                            <input class="form-control" type="text" id="p_area" name="p_area" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装区县:
+                            <input class="form-control" type="text" id="p_county" name="p_county" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装地址:
+                            <input class="form-control" type="text" id="p_installation_location" name="p_installation_location" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            买方单位:
+                            <input class="form-control" type="text" id="p_buyer_unit" name="p_buyer_unit" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            使用单位:
+                            <input class="form-control" type="text" id="p_use_unit" name="p_use_unit" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            客户属性:
+                            <input class="form-control" type="text" id="p_client_attributes" name="p_client_attributes" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            大客户编码:
+                            <input class="form-control" type="text" id="p_big_client_code" name="s_big_client_code" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            大客户简称:
+                            <input class="form-control" type="text" id="p_big_client_short" name="s_big_client_short" readonly="readonly"/>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-2">
+                            三方合同:
+                            <input class="form-control" type="text" id="p_if_three_party" name="p_if_three_party" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            调验合同:
+                            <input class="form-control" type="text" id="p_if_check" name="p_if_check" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            设备提货前支付比例:
+                            <input class="form-control" type="text" id="p_before_delivery_per" name="p_before_delivery_per" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            设备质保金比例:
+                            <input class="form-control" type="text" id="p_quality_assurance_per" name="p_quality_assurance_per" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            设备SPL价:
+                            <input class="form-control" type="text" id="p_equipment_spl" name="p_equipment_spl" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            设备签约价:
+                            <input  class="form-control" type="text" id="p_equipment_sign" name="p_equipment_sign" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            运费SPL价:
+                            <input  class="form-control" type="text" id="p_transport_spl" name="p_transport_spl" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            运费签约价:
+                            <input  class="form-control" type="text" id="p_transport_sign" name="p_transport_sign" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装SPL价:
+                            <input  class="form-control" type="text" id="p_installation_spl" name="p_installation_spl" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装签约价:
+                            <input  class="form-control" type="text" id="p_installation_sign" name="p_installation_sign" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            营业澄清:
+                            <textarea class="form-control" type="text" id="p_clarify" name="p_clarify" rows="3" readonly="readonly"></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            商审备注:
+                            <textarea class="form-control" type="text" id="p_contract_remarks" name="p_contract_remarks" rows="3" readonly="readonly"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">安装合同签订方:</a>
+                            <input  class="form-control" type="text" id="p_install_contract_sign" name="p_install_contract_sign" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">澄清费用:</a>
+                            <input class="form-control" type="number" id="p_clarify_cost" name="p_clarify_cost" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            分公司提交日期:
+                            <input  class="form-control" type="text" id="p_branch_submit_date" name="p_branch_submit_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            首次资料接收日期:
+                            <input  class="form-control" type="text" id="p_contract_rec_date" name="p_contract_rec_date" readonly="readonly"/>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-2">
+                            最终审核日期:
+                            <input class="form-control" type="text" id="p_audit_date" name="p_audit_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            审核版本:
+                            <input class="form-control" type="text" id="p_audit_version" name="p_audit_version" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            山东司商审:
+                            <input class="form-control" type="text" id="p_contract_auditor" name="p_contract_auditor" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            调验保证金:
+                            <input class="form-control" type="number" id="p_check_bail" name="p_check_bail" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            调验保证金收款日期:
+                            <input class="form-control" type="text" id="p_check_bail_rec_date" name="p_check_bail_rec_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            调验保证金退回日期:
+                            <input class="form-control" type="text" id="p_check_bail_bac_date" name="p_check_bail_rec_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装合同(2)金额:
+                            <input class="form-control" type="text" id="p_supporting_contract_amount" name="p_supporting_contract_amount" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装合同(2)支出:
+                            <input class="form-control" type="text" id="p_supporting_expenditure" name="p_supporting_expenditure" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            总公司营业员:
+                            <input  class="form-control" type="text" id="p_head_salesperson" name="p_head_salesperson" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            总公司商审:
+                            <input class="form-control" type="text" id="p_head_auditor" name="p_head_auditor" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            总公司接收日期:
+                            <input  class="form-control" type="text" id="p_delivery_date" name="p_delivery_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            总公司寄出日期:
+                            <input  class="form-control" type="text" id="p_send_date" name="p_send_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            寄出单号:
+                            <input  class="form-control" type="text" id="p_send_number" name="p_send_number" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">合同双方盖章日期:</a>
+                            <input  class="form-control" type="text" id="p_both_seal_date" name="p_both_seal_date" readonly="readonly"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（合同预览-结束） -->
+<!--完工明细导出开始-->
+<div class="modal fade" id="CompleteExport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    完工明细导出
+                </h4>
+            </div>
+            <form id="CompleteExportForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            导出条件:
+                            <select id="export_condition" name="export_condition" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择导出条件">
+                                <option value="" selected style="display:none"></option>
+                                <option value="完工日期">完工日期</option>
+                                <option value="技监发证日期">技监发证日期</option>
+                                <option value="发货日期">发货日期</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            日期从:
+                            <input class="form-control" type="text" id="CompleteExportFrom" name="CompleteExportFrom" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            日期至:
+                            <input class="form-control" type="text" id="CompleteExportTo" name="CompleteExportTo" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="add_btn" type="button" onclick="CompleteExport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--完工明细导出结束-->
+<!--发货模态框查询开始-->
+<div class="modal fade" id="DeliveryPredictModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    发货明细导出
+                </h4>
+            </div>
+            <form id="DeliveryForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            导出条件:
+                            <select id="export_delivery_condition" name="export_delivery_condition" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择导出条件">
+                                <option value="" selected style="display:none"></option>
+                                <option value="上报出仓日期">上报出仓日期</option>
+                                <option value="预计发货日期">预计发货日期</option>
+                                <option value="监理预计发货日期">监理预计发货日期</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            发货日期从:
+                            <input class="form-control" type="text" id="DeliveryFrom" name="DeliveryFrom" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            发货日期至:
+                            <input class="form-control" type="text" id="DeliveryTo" name="DeliveryTo" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="DeliveryReport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--发货模态框查询结束-->
+</body>
+<script src="/../tp5/public/static/js/myjs/contract.js" type="text/javascript"></script>
+<script src="/../tp5/public/static/js/myjs/report.js" type="text/javascript"></script>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <!-- 标题（开始） -->
+        <ol class="breadcrumb">
+            <li><a href="#"><span class = "glyphicon glyphicon-option-vertical"></span>安装管理部</a></li>
+            <li class="active">安装网点人员信息</li>
+        </ol>
+        <!-- 标题（结束） -->
+        <!-- 查询（开始） -->
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="col-xs-2 col-sm-2">
+                            <input style="width: 100%;" name="staff_name" type="text" class="form-control form-group-sm" placeholder="姓名..." value="{:input('get.staff_name')}" />
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+                            <input style="width: 100%;" name="supplier" type="text" class="form-control form-group-sm" placeholder="网点..." value="{:input('get.supplier')}" />
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+                            <select name="company" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="区域">
+                                <optgroup label="请选择区域：">
+                                <option value="济南大区">济南大区</option>
+                                <option value="青岛分公司">青岛分公司</option>
+                                <option value="潍坊分公司">潍坊分公司</option>
+                                <option value="烟台分公司">烟台分公司</option>
+                                <option value="临沂分公司">临沂分公司</option>
+                                <option value="济宁分公司">济宁分公司</option>
+                                <option value="东营分公司">东营分公司</option>
+                                <option value="德州分公司">德州分公司</option>
+                                <option value="菏泽办事处">菏泽办事处</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+                            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>查询</button>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 text-right" >
+                            <!--<a class="btn btn-primary" data-toggle="modal" data-target="#addModal"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增</a>-->
+                            <a class="btn btn-primary" onclick="Add();"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增</a>
+                            <a href="{:url('export')}" class="btn btn-success"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-2 col-sm-2">
+
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+
+                        </div>
+                    </div>
+                    <hr />
+                </form>
+            </div>
+
+        </div>
+        <!-- 查询（结束） -->
+
+        <!-- 表单（开始） -->
+        <div class="table-responsive">
+            <table id="table" class="table table-hover table-bordered table-striped table-condensed">
+                <!--<tr class="info" style="white-space:nowrap">----不想标题换行时用这个-->
+                <tr class="info">
+                    <th>ID</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">网点</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">分公司</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">市区</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">姓名</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">身份证号</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">班组长</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">操作证编号</th>
+                    <th>操作</th>
+                </tr>
+                {volist name="installers" id="_Installer" key="key"}
+                <tr>
+                    <td>{$_Installer->getData('id')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('supplier')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('company')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('city')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('staff_name')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('id_card')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('foreman')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('certificate_no')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">
+                        <a class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#DeleteModal" onclick="GetDeleteID('{$_Installer.id}');">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>&nbsp;
+                        <a class="btn btn-primary btn-sm " onclick="GetEditID('{$_Installer.id}');">
+                            <i class="glyphicon glyphicon-pencil
+"></i>
+                        </a>
+                    </td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+        <!-- 表单（结束） -->
+        {$installers->render()}
+    </div>
+</div>
+<!-- 模态框（新增/修改安装人员-开始） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    安装网点人员信息
+                </h4>
+            </div>
+            <form id="addform">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4">
+                            安装网点:
+                            <input class="form-control" type="hidden" id="id" name="id" />
+                            <input class="form-control" type="text" id="add_supplier" name="add_supplier" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            分公司:
+                            <select id="add_company" name="add_company" class="selectpicker form-control" >
+            　　                 <option value="济南大区">济南大区</option>
+                                <option value="青岛分公司">青岛分公司</option>
+                                <option value="潍坊分公司">潍坊分公司</option>
+                                <option value="烟台分公司">烟台分公司</option>
+                                <option value="临沂分公司">临沂分公司</option>
+                                <option value="济宁分公司">济宁分公司</option>
+                                <option value="东营分公司">东营分公司</option>
+                                <option value="德州分公司">德州分公司</option>
+                                <option value="菏泽办事处">菏泽办事处</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            安装地市:
+                            <select id="add_city" name="add_city" class="selectpicker form-control" >
+                                <option value="济南市">济南市</option>
+                                <option value="青岛市">青岛市</option>
+                                <option value="日照市">日照市</option>
+                                <option value="潍坊市">潍坊市</option>
+                                <option value="淄博市">淄博市</option>
+                                <option value="烟台市">烟台市</option>
+                                <option value="威海市">威海市</option>
+                                <option value="临沂市">临沂市</option>
+                                <option value="泰安市">泰安市</option>
+                                <option value="泰安市">济宁市</option>
+                                <option value="泰安市">枣庄市</option>
+                                <option value="泰安市">德州市</option>
+                                <option value="泰安市">聊城市</option>
+                                <option value="泰安市">东营市</option>
+                                <option value="泰安市">滨州市</option>
+                                <option value="泰安市">菏泽市</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- 第二行元素-->
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4">
+                            人员姓名:
+                            <input class="form-control" type="text" id="add_staff_name" name="add_staff_name" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            身份证号:
+                            <input class="form-control" type="text" id="add_id_card" name="add_id_card" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            是否为班组长:
+                            <select id="add_foreman" name="add_foreman" class="selectpicker form-control" >
+                                <option value="否">否</option>
+                                <option value="是">是</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- 第三行元素-->
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4">
+                            操作证编号:
+                            <input class="form-control" type="text" id="add_certificate_no" name="add_certificate_no" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            发证日期:
+                            <input class="form-control" type="text" id="add_issue_date" name="add_issue_date" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            截止日期:
+                            <input class="form-control" type="text" id="add_closing_date" name="add_closing_date" />
+                        </div>
+                    </div>
+                    <!-- 第四行元素-->
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4">
+                            发证机构:
+                            <input class="form-control" type="text" id="add_issuing_authority" name="add_issuing_authority" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            总公司是否备案:
+                            <select id="add_head_records" name="add_head_records" class="selectpicker form-control" >
+                                <option value="否">否</option>
+                                <option value="是">是</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            备案日期:
+                            <input class="form-control" type="text" id="add_record_date" name="add_record_date" />
+                        </div>
+                    </div>
+                    <!-- 第五行元素-->
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4">
+                            保险有效期从:
+                            <input class="form-control" type="text" id="add_insurance_period_from" name="add_insurance_period_from" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            保险有效期至:
+                            <input class="form-control" type="text" id="add_insurance_period_to" name="add_insurance_period_to" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            大队长:
+                            <input class="form-control" type="text" id="add_captain" name="add_captain" />
+                        </div>
+                    </div>
+                    <!-- 第六行元素-->
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4">
+                            有无电工证:
+                            <select id="add_electrician_certificate" name="add_electrician_certificate" class="selectpicker form-control" >
+                                <option value="无">无</option>
+                                <option value="有">有</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            电工证到期日期:
+                            <input class="form-control" type="text" id="add_electrician_certificate_due_date" name="add_electrician_certificate_due_date" />
+                        </div>
+
+                        <div class="col-xs-4 col-sm-4">
+                            有无焊工证:
+                            <select id="add_welder_certificate" name="add_welder_certificate" class="selectpicker form-control" >
+                                <option value="无">无</option>
+                                <option value="有">有</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- 第七行元素-->
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4">
+                            焊工证到期日期:
+                            <input class="form-control" type="text" id="add_welder_certificate_due_date" name="add_welder_certificate_due_date" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row text-right">
+                        <div class="col-xs-4 col-sm-4">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+
+                        </div>
+                        <div class="col-xs-4 col-sm-4 ">
+                            <button id="add_btn" type="button" onclick="addPost()" class="btn btn-success">新增</button>
+                            <button id="update_btn" type="button" onclick="editPost()" class="btn btn-danger">修改</button>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新增/修改安装人员-结束） -->
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    删除
+                </h4>
+            </div>
+            <form id="deleteform">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <input class="form-control" type="hidden" readonly="readonly" id="delete_id" name="delete_id" />请确认是否删除？
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/installer.js" type="text/javascript"></script>
+</html>

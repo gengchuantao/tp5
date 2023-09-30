@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>事业部成员列表</title>
+</head>
+<body >
+<!--页面封装开始 -->
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--导航开始-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">系统设置</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{:url('Index/main')}"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">事业部成员维护</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <hr class="border border-secondary border-1opacity-50">
+        <!--导航结束-->
+        <!--操作模块开始-->
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-auto">
+                        <label for="search_staff_name"></label><input id="search_staff_name" class="form-control" placeholder="姓名" />
+                    </div>
+                    <div class="col-auto">
+                        <label for="search_staff_bu"></label><input id="search_staff_bu" class="form-control" placeholder="事业部" />
+                    </div>
+                    <div class="col-auto">
+                        <label for="search_bustaff_company"></label>
+                        <div class="input-group">
+                            <input id="search_bustaff_company" class="form-control" placeholder="区域" />
+                            <button class="btn btn-outline-info bi bi-search" type="button" id="query"></button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div id="toolbar">
+                    <div style="display:inline-block;">
+                        <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                            <a class="btn btn-sm btn-primary bi bi-plus-square" data-bs-toggle="modal" data-bs-target="#NewStaff" title="新增">新增</a>
+                            <a class="btn btn-sm btn-danger bi bi-trash" title="删除" onclick="GetDeleteID('id');">删除</a>
+                            <a class="btn btn-sm btn-success bi bi-pencil-square" title="编辑" onclick="GetUpdateID('id');">编辑</a>
+                            <a href="{:url('export')}" class="btn btn-sm btn-outline-dark bx bxs-down-arrow-square">导出</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table
+                            class="table table-striped table-sm"
+                            id="bustaffIndex"
+                            data-toggle="table"
+                            data-buttons-class="sm"
+                            style="white-space: nowrap;"
+                            data-unique-id="id">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--操作模块结束-->
+    </div>
+</div>
+<!--页面封装结束 -->
+<!-- 模态框（新建成员-开始） -->
+<div class="modal fade" id="NewStaff" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animation-dot">
+            <div class="modal-header">
+                <h5 class="modal-title">新建成员</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="company">分公司:</label><input class="form-control" type="text" id="company" name="company" value="{$Think.session.company}" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="staff_name">姓名:</label><select id="staff_name" name="staff_name" class="selectpicker form-control" value="" onchange="GetStaffId()">
+                                　　             <option data-tokens="ketchup mustard" value="">请选择人员</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="staff_id">工号:</label><input class="form-control" type="text" id="staff_id" name="staff_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="staff_post">岗位:</label>
+                            <input class="form-control" type="text" id="staff_post" name="staff_post" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="staff_bu">事业部:</label>
+                            <input class="form-control" type="text" id="staff_bu" name="staff_bu" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <label for="if_bu_minister">事业部长:</label>
+                            <select id="if_bu_minister" name="if_bu_minister" class="selectpicker form-control form-group-sm"   title="是否为事业部长">
+                                <option value="否">否</option>
+            　　                 <option value="是">是</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="addButton" type="button" onclick="AddNew()" class="btn btn-primary">
+                        新增
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新建成员-结束） -->
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">请确认是否删除？</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="DeleteForm">
+                <input class="form-control" type="text" readonly="readonly" id="delete_id" name="delete_id" />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">更新</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            工号:
+                            <input class="form-control" type="hidden" id="update_id" name="update_id" />
+                            <input class="form-control" type="text" id="bustaff_staff_id" name="bustaff_staff_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            姓名:
+                            <input class="form-control" type="text" id="bustaff_staff_name" name="bustaff_staff_name" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            职位:
+                            <input class="form-control" type="text" id="bustaff_staff_post" name="bustaff_staff_post" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            事业部:
+                            <input class="form-control" type="text" id="bustaff_staff_bu" name="bustaff_staff_bu" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            区域:
+                            <input class="form-control" type="text" id="bustaff_company" name="bustaff_company" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            事业部长:
+                            <input class="form-control" type="text" id="bustaff_if_bu_minister" name="bustaff_if_bu_minister" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            是否离职:
+                            <input class="form-control" type="text" id="bustaff_if_quit" name="bustaff_if_quit" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="UpdatePost()" class="btn btn-primary">修改</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+</body>
+<!--引入JS-->
+<script src="<?php addVersion('__JS__/myjs/bustaff.js');?>"></script>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>事业部绩效提报</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>事业部绩效审核</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a href="{:url('verifyExport')}" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--查询条件-->
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label>
+                            <input name="staff_bu" type="text" class="form-control" placeholder="事业部..." value="{:input('get.staff_bu')}">
+                        </label>
+                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
+                    </div>
+                </form>
+            </div>
+            <!--表单显示-->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <tr class="info">
+                        <th>ID</th>
+                        <th class="text-center">操作</th>
+                        <th>流程</th>
+                        <th>员工编号</th>
+                        <th>员工姓名</th>
+                        <th>所属事业部</th>
+                        <th class="text-right">计提金额</th>
+                        <th>类别</th>
+                        <th>计提日期</th>
+                        <th>财年</th>
+                    </tr>
+                    {volist name="budrawings" id="_Budrawing" key="key"}
+                    <tr>
+                        <td>{$_Budrawing->getData('id')}</td>
+                        {switch name="$_Budrawing.process_status"}
+                        {case value="已审核"}
+                        <td class="text-center"></td>
+                        {/case}
+                        {case value="待审核"}
+                        <td class="text-center">
+                            <a title="删除" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#DeleteModal" onclick="GetDeleteId('{$_Budrawing.id}');"><i class="glyphicon glyphicon-trash"></i></a>
+                            <a title="审核" class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#VerifyModal" onclick="GetVerifyId('{$_Budrawing.id}');"><i class="glyphicon glyphicon-pencil"></i></a>
+                        </td>
+                        {/case}
+                        {case value="已拒绝"}
+                        <td class="text-center"></td>
+                        {/case}
+                        {default /}
+                        <td class="text-center"></td>
+                        {/switch}
+                        <td>{$_Budrawing->getData('process_status')}</td>
+                        <td>{$_Budrawing->getData('staff_id')}</td>
+                        <td>{$_Budrawing->getData('staff_name')}</td>
+                        <td>{$_Budrawing->getData('staff_bu')}</td>
+                        <td class="text-right">{$_Budrawing->getData('drawing_amount')|number_format=2}</td>
+                        <td>{$_Budrawing->getData('type')}</td>
+                        <td>{$_Budrawing->getData('drawing_date')}</td>
+                        <td>{$_Budrawing->getData('year')}</td>
+                    </tr>
+                    {/volist}
+                </table>
+                {$budrawings->render()}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    请确认是否删除？
+                </h4>
+            </div>
+            <form id="DeleteForm">
+                <input class="form-control" type="hidden" readonly="readonly" id="delete_id" name="delete_id" />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+<!-- 模态框（审核-开始） -->
+<div class="modal fade" id="VerifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animation-dot">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title text-danger" >
+                    审核
+                </h4>
+            </div>
+            <form id="VerifyForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">分公司:</a>
+                            <input class="form-control" type="hidden" id="verify_id" name="verify_id" />
+                            <input class="form-control" type="text" id="verify_company" name="verify_company" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">类别:</a>
+                            <input class="form-control" type="text" id="verify_type" name="verify_type"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">事业部:</a>
+                            <input class="form-control" type="text" id="verify_staff_bu" name="verify_staff_bu"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">计提人员:</a>
+                            <input class="form-control" type="text" id="verify_staff_name" name="verify_staff_name"  readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">员工编号:</a>
+                            <input class="form-control" type="number" id="verify_staff_id" name="verify_staff_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">事业部可计提金额:</a>
+                            <input class="form-control" type="number" id="verify_bu_accrued_amount" name="verify_bu_accrued_amount" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">本次计提金额:</a>
+                            <input class="form-control" type="number" id="verify_drawing_amount" name="verify_drawing_amount" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="Verify()" class="btn btn-primary">
+                        审核
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（审核-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/buDrawing.js"></script>
+</html>

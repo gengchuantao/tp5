@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>受控图纸</title>
+</head>
+<body class="container">
+<!-- 图纸首页 -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>受控图纸</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a href="{:url('AllDrawing')}" class="btn btn-default"><i class="glyphicon glyphicon-export"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--查询条件-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-2">
+                                    <select name="drawing_status" class="selectpicker form-control" multiple data-max-options="1"  title="请选择流程">
+                                        <option value="未出图">未出图</option>
+                                        <option value="已指派">已指派</option>
+                                        <option value="已出图">已出图</option>
+                                        <option value="已审核">已审核</option>
+                                        <option value="已上传">已上传</option>
+                                    </select>
+                                </div>
+                                <div class="col-xs-6 col-sm-2">
+                                    <div class="input-group">
+                                        <input name="contract_id" type="text" class="form-control" placeholder="合同号..." value="{:input('get.contract_id')}">
+                                        <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-2 text-right">
+
+                                </div>
+                                <div class="col-xs-6 col-sm-2 text-right">
+
+                                </div>
+                                <div class="col-xs-6 col-sm-2 text-right">
+
+                                </div>
+                                <div class="col-xs-6 col-sm-2 text-right">
+
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--表单显示-->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <tr class="info">
+                        <th style=" white-space:nowrap">操作</th>
+                        <th style=" white-space:nowrap">序号</th>
+                        <th style=" white-space:nowrap">合同号</th>
+                        <th style=" white-space:nowrap">买方单位</th>
+                        <th style=" white-space:nowrap">流程</th>
+                        <th style=" white-space:nowrap">台量</th>
+                        <th style=" white-space:nowrap">修改单</th>
+                        <th style=" white-space:nowrap">销售区域</th>
+                        <th style=" white-space:nowrap">营业员</th>
+                        <th style=" white-space:nowrap">出图人(指派)</th>
+                        <th style=" white-space:nowrap">出图人(实际)</th>
+                        <th style=" white-space:nowrap">出图日期</th>
+                        <th style=" white-space:nowrap">校审人</th>
+                        <th style=" white-space:nowrap">校审日期</th>
+                        <th style=" white-space:nowrap">存放位置</th>
+                        <th style=" white-space:nowrap">上传日期</th>
+                        <th style=" white-space:nowrap">出图备注</th>
+                        <th style=" white-space:nowrap">上传备注</th>
+                    </tr>
+                    {volist name="contracts" id="_Contract" key="key"}
+
+                    <!--{eq name="$_Contract.drawing_status" value="已上传"}
+                    <tr class="success">
+                    {else/}
+                        {eq name="$_Contract.drawing_status" value="已审核"}
+                            <tr class="warning">
+                        {else/}
+
+                        {/eq}
+                    {/eq}-->
+                    <tr>
+                        <td style=" white-space:nowrap">
+                            <a title="新增修改单" class="btn btn-info btn-xs" data-toggle="modal" data-target="#AddModifyModal" onclick="GetAddModifyID('{$_Contract.id}');"><i class="glyphicon glyphicon-plus
+"></i></a>
+                            <a title="修改" class="btn btn-info btn-xs" data-toggle="modal" data-target="#EditDrawingModal" onclick="GetEditDrawingID('{$_Contract.id}');"><i class="glyphicon glyphicon-edit
+"></i></a>
+                            {eq name="$_Contract.drawing_status" value="未出图"}
+                            <a title="指派" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AssignmentModal" onclick="GetAssignmentID('{$_Contract.id}');"><i class="glyphicon glyphicon-hand-right"></i></a>
+                            {else/}
+                            {/eq}
+                            {eq name="$_Contract.drawing_status" value="已指派"}
+                            <a title="出图" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#DrewModal" onclick="GetDrewID('{$_Contract.id}');"><i class="glyphicon glyphicon-picture
+"></i></a>
+                            {else/}
+                            {/eq}
+                            {eq name="$_Contract.drawing_status" value="已出图"}
+                            <a title="校审" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ReviewDrawingModal" onclick="GetReviewDrawingID('{$_Contract.id}');"><i class="glyphicon glyphicon-ok"></i></a>
+                            {else/}
+                            {/eq}
+                            {eq name="$_Contract.drawing_status" value="已审核"}
+                            <a title="出图" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#DrewModal" onclick="GetDrewID('{$_Contract.id}');"><i class="glyphicon glyphicon-picture
+"></i></a>
+                            <a title="校审" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ReviewDrawingModal" onclick="GetReviewDrawingID('{$_Contract.id}');"><i class="glyphicon glyphicon-ok"></i></a>
+                            <a title="上传" class="btn btn-success btn-xs" data-toggle="modal" data-target="#UploadDrawingModal" onclick="GetUploadDrawingID('{$_Contract.id}');"><i class="glyphicon glyphicon-open
+"></i></a>
+                            {else/}
+                            {/eq}
+                        </td>
+                        <td>{$_Contract->getData('id')}</td>
+                        <td style="white-space:nowrap"><a href="{:url('Modify/drawing')}?contract_id={$_Contract->getData('contract_id')}">{$_Contract->getData('contract_id')}</a></td>
+                        <td style="white-space:nowrap">{$_Contract->getData('buyer_unit')}</td>
+
+                        {eq name="$_Contract.drawing_status" value="已上传"}
+                        <td style="white-space:nowrap"><span class="badge" style="background-color: green">{$_Contract->getData('drawing_status')}</span></td>
+                        {else/}
+                        {/eq}
+                        {eq name="$_Contract.drawing_status" value="已审核"}
+                        <td style="white-space:nowrap"><span class="badge" style="background-color: orange">{$_Contract->getData('drawing_status')}</span></td>
+                        {else/}
+                        {/eq}
+                        {eq name="$_Contract.drawing_status" value="已出图"}
+                        <td style="white-space:nowrap"><span class="badge" style="background-color: darkslateblue">{$_Contract->getData('drawing_status')}</span></td>
+                        {else/}
+                        {/eq}
+                        {eq name="$_Contract.drawing_status" value="已指派"}
+                        <td style="white-space:nowrap"><span class="badge" style="background-color: orangered">{$_Contract->getData('drawing_status')}</span></td>
+                        {else/}
+                        {/eq}
+                        {eq name="$_Contract.drawing_status" value="未出图"}
+                        <td style="white-space:nowrap"><span class="badge" style="background-color: deepskyblue">{$_Contract->getData('drawing_status')}</span></td>
+                        {else/}
+                        {/eq}
+                        <td style="white-space:nowrap;" class="text-right">{$_Contract->getData('contract_num')}</td>
+                        <td style="white-space:nowrap;" class="text-right">{$_Contract->getData('modify_count')}</td>
+                        <td style="white-space:nowrap">{$_Contract->getData('branch')}</td>
+                        <td style="white-space:nowrap">{$_Contract->getData('sales_clerk')}</td>
+                        <td style=" white-space:nowrap">{$_Contract->getData('drawing_people')}</td>
+                        <td style="white-space:nowrap">{$_Contract->getData('drew_people')}</td>
+                        <td style="white-space:nowrap" class="text-right">{$_Contract->getData('drew_date')}</td>
+                        <td style="white-space:nowrap" class="text-right">{$_Contract->getData('review_people')}</td>
+                        <td style="white-space:nowrap" class="text-right">{$_Contract->getData('drew_review_date')}</td>
+                        <td style="white-space:nowrap" class="text-right">{$_Contract->getData('drew_position')}</td>
+                        <td style="white-space:nowrap" class="text-right">{$_Contract->getData('drew_upload_time')}</td>
+                        <td style="white-space:nowrap">{$_Contract->getData('drew_people_remarks')}</td>
+                        <td style="white-space:nowrap">{$_Contract->getData('upload_remarks')}</td>
+                    </tr>
+                    {/volist}
+                </table>
+                {$contracts->render()}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（指派-开始） -->
+<div class="modal fade" id="AssignmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    图纸指派
+                </h4>
+            </div>
+            <form id="AssignmentForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            合同号:
+                            <input class="form-control" type="hidden" id="contract_assignment_id" name="contract_assignment_id" />
+                            <input class="form-control" type="text" id="d_contract_id" name="d_contract_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <a style="color: red;">资料接收日期:</a>
+                            <div class='input-group date' id='d_drawing_rec_date'>
+                                <input type='text' class="form-control" id='drawing_rec_date' name='drawing_rec_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <a style="color: red;">出图人:</a>
+                            <select id="drawing_people" name="drawing_people" class="selectpicker form-control" >
+                                <option value="战智娜">战智娜</option>
+                                <option value="宗雪莹">宗雪莹</option>
+                                <option value="王霞">王霞</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="Assignment()" class="btn btn-primary">
+                        指派
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（指派-结束） -->
+<!-- 模态框（出图-开始） -->
+<div class="modal fade" id="DrewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    出图
+                </h4>
+            </div>
+            <form id="DrewForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            合同号:
+                            <input class="form-control" type="hidden" id="contract_drew_id" name="contract_drew_id" />
+                            <input class="form-control" type="text" id="drew_contract_id" name="drew_contract_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">出图日期:</a>
+                            <div class='input-group date' id='d_drew_date'>
+                                <input type='text' class="form-control" id='drew_date' name='drew_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            图纸张数:
+                            <input class="form-control" type="number" id="drawing_num" name="drawing_num" />
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            图纸版本:
+                            <input class="form-control" type="number" id="drew_version" name="drew_version" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            出图备注:
+                            <textarea class="form-control" type="text" id="drew_people_remarks" name="drew_people_remarks" rows="10"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="Drew()" class="btn btn-primary">
+                        出图
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（出图-结束） -->
+<!-- 模态框（校审-开始） -->
+<div class="modal fade" id="ReviewDrawingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    校审
+                </h4>
+            </div>
+            <form id="ReviewForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            合同号:
+                            <input class="form-control" type="hidden" id="contract_review_id" name="contract_review_id" />
+                            <input class="form-control" type="text" id="review_contract_id" name="review_contract_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <a style="color: red;">校审日期:</a>
+                            <div class='input-group date' id='d_drew_review_date'>
+                                <input type='text' class="form-control" id='drew_review_date' name='drew_review_date' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            准确率:
+                            <input class="form-control" type="text" id="proof_accuracy_rate" name="proof_accuracy_rate" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            校审备注:
+                            <textarea class="form-control" type="text" id="drew_review_remarks" name="drew_review_remarks" rows="10"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="ReviewDrawing()" class="btn btn-primary">
+                        校审
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（校审-结束） -->
+<!-- 模态框（上传-开始） -->
+<div class="modal fade" id="UploadDrawingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    上传
+                </h4>
+            </div>
+            <form id="UploadDrawingForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            合同号:
+                            <input class="form-control" type="hidden" id="contract_upload_id" name="contract_upload_id" />
+                            <input class="form-control" type="text" id="upload_contract_id" name="upload_contract_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            图纸存放位置:
+                            <input class="form-control" type="text" id="drew_position" name="drew_position" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <a style="color: red;">上传日期:</a>
+                            <div class='input-group date' id='d_drew_upload_time'>
+                                <input type='text' class="form-control" id='drew_upload_time' name='drew_upload_time' />
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12">
+                            上传备注:
+                            <textarea class="form-control" type="text" id="upload_remarks" name="upload_remarks" rows="10"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="UploadDrawing()" class="btn btn-primary">
+                        上传
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（上传-结束） -->
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditDrawingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    编辑
+                </h4>
+            </div>
+            <form id="EditDrawingForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-12">
+                            合同号:
+                            <input class="form-control" type="hidden" id="contract_edit_id" name="contract_edit_id" />
+                            <input class="form-control" type="text" id="edit_contract_id" name="edit_contract_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            出图备注:
+                            <textarea class="form-control" type="text" id="e_drew_people_remarks" name="e_drew_people_remarks" rows="5"></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            上传备注:
+                            <textarea class="form-control" type="text" id="e_upload_remarks" name="e_upload_remarks" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="EditDrawing()" class="btn btn-primary">
+                        提交
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+<!-- 模态框（新增修改单-开始） -->
+<div class="modal fade" id="AddModifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    新增修改单
+                </h4>
+            </div>
+            <form id="AddModifyForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-3">
+                            合同号:
+                            <input class="form-control" type="text" id="m_contract_id" name="m_contract_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            区域:
+                            <input class="form-control" type="text" id="m_branch" name="m_branch" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            修改单号:
+                            <input class="form-control" type="text" id="m_modify_id" name="m_modify_id"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            <a style="color: red;">修改分类:</a>
+                            <select id="m_modify_type" name="m_modify_type" class="selectpicker form-control form-group-sm" multiple data-max-options="5"  title="请选择修改分类">
+                                <option value="新增电梯">新增电梯</option>
+                                <option value="土建修改">土建修改</option>
+                                <option value="装饰修改">装饰修改</option>
+                                <option value="功能修改">功能修改</option>
+                                <option value="梯型修改">梯型修改</option>
+                                <option value="其它修改">其它修改</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            修改台量:
+                            <input class="form-control" type="text" id="m_modify_num" name="m_modify_num"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            其中(新增台量):
+                            <input class="form-control" type="text" id="m_plus_num" name="m_plus_num"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
+                            其中(梯型修改台量):
+                            <input class="form-control" type="text" id="m_model_change_num" name="m_model_change_num"/>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            备注:
+                            <textarea class="form-control" type="text" id="m_remarks" name="m_remarks" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="AddModify()" class="btn btn-primary">
+                        提交
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新增修改单-结束） -->
+<!-- 模态框（合同预览-开始） -->
+<div class="modal fade" id="ContractPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 95%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    合同预览
+                </h4>
+            </div>
+            <form id="ContractPreviewForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            合同号:
+                            <input class="form-control" type="hidden" id="contract_preview_id" name="contract_preview_id" />
+                            <input class="form-control" type="text" id="p_contract_id" name="p_contract_id" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            台量:
+                            <input class="form-control" type="text" id="p_contract_num" name="p_contract_num" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            签订分公司:
+                            <input class="form-control" type="text" id="p_branch" name="p_branch" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            营业员:
+                            <input class="form-control" type="text" id="p_sales_clerk" name="p_sales_clerk" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            项目名称:
+                            <input class="form-control" type="text" id="p_project_name" name="p_project_name" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装省份:
+                            <input class="form-control" type="text" id="p_province" name="p_province" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            安装地市:
+                            <input class="form-control" type="text" id="p_area" name="p_area" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装区县:
+                            <input class="form-control" type="text" id="p_county" name="p_county" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装地址:
+                            <input class="form-control" type="text" id="p_installation_location" name="p_installation_location" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            买方单位:
+                            <input class="form-control" type="text" id="p_buyer_unit" name="p_buyer_unit" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            使用单位:
+                            <input class="form-control" type="text" id="p_use_unit" name="p_use_unit" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            客户属性:
+                            <input class="form-control" type="text" id="p_client_attributes" name="p_client_attributes" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            大客户编码:
+                            <input class="form-control" type="text" id="p_big_client_code" name="s_big_client_code" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            大客户简称:
+                            <input class="form-control" type="text" id="p_big_client_short" name="s_big_client_short" readonly="readonly"/>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-2">
+                            三方合同:
+                            <input class="form-control" type="text" id="p_if_three_party" name="p_if_three_party" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            调验合同:
+                            <input class="form-control" type="text" id="p_if_check" name="p_if_check" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            设备提货前支付比例:
+                            <input class="form-control" type="text" id="p_before_delivery_per" name="p_before_delivery_per" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            设备质保金比例:
+                            <input class="form-control" type="text" id="p_quality_assurance_per" name="p_quality_assurance_per" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            设备SPL价:
+                            <input class="form-control" type="text" id="p_equipment_spl" name="p_equipment_spl" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            设备签约价:
+                            <input  class="form-control" type="text" id="p_equipment_sign" name="p_equipment_sign" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            运费SPL价:
+                            <input  class="form-control" type="text" id="p_transport_spl" name="p_transport_spl" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            运费签约价:
+                            <input  class="form-control" type="text" id="p_transport_sign" name="p_transport_sign" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装SPL价:
+                            <input  class="form-control" type="text" id="p_installation_spl" name="p_installation_spl" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装签约价:
+                            <input  class="form-control" type="text" id="p_installation_sign" name="p_installation_sign" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">安装合同签订方:</a>
+                            <input  class="form-control" type="text" id="p_install_contract_sign" name="p_install_contract_sign" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            分公司服务费申请点数:
+                            <input class="form-control" type="text" id="p_branch_service_points" name="p_branch_service_points" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            经销商A:
+                            <input class="form-control" type="text" id="p_first_distributor" name="p_first_distributor" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            服务费点数A:
+                            <input class="form-control" type="number" id="p_service_charge_points1" name="p_service_charge_points1" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            经销商B:
+                            <input class="form-control" type="text" id="p_second_distributor" name="p_second_distributor" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            服务费点数B:
+                            <input class="form-control" type="number" id="p_service_charge_points2" name="p_service_charge_points2" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            营业澄清:
+                            <textarea class="form-control" type="text" id="p_clarify" name="p_clarify" rows="3" readonly="readonly"></textarea>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            商审备注:
+                            <textarea class="form-control" type="text" id="p_contract_remarks" name="p_contract_remarks" rows="3" readonly="readonly"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">澄清费用:</a>
+                            <input class="form-control" type="number" id="p_clarify_cost" name="p_clarify_cost" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+
+                            <a style="color: red;">配套费用:</a>
+                            <input  class="form-control" type="number" id="p_supporting_cost" name="p_supporting_cost" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            分公司提交日期:
+                            <input  class="form-control" type="text" id="p_branch_submit_date" name="p_branch_submit_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            首次资料接收日期:
+                            <input  class="form-control" type="text" id="p_contract_rec_date" name="p_contract_rec_date" readonly="readonly"/>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-2">
+                            最终审核日期:
+                            <input class="form-control" type="text" id="p_audit_date" name="p_audit_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            审核版本:
+                            <input class="form-control" type="text" id="p_audit_version" name="p_audit_version" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            山东司商审:
+                            <input class="form-control" type="text" id="p_contract_auditor" name="p_contract_auditor" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            调验保证金:
+                            <input class="form-control" type="number" id="p_check_bail" name="p_check_bail" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            调验保证金收款日期:
+                            <input class="form-control" type="text" id="p_check_bail_rec_date" name="p_check_bail_rec_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            调验保证金退回日期:
+                            <input class="form-control" type="text" id="p_check_bail_bac_date" name="p_check_bail_rec_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装合同(2)金额:
+                            <input class="form-control" type="text" id="p_supporting_contract_amount" name="p_supporting_contract_amount" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            安装合同(2)支出:
+                            <input class="form-control" type="text" id="p_supporting_expenditure" name="p_supporting_expenditure" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            总公司营业员:
+                            <input  class="form-control" type="text" id="p_head_salesperson" name="p_head_salesperson" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            总公司商审:
+                            <input class="form-control" type="text" id="p_head_auditor" name="p_head_auditor" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            总公司接收日期:
+                            <input  class="form-control" type="text" id="p_delivery_date" name="p_delivery_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            总公司寄出日期:
+                            <input  class="form-control" type="text" id="p_send_date" name="p_send_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            寄出单号:
+                            <input  class="form-control" type="text" id="p_send_number" name="p_send_number" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <a style="color: red;">合同双方盖章日期:</a>
+                            <input  class="form-control" type="text" id="p_both_seal_date" name="p_both_seal_date" readonly="readonly"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（合同预览-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/contract.js" type="text/javascript"></script>
+</html>

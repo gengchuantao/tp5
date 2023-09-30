@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+{volist name="prepayments" id="_Prepayment" key="key"}
+<div style="page-break-after: always;">
+    &nbsp<br>
+    <h3 class="text-center">工程预付/结算款申请表</h3><br>&nbsp<br>
+    <div class="col-md-5 col-xs-5 text-left">施工单位:{$_Prepayment->getData('supplier')}</div>
+    <div class="col-md-4 col-xs-4">申请款项类别:{$_Prepayment->getData('payment_type')}</div>
+    <div class="col-md-3 col-xs-3 text-right">{$_Prepayment->getData('invoice_status')}</div>
+
+    <div>
+        <div class="col-md-2 col-xs-2 text-center" style="font-weight:bold;font-size: 8px;border:1px solid #000;">合同号</div>
+        <div class="col-md-3 col-xs-3 text-center" style="font-weight:bold;font-size: 8px;border:1px solid #000;">生产工号</div>
+        <div class="col-md-2 col-xs-2 text-center" style="font-weight:bold;font-size: 8px;border:1px solid #000;">单位名称</div>
+        <div class="col-md-1 col-xs-1 text-center" style="font-weight:bold;font-size: 8px;border:1px solid #000;">台量</div>
+        <div class="col-md-1 col-xs-1 text-center" style="font-weight:bold;font-size: 8px;border:1px solid #000;">进场日期</div>
+        <div class="col-md-1 col-xs-1 text-center" style="font-weight:bold;font-size: 8px;border:1px solid #000;">完工日期</div>
+        <div class="col-md-2 col-xs-2 text-center" style="font-weight:bold;font-size: 8px;border:1px solid #000;">客户已付工程费比例</div>
+
+        <div class="col-md-2 col-xs-2 text-center" style="padding:20px 0;height:100px;border:1px solid #000">{$_Prepayment->getData('subcontract_id')}</div>
+        <div class="col-md-3 col-xs-3 text-center" style="padding:20px 0;height:100px;border:1px solid #000">{$_Prepayment->getData('product_id')}</div>
+        <div class="col-md-2 col-xs-2 text-center" style="padding:20px 0;height:100px;border:1px solid #000">{$_Prepayment->getData('buyer_unit')}</div>
+        <div class="col-md-1 col-xs-1 text-center" style="padding:20px 0;height:100px;border:1px solid #000">{$_Prepayment->getData('subcontract_num')}</div>
+        <div class="col-md-1 col-xs-1 text-center" style="padding:20px 0;font-size: 8px;height:100px;border:1px solid #000">{$_Prepayment->getData('entry_date')}</div>
+        <div class="col-md-1 col-xs-1 text-center" style="padding:20px 0;font-size: 8px;height:100px;border:1px solid #000">{$_Prepayment->getData('complete_date')}</div>
+        <div class="col-md-2 col-xs-2 text-center" style="padding:20px 0;height:100px;border:1px solid #000">{$_Prepayment->getData('customer_paid_ratio')*100}%</div>
+
+        <div class="col-md-6 col-xs-6 text-left" style="border:1px solid #000">安装管理部意见：<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>确认人:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp经办人:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp日期：{$Think.session.today_date}</div>
+        <div class="col-md-6 col-xs-6 text-left" style="border:1px solid #000">质量技术部意见：(办理结算款时填写)<br>遗留项目数量:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp项：其中主件主项:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp项：安全项目：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp项<br>&nbsp<br>安装单位是否配合整改:<br>&nbsp<br>建议扣罚的整改费用:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp元<br>&nbsp<br>确认人:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp日期:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div>
+
+        <div class="col-md-12 col-xs-12 text-left" style="font-size: 16px;border:1px solid #000">&nbsp<br>金额(大写)&nbsp{$_Prepayment->getData('capital_chinese_character')}&nbsp&nbsp¥{$_Prepayment->getData('payment_amount')|number_format=2}&nbsp</div>
+
+        <div class="col-md-4 col-xs-4 text-center" style="border:1px solid #000">总经理审批</div>
+        <div class="col-md-4 col-xs-4 text-center" style="border:1px solid #000">财务部审批</div>
+        <div class="col-md-4 col-xs-4 text-center" style="border:1px solid #000">工程副总审批</div>
+
+        <div class="col-md-4 col-xs-4" style="border:1px solid #000">&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp</div>
+        <div class="col-md-4 col-xs-4" style="border:1px solid #000">&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp</div>
+        <div class="col-md-4 col-xs-4" style="border:1px solid #000">&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp</div>
+    </div>
+</div>
+<div style="page-break-after: always;">
+    &nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>
+    <h3 class="text-center">日立电梯(中国)有限公司山东分公司</h3>
+    <h3 class="text-center"><u>请款单</u></h3>
+    <div class="col-md-4 col-xs-4">部门:安装部</div>
+    <div class="col-md-3 col-xs-3 text-right">日期:{$Think.session.today_date}</div>
+    <div class="col-md-5 col-xs-5 text-right">网点:{$_Prepayment->getData('supplier')}</div>
+    <div>
+        <div class="col-md-12 col-xs-12" style="border:1px solid #000">
+            兹领到(现金)&nbsp{$_Prepayment->getData('capital_chinese_character')}<br>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp(支票)&nbsp<br>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp(汇款)&nbsp¥{$_Prepayment->getData('payment_amount')|number_format=2}
+        </div>
+        <div class="col-md-2 col-xs-2 text-center" style="border:1px solid #000"><br>请款<br>用途<br>&nbsp</div>
+        <div class="col-md-10 col-xs-10" style="border:1px solid #000"><br>{$_Prepayment->getData('subcontract_id')}_{$_Prepayment->getData('buyer_unit')}<br>{$_Prepayment->getData('payment_type')}_{$_Prepayment->getData('payment_ratio')*100}%<br>&nbsp</div>
+        <div class="col-md-3 col-xs-3 text-center" style="border:1px solid #000">主管领导</div>
+        <div class="col-md-6 col-xs-6 text-center" style="border:1px solid #000">部门负责人意见</div>
+        <div class="col-md-3 col-xs-3 text-center" style="border:1px solid #000">领款人</div>
+        <div class="col-md-3 col-xs-3" style="border:1px solid #000">&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp</div>
+        <div class="col-md-6 col-xs-6" style="border:1px solid #000">&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp</div>
+        <div class="col-md-3 col-xs-3" style="border:1px solid #000">&nbsp<br>&nbsp<br>&nbsp<br>&nbsp<br>&nbsp</div>
+        <div class="col-md-4 col-xs-4"></div>
+        <div class="col-md-4 col-xs-4">审核:</div>
+        <div class="col-md-4 col-xs-4">出纳:</div>
+    </div>
+</div>
+{/volist}
+</body>
+</html>

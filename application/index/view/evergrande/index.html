@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <title>恒大赶工奖</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <!-- 面板（开始） -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--查询条件-->
+                <div class="row">
+                    <div class="col-xs-8 col-sm-8 col-md-8">
+                        <h3 class="panel-title">恒大赶工奖原票登记</h3>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 text-right">
+                        <a class="btn btn-xs btn-default" data-toggle="modal" data-target="#AddEvergrande" title="新增"><i class="glyphicon glyphicon-plus"></i></a>
+                        <a class="btn btn-xs btn-default" title="删除" onclick="GetDeleteID()"><i class="glyphicon glyphicon-trash"></i></a>
+                        <a href="{:url('export')}" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-export" title="导出"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--查询条件-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-inline text-right">
+                            <div class="row">
+                                <div class="col-xs-4 col-sm-2">
+                                    <input style="width: 100%;" name="contract_id" type="text" class="form-control form-group-sm" placeholder="合同号..." value="{:input('get.contract_id')}" />
+                                </div>
+                                <div class="col-xs-4 col-sm-2">
+                                    <select name="type" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择业务类型">
+                                        　　                 <optgroup label="请选择业务类型：">
+                                        　　                 <option  value="安装">安装</option>
+                                        <option value="设备">设备</option>
+                                        <option value="保养">保养</option>
+                                        <option value="维改">维改</option>
+                                        　　                     </optgroup>
+                                    </select>
+
+                                </div>
+                                <div class="col-xs-4 col-sm-2 text-left">
+                                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                                <div class="col-xs-4 col-sm-2">
+
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--表单显示-->
+            <div class="table-responsive">
+                <table id="table" class="table table-hover table-bordered table-striped table-condensed">
+                    <!--<tr class="info" style="white-space:nowrap">----不想标题换行时用这个-->
+                    <tr class="info">
+                        <th style=" white-space:nowrap"></th>
+                        <th>ID</th>
+                        <th class="text-center">操作</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">类别</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">商票编号</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">票面金额</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">收款编号</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">合同号</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">拆分金额</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">买方单位</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">区域</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">赶工奖</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">实收</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">欠款</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">协议号</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">合同合计</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">合同开票</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">合同实收</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">合同欠款</th>
+                        <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">经办人</th>
+                    </tr>
+                    {volist name="evergrandes" id="_Evergrande" key="key"}
+                    <tr>
+                        <td><input type="checkbox" name="evergrande_check" value="{$_Evergrande.id}" onclick="CheckLimit(this);"></td>
+                        <td>{$_Evergrande->getData('id')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">
+                            {eq name="Think.session.admin" value="1"}
+                            <a title="协议补录" class="btn btn-success btn-xs"  data-toggle="modal" data-target="#EditEvergrande" onclick="GetEditID('{$_Evergrande.id}');"><i class="glyphicon glyphicon-tag
+"></i>&nbsp</a>
+                            {else/}
+                            <a title="协议补录" class="btn btn-success btn-xs"  data-toggle="modal" data-target="#EditEvergrande" onclick="GetEditID('{$_Evergrande.id}');"><i class="glyphicon glyphicon-tag
+"></i>&nbsp</a>
+                            {/eq}
+                        </td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('type')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('bill_id')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('bill_amount')|number_format=2}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('receipt_id')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('contract_id')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('split_amount')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('buyer_unit')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('company')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('discount_amount')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('discount_collection')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('discount_arrears')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('discount_protocol')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('contract_discount_amount')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('contract_invoice_amount')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('contract_discount_collection')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('contract_discount_arrears')}</td>
+                        <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Evergrande->getData('agent')}</td>
+                    </tr>
+                    {/volist}
+                </table>
+            </div>
+            {$evergrandes->render()}
+        </div>
+        <!-- 面板（结束） -->
+        <!-- 查询（开始） -->
+
+        <!-- 查询（结束） -->
+
+        <!-- 表单（开始） -->
+
+        <!-- 表单（结束） -->
+
+    </div>
+</div>
+<!-- 模态框（新增原商票-开始） -->
+<div class="modal fade" id="AddEvergrande" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title text-danger" >
+                    <strong>原票登记</strong>
+                </h4>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4">
+                            <label style="color: #CC0000">*业务类别:</label>
+                            <select id="type" name="type" class="selectpicker form-control" >
+        　　                  <option selected value="安装">安装</option>
+        　　                  <option value="设备">设备</option>
+                            <option value="保养">保养</option>
+                            <option value="维改">维改</option>
+                            <option value="配件、材料">配件、材料</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label style="color: #CC0000">*商票编号:</label>
+                            <input class="form-control" type="text" id="bill_id" name="bill_id" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label style="color: #CC0000">*票面金额:</label>
+                            <input class="form-control" type="number" id="bill_amount" name="bill_amount" onblur="delSubstring();" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class='col-xs-4 col-sm-4' >
+                            <label style="color: #CC0000">*出票日期:</label>
+                            <input  class="form-control date" type='date'  id="issue_date" name="issue_date" />
+                        </div>
+                        <div class='col-xs-4 col-sm-4' >
+                            <label style="color: #CC0000">*到期日期:</label>
+                            <input  class="form-control date" type='date'  id="due_date" name="due_date" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label style="color: #CC0000">*经办人:</label>
+                            <input class="form-control" type="text" id="agent" name="agent" onblur="delSubstring();" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class='col-xs-4 col-sm-4' >
+                            <label style="color: #CC0000">*ERP收款编号:</label>
+                            <input class="form-control" type="text" id="receipt_id" name="receipt_id"/>
+                        </div>
+                        <div class='col-xs-4 col-sm-4' >
+                            <label style="color: #CC0000">*合同编号:</label>
+                            <input class="form-control" type='text'  id="contract_id" name="contract_id" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label style="color: #CC0000">*拆分金额:</label>
+                            <input class="form-control" type="text" id="split_amount" name="split_amount" onblur="delSubstring();" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class='col-xs-4 col-sm-4' >
+                            <label style="color: #CC0000">*入金时间:</label>
+                            <input  class="form-control date" type='date'  id="income_date" name="income_date" />
+                        </div>
+                        <div class='col-xs-4 col-sm-4' >
+
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="AddEvergrande()" class="btn btn-primary">
+                        提交
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新增原商票-结束） -->
+<!-- 模态框（追加协议-开始） -->
+<div class="modal fade" id="EditEvergrande" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title text-danger" >
+                    <strong>追加协议</strong>
+                </h4>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4">
+                            <label style="color: #CC0000">*业务类别:</label>
+                            <input class="form-control" type="hidden" id="edit_id" name="edit_id" />
+                            <input class="form-control" type="text" id="edit_type" name="edit_type" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label style="color: #CC0000">*商票编号:</label>
+                            <input class="form-control" type="text" id="edit_bill_id" name="edit_bill_id" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label style="color: #CC0000">*票面金额:</label>
+                            <input class="form-control" type="number" id="edit_bill_amount" name="edit_bill_amount" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class='col-xs-4 col-sm-4' >
+                            <label style="color: #CC0000">*出票日期:</label>
+                            <input  class="form-control date" type='text'  id="edit_issue_date" name="edit_issue_date" readonly="readonly" />
+                        </div>
+                        <div class='col-xs-4 col-sm-4' >
+                            <label style="color: #CC0000">*到期日期:</label>
+                            <input  class="form-control date" type='text'  id="edit_due_date" name="edit_due_date" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label style="color: #CC0000">*经办人:</label>
+                            <input class="form-control" type="text" id="edit_agent" name="edit_agent" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class='col-xs-4 col-sm-4' >
+                            <label style="color: #CC0000">*ERP收款编号:</label>
+                            <input class="form-control" type="text" id="edit_receipt_id" name="edit_receipt_id" readonly="readonly"/>
+                        </div>
+                        <div class='col-xs-4 col-sm-4' >
+                            <label style="color: #CC0000">*合同编号:</label>
+                            <input class="form-control" type='text'  id="edit_contract_id" name="edit_contract_id" readonly="readonly" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label style="color: #CC0000">*拆分金额:</label>
+                            <input class="form-control" type="text" id="edit_split_amount" name="edit_split_amount" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class='col-xs-4 col-sm-4' >
+                            <label style="color: #CC0000">*入金时间:</label>
+                            <input class="form-control" type="text" id="edit_income_date" name="edit_income_date" readonly="readonly" />
+                        </div>
+                        <div class='col-xs-4 col-sm-4' >
+                            <label style="color: #CC0000">*协议号:</label>
+                            <input class="form-control" type="text" id="edit_discount_protocol" name="edit_discount_protocol" />
+                        </div>
+                        <div class='col-xs-4 col-sm-4' >
+
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="EditPost()" class="btn btn-primary">
+                        提交
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（追加协议-结束） -->
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    请确认是否删除？
+                </h4>
+            </div>
+            <form id="DeleteForm">
+                    <div class="input-group col-md-12">
+                        <span class="input-group-addon">ID:</span>
+                        <input class="form-control" readonly="readonly" id="delete_id" name="delete_id" />
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/evergrande.js"></script>
+</html>

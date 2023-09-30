@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>合同存档</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a data-toggle="modal" data-target="#ContractFileModal" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--查询条件-->
+                <form class="form-group-md">
+                        <div class="col-xs-6 col-sm-2 form-group">
+                            <input name="contract_id" type="text" class="form-control" placeholder="合同号..." value="{:input('get.contract_id')}">
+                        </div>
+                        <div class="col-xs-6 col-sm-2 form-group">
+                            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
+                        </div>
+                </form>
+            </div>
+            <!--表单显示-->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <tr class="info">
+                        <th>ID</th>
+                        <th>合同号</th>
+                        <th>台量</th>
+                        <th>买方单位</th>
+                        <th>双方盖章日期</th>
+                        <th>合同位置</th>
+                        <th>夹号</th>
+                        <th>夹序</th>
+                        <th>备注</th>
+                        <th>存档人</th>
+                        <th>存档时间</th>
+                        <th>档案状态</th>
+                        <th>操作</th>
+                    </tr>
+                    {volist name="contracts" id="_Contract" key="key"}
+                    <tr>
+                        <td>{$_Contract->getData('id')}</td>
+                        <td>{$_Contract->getData('contract_id')}</td>
+                        <td>{$_Contract->getData('contract_num')}</td>
+                        <td>{$_Contract->getData('buyer_unit')}</td>
+                        <td>{$_Contract->getData('both_seal_date')}</td>
+                        <td>{$_Contract->getData('contract_position')}</td>
+                        <td>{$_Contract->getData('contract_folder_num')}</td>
+                        <td>{$_Contract->getData('contract_folder_order')}</td>
+                        <td>{$_Contract->getData('contract_filing_remarks')}</td>
+                        <td>{$_Contract->getData('contract_filing_person')}</td>
+                        <td>{$_Contract->getData('contract_filing_date')}</td>
+                        <td>{$_Contract->getData('contract_filing_status')}</td>
+                        <td>&nbsp;<a title="存档" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#EditModal" onclick="GetEditID('{$_Contract.id}');"><i class="glyphicon glyphicon-inbox"></i></a></td>
+                    </tr>
+                    {/volist}
+                </table>
+                {$contracts->render()}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    合同存档
+                </h4>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <input class="form-control" type="hidden" id="edit_id" name="edit_id" />
+                            位置: <input class="form-control" type="text" id="contract_position" name="contract_position" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            夹号: <input class="form-control" type="text" id="contract_folder_num" name="contract_folder_num" required="required"/>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            夹序: <input class="form-control" type="text" id="contract_folder_order" name="contract_folder_order" required="required" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            备注:
+                            <textarea class="form-control" type="text" rows="8" id="contract_filing_remarks" name="contract_filing_remarks" ></textarea><br/>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="EditForm()" class="btn btn-primary">
+                        提交更改
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+<!--合同归档导出开始-->
+<div class="modal fade" id="ContractFileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    生效明细导出
+                </h4>
+            </div>
+            <form id="ContractFileForm">
+                <div class="modal-body">
+                    <!-- 第一行元素-->
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            导出条件:
+                            <select id="export_condition" name="export_condition" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择导出条件">
+                                <option value="" selected style="display:none"></option>
+                                <option value="邮寄总部日期">邮寄总部日期</option>
+                                <option value="双方盖章日期">双方盖章日期</option>
+                                <option value="归档日期">归档日期</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            日期从:
+                            <input class="form-control" type="text" id="ContractFileFrom" name="ContractFileFrom" />
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            日期至:
+                            <input class="form-control" type="text" id="ContractFileTo" name="ContractFileTo" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="add_btn" type="button" onclick="ContractFileExport()" class="btn btn-success">导出</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--合同归档导出结束-->
+</body>
+<script src="/../tp5/public/static/js/myjs/contract.js" type="text/javascript"></script>
+</html>

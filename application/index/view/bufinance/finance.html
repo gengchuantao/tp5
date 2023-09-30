@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事业部项目奖金/费用</title>
+</head>
+<body class="container">
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>事业部季度奖金与计提情况</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr style="background-color: #d42d32;color: white">
+                <th class="text-center">序号</th>
+                <th>事业部</th>
+                <th>区域</th>
+                <th class="text-right">薪酬池</th>
+                <th class="text-right">薪酬计提</th>
+                <th class="text-right">薪酬结余</th>
+                <th class="text-right">财年</th>
+            </tr>
+            {volist name="result" id="vo"}
+            <tr>
+                <td class="text-center">{$key+1}</td>
+                <td class="text-left">{$vo.bu_name}</td>
+                <td class="text-left">{$vo.scompany}</td>
+                <td class="text-right">{$vo.quarter_pay|number_format=2}</td>
+                <td class="text-right">{$vo.sum_drawing|number_format=2}</td>
+                <td class="text-right">{$vo.quarter_pay_balance|number_format=2}</td>
+                <td class="text-right">{$vo.year}</td>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+</body>
+</html>

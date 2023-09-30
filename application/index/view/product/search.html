@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>工号信息查询</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--标题信息-->
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <h4 class="panel-title"><span>工号信息查询</span></h4>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <a href="{:url('ConditionProduct')}" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-export" title="导出"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!--查询条件-->
+                <form class="form-group-md">
+                    <div class="col-xs-6 col-sm-2 form-group">
+                        <input name="product_id" type="text" class="form-control" placeholder="工号..." value="{:input('get.product_id')}">
+                    </div>
+                    <div class="col-xs-6 col-sm-2 form-group">
+                        <input name="contract_id" type="text" class="form-control" placeholder="设备合同号..." value="{:input('get.contract_id')}">
+                    </div>
+                    <div class="col-xs-6 col-sm-2 form-group">
+                        <input name="install_contract_id" type="text"  class="form-control" placeholder="安装合同号..." value="{:input('get.install_contract_id')}">
+                    </div>
+                    <div class="col-xs-6 col-sm-2 form-group">
+                        <input name="elevator_model" type="text" class="form-control" placeholder="电梯型号..." value="{:input('get.elevator_model')}">
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                        <div class="input-group">
+                            <input name="floor" type="text" class="form-control" placeholder="层..." value="{:input('get.floor')}">
+                            <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                                    </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--表单显示-->
+            <div class="table-responsive" >
+                <table class="table table-hover table-bordered table-striped table-condensed text-nowrap">
+                    <tr class="info">
+                        <th style=" white-space:nowrap">ID</th>
+                        <th style=" white-space:nowrap">工号</th>
+                        <th style=" white-space:nowrap">合同号</th>
+                        <th style=" white-space:nowrap">安装合同号</th>
+                        <th style=" white-space:nowrap">电梯型号</th>
+                        <th style=" white-space:nowrap">层</th>
+                        <th style=" white-space:nowrap">站</th>
+                        <th style=" white-space:nowrap">门</th>
+                        <th style=" white-space:nowrap">生效日期</th>
+                        <th style=" white-space:nowrap">上报日期</th>
+                        <th style=" white-space:nowrap">统计日期</th>
+                        <th style=" white-space:nowrap">出仓日期</th>
+                        <th style=" white-space:nowrap">进场日期</th>
+                        <th style=" white-space:nowrap">技监日期</th>
+                        <th style=" white-space:nowrap">营业员</th>
+                        <th style=" white-space:nowrap">总状态</th>
+                        <th style=" white-space:nowrap">分状态</th>
+                        <th style=" white-space:nowrap">拆分</th>
+                        <th style=" white-space:nowrap">定金超5%</th>
+                        <th style=" white-space:nowrap">生效</th>
+                        <th style=" white-space:nowrap">预计发货日期</th>
+                        <th style=" white-space:nowrap">业绩归属</th>
+
+                        <th style=" white-space:nowrap">设备收款比例</th>
+                        <th style=" white-space:nowrap">收款编号</th>
+                        <th style=" white-space:nowrap">标准设备价</th>
+                        <th style=" white-space:nowrap">设备签约价</th>
+                        <th style=" white-space:nowrap">设备下浮</th>
+                        <th style=" white-space:nowrap">标准运输价</th>
+                        <th style=" white-space:nowrap">运输签约价</th>
+                        <th style=" white-space:nowrap">运输下浮</th>
+                        <th style=" white-space:nowrap">标准安装价</th>
+                        <th style=" white-space:nowrap">安装签约价</th>
+                        <th style=" white-space:nowrap">安装下浮</th>
+                        <th style=" white-space:nowrap">设备预收</th>
+                        <th style=" white-space:nowrap">设备已开票</th>
+                        <th style=" white-space:nowrap">设备实收</th>
+                        <th style=" white-space:nowrap">安装预收</th>
+                        <th style=" white-space:nowrap">安装已开票</th>
+                        <th style=" white-space:nowrap">安装实收</th>
+                        <th style=" white-space:nowrap">分包标准价-含水电</th>
+
+
+
+                    </tr>
+                    {volist name="products" id="_Products" key="key"}
+                    <tr>
+                        <td style=" white-space:nowrap">{$_Products->getData('id')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('product_id')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('fix_contract_id')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('install_contract_id')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('elevator_model')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('floor')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('stop')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('door')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('into_force_date')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('report_date')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('statistical_date')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('report_delivery_date')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('entry_date')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('issuing_date')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('sales_person')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('status')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('sd_status')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('if_split')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('enough_5_percent')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('if_into_force')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('expected_delivery_date')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('belong_to')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('equipment_receipt_ratio')*100|number_format=2}%</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('receipt_id')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('standard_equipment_price')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('contract_equipment_price')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('equipment_prices_fall')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('standard_transport_price')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('contract_transport_price')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('transport_prices_fall')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('standard_installation_price')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('contract_installation_price')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('install_prices_fall')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('equipment_expected_collected')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('equipment_invoiced_amount')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('equipment_amount_collected')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('install_expected_collected')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('install_invoiced_amount')}</td>
+                        <td style=" white-space:nowrap">{$_Products->getData('install_amount_collected')}</td>
+                        <td class="text-right">{$_Products->getData('entrust_spl')+$_Products->getData('hoisting_cost')+$_Products->getData('shed')+$_Products->getData('water_electricity')}</td>
+
+
+
+                    </tr>
+                    {/volist}
+                </table>
+                {$products->render()}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

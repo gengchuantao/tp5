@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-12">
+        <!-- 标题（开始） -->
+        <ol class="breadcrumb">
+            <li><a href="#"><span class = "glyphicon glyphicon-option-vertical"></span>安装管理部</a></li>
+            <li class="active">安装网点人员信息</li>
+        </ol>
+        <!-- 标题（结束） -->
+        <!-- 查询（开始） -->
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="col-xs-2 col-sm-2">
+                            <input style="width: 100%;" name="staff_name" type="text" class="form-control form-group-sm" placeholder="姓名..." value="{:input('get.staff_name')}" />
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+                            <input style="width: 100%;" name="supplier" type="text" class="form-control form-group-sm" placeholder="网点..." value="{:input('get.supplier')}" />
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+                            <select name="company" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="区域">
+                                <optgroup label="请选择区域：">
+                                    <option value="济南大区">济南大区</option>
+                                    <option value="青岛分公司">青岛分公司</option>
+                                    <option value="潍坊分公司">潍坊分公司</option>
+                                    <option value="烟台分公司">烟台分公司</option>
+                                    <option value="临沂分公司">临沂分公司</option>
+                                    <option value="济宁分公司">济宁分公司</option>
+                                    <option value="东营分公司">东营分公司</option>
+                                    <option value="德州分公司">德州分公司</option>
+                                    <option value="菏泽办事处">菏泽办事处</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+                            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>查询</button>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 text-right" >
+                            <a href="{:url('export')}" class="btn btn-success"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-2 col-sm-2">
+
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+
+                        </div>
+                    </div>
+                    <hr />
+                </form>
+            </div>
+
+        </div>
+        <!-- 查询（结束） -->
+        <!-- 表单（开始） -->
+        <div class="table-responsive">
+            <table id="table" class="table table-hover table-bordered table-striped table-condensed">
+                <!--<tr class="info" style="white-space:nowrap">----不想标题换行时用这个-->
+                <tr class="info">
+                    <th>ID</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">网点</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">分公司</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">市区</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">姓名</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">身份证号</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">班组长</th>
+                    <th style="white-space:nowrap;overflow:hidden;word-break:keep-all;">操作证编号</th>
+                </tr>
+                {volist name="installers" id="_Installer" key="key"}
+                <tr>
+                    <td>{$_Installer->getData('id')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('supplier')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('company')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('city')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('staff_name')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('id_card')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('foreman')}</td>
+                    <td style="white-space:nowrap;overflow:hidden;word-break:keep-all;">{$_Installer->getData('certificate_no')}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+        <!-- 表单（结束） -->
+        {$installers->render()}
+    </div>
+</div>
+</body>
+<script src="/../tp5/public/static/js/myjs/installer.js" type="text/javascript"></script>
+</html>

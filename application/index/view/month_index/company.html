@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>分公司经营数据</title>
+    <style>
+        .ph-item,
+        .ph-picture {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body >
+{eq name="Think.session.company" value="山东分公司"}
+    {eq name="Think.session.month_index_company" value="合计"}
+    <h4 class="text-center">山东分公司<small>summary of operations</small></h4>
+    {else/}
+    <h4 class="text-center">{$Think.session.month_index_company}<small>summary of operations</small></h4>
+    {/eq}
+{else/}
+<h4 class="text-center">{$Think.session.company}<small>summary of operations</small></h4>
+{/eq}
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title" style="font-weight: bold">
+                <a data-toggle="collapse" data-parent="#accordion"
+                   href="#collapseOne">
+                    ㈠售前经营
+                </a>
+            </h5>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table
+                            class="table table-striped table-sm"
+                            id="companyOperations"
+                            data-cache="true"
+                            data-toggle="table"
+                            style="white-space: nowrap;"
+                            data-loading-template="loadingTemplate"
+                            data-search="false"
+                            data-search-align="left">
+                        <thead style="background-color: lightgrey;color: dimgrey" class="thead-dark">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title" style="font-weight: bold">
+                <a data-toggle="collapse" data-parent="#accordion"
+                   href="#collapseTwo">
+                    ㈡应收账款
+                </a>
+            </h5>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table
+                            class="table table-striped table-sm"
+                            id="accountsReceivable"
+                            data-cache="true"
+                            data-toggle="table"
+                            style="white-space: nowrap;"
+                            data-loading-template="loadingTemplate"
+                            data-search="false"
+                            data-search-align="left">
+                        <thead style="background-color: lightgrey;color: dimgrey" class="thead-dark">
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title" style="font-weight: bold">
+                <a data-toggle="collapse" data-parent="#accordion"
+                   href="#collapseThree">
+                    ㈢售后经营
+                </a>
+            </h5>
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table
+                            class="table table-striped table-sm"
+                            id="maintainOperate"
+                            data-cache="true"
+                            data-toggle="table"
+                            style="white-space: nowrap;"
+                            data-loading-template="loadingTemplate"
+                            data-search="false"
+                            data-search-align="left">
+                        <thead style="background-color: lightgrey;color: dimgrey" class="thead-dark">
+                    </table>
+                    <table
+                            class="table table-striped table-sm"
+                            id="maintainOperate1"
+                            data-cache="true"
+                            data-toggle="table"
+                            style="white-space: nowrap;"
+                            data-loading-template="loadingTemplate"
+                            data-search="false"
+                            data-search-align="left">
+                        <thead style="background-color: lightgrey;color: dimgrey" class="thead-dark">
+                    </table>
+                    <table
+                            class="table table-striped table-sm"
+                            id="maintainOperate2"
+                            data-cache="true"
+                            data-toggle="table"
+                            style="white-space: nowrap;"
+                            data-loading-template="loadingTemplate"
+                            data-search="false"
+                            data-search-align="left">
+                        <thead style="background-color: lightgrey;color: dimgrey" class="thead-dark">
+                    </table>
+                    <table
+                            class="table table-striped table-sm"
+                            id="maintainOperate3"
+                            data-cache="true"
+                            data-toggle="table"
+                            style="white-space: nowrap;"
+                            data-loading-template="loadingTemplate"
+                            data-search="false"
+                            data-search-align="left">
+                        <thead style="background-color: lightgrey;color: dimgrey" class="thead-dark">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="<?php addVersion('__JS__/myjs/companyOperations.js');?>"></script>
+</html>

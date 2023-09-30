@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<div class="center-block"><img src="__STATIC__/img/kpi/01.png" class="img-responsive center-block" ></div>
+<hr style="filter: progid:dximagetransform.microsoft.glow(color='#987cb9',strength=10)" width="80%" color="#987cb9" size=1>
+<!--<div class="table-responsive">
+    <table class="table table-hover table-bordered table-striped table-condensed">
+        <tr style="background-color: #d42d32;color: white">
+            <th>ID</th>
+            <th>一级指标</th>
+            <th>二级指标</th>
+            <th>提供部门</th>
+            <th class="text-right">指标分</th>
+            <th class="text-right">最高分</th>
+            <th class="text-right">预计得分</th>
+            <th class="text-right">实际得分</th>
+            <th class="text-right">差距</th>
+        </tr>
+        {volist name="kpis" id="kpis"}
+        <tr>
+            <td>{$key+1}</td>
+            <td>{$kpis.first_index_name}</td>
+            <td>{$kpis.second_index_name}</td>
+            <td>{$kpis.department}</td>
+            <td class="text-right">{$kpis.index_score|number_format=2}</td>
+            <td class="text-right">{$kpis.max_score|number_format=2}</td>
+            <td class="text-right">{$kpis.expected_score|number_format=2}</td>
+            <td class="text-right">{$kpis.actual_score|number_format=2}</td>
+            {lt name="kpis.disparity" value="-0.9"}
+            <td class="text-right"><span class="badge" style="background-color: orange">{$kpis.disparity|number_format=2}</span></td>
+            {else/}
+            <td class="text-right">{$kpis.disparity|number_format=2}</td>
+            {/lt}
+        </tr>
+        {/volist}
+    </table>
+</div>-->
+</body>
+</html>

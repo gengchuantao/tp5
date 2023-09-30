@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<ol class="breadcrumb">
+    <li><a href={:url('Safety/bi')}><span class = "glyphicon glyphicon-option-vertical"></span>平台主页</a></li>
+    <li><a href={:url('Learn/index')}>信息共享</a></li>
+    <li class="active">文章预览</li>
+</ol>
+<h4 class="text-center text-danger">{$Learn->getData('title')}</h4>
+<hr/>
+<div class="form-group">
+    <div class="col-sm-12 col-md-12">
+        {volist name="result01" id="result01"}
+        <img class="img-responsive" src={$result01.images_address} alt="Cinque Terre"/>
+        {eq name="Think.session.admin" value="1"}
+        <a title="删除" class="btn btn-sm btn-danger" href="{:url('DeleteImg?id=' . $result01.id)}"  onclick='return del();'><i class="glyphicon glyphicon-trash"></i></a>
+        {else/}
+        {/eq}
+        {/volist}
+    </div>
+</div>
+</body>
+</html>

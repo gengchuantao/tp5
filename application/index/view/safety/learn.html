@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+    <ol class="breadcrumb">
+        <li><a href={:url('Safety/bi')}><span class = "glyphicon glyphicon-option-vertical"></span>平台主页</a></li>
+        <li class="active">信息共享</li>
+        <li class="active">信息发布</li>
+    </ol>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tr class="info">
+                <th>序号</th>
+                <th style="width:5%;">合同号</th>
+                <th style="width:12%;">项目名称</th>
+                <th>项目类型</th>
+                <th>区域</th>
+                <th>台量</th>
+                <th>作业经理/站长</th>
+                <th>班组</th>
+                <th>检查日期</th>
+                <th>审核状态</th>
+                <th>项目状态</th>
+                <th>操作</th>
+            </tr>
+            {volist name="safetys" id="_Safety" key="key"}
+            {eq name="_Safety.audit_status" value="待审核"}
+            <tr class="warning">
+                <td>{$_Safety->getData('id')}</td>
+                <td style="width:5%;">{$_Safety->getData('contract_id')}</td>
+                <td style="width:12%;">{$_Safety->getData('project_name')}</td>
+                <td>{$_Safety->getData('project_type')}</td>
+                <td>{$_Safety->getData('company')}</td>
+                <td>{$_Safety->getData('contract_num')}</td>
+                <td>{$_Safety->getData('debuggers')}</td>
+                <td>{$_Safety->getData('team')}</td>
+                <td>{$_Safety->getData('check_date')}</td>
+                <td>{$_Safety->getData('audit_status')}</td>
+                <td>{$_Safety->getData('project_status')}</td>
+                <td>&nbsp;<a title="上传" class="btn btn-sm btn-success" href="{:url('upload?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-upload
+"></i></a>
+                    <a title="预览" class="btn btn-sm btn-primary" href="{:url('preview?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-eye-open
+"></i></a>
+
+                    {eq name="Think.session.checker" value="1"}
+                    <a title="安全检查" class="btn btn-sm btn-warning" href="{:url('check?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-copyright-mark"></i></a>
+                    <a title="审核" class="btn btn-sm btn-info" href="{:url('audit?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-check"></i></a>
+                    {else/}
+                    {/eq}
+                    {eq name="Think.session.admin" value="1"}
+                    <a title="删除" class="btn btn-sm btn-danger" href="{:url('delete?id=' . $_Safety->getData('id'))}" onclick='return del();'><i class="glyphicon glyphicon-trash"></i></a>
+                    {else/}
+                    {/eq}
+                </td>
+            </tr>
+            {else/}
+            {eq name="_Safety.audit_status" value="已审核"}
+            <tr class="success">
+                <td>{$_Safety->getData('id')}</td>
+                <td>{$_Safety->getData('contract_id')}</td>
+                <td>{$_Safety->getData('project_name')}</td>
+                <td>{$_Safety->getData('project_type')}</td>
+                <td>{$_Safety->getData('company')}</td>
+                <td>{$_Safety->getData('contract_num')}</td>
+                <td>{$_Safety->getData('debuggers')}</td>
+                <td>{$_Safety->getData('team')}</td>
+                <td>{$_Safety->getData('check_date')}</td>
+                <td>{$_Safety->getData('audit_status')}</td>
+                <td>{$_Safety->getData('project_status')}</td>
+                <td>&nbsp;<a title="上传" class="btn btn-sm btn-success" href="{:url('upload?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-upload
+        "></i></a>
+                    <a title="预览" class="btn btn-sm btn-primary" href="{:url('preview?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-eye-open
+        "></i></a>
+
+                    {eq name="Think.session.checker" value="1"}
+                    <a title="安全检查" class="btn btn-sm btn-warning" href="{:url('check?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-copyright-mark"></i></a>
+                    <a title="审核" class="btn btn-sm btn-info" href="{:url('audit?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-check"></i></a>
+                    {else/}
+                    {/eq}
+                    {eq name="Think.session.admin" value="1"}
+                    <a title="删除" class="btn btn-sm btn-danger" href="{:url('delete?id=' . $_Safety->getData('id'))}" onclick='return del();'><i class="glyphicon glyphicon-trash"></i></a>
+                    {else/}
+                    {/eq}
+                </td>
+            </tr>
+            {else/}
+            <tr class="danger">
+                <td>{$_Safety->getData('id')}</td>
+                <td>{$_Safety->getData('contract_id')}</td>
+                <td>{$_Safety->getData('project_name')}</td>
+                <td>{$_Safety->getData('project_type')}</td>
+                <td>{$_Safety->getData('company')}</td>
+                <td>{$_Safety->getData('contract_num')}</td>
+                <td>{$_Safety->getData('debuggers')}</td>
+                <td>{$_Safety->getData('team')}</td>
+                <td>{$_Safety->getData('check_date')}</td>
+                <td>{$_Safety->getData('audit_status')}</td>
+                <td>{$_Safety->getData('project_status')}</td>
+                <td>&nbsp;<a title="上传" class="btn btn-sm btn-success" href="{:url('upload?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-upload
+    "></i></a>
+                    <a title="预览" class="btn btn-sm btn-primary" href="{:url('preview?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-eye-open
+    "></i></a>
+
+                    {eq name="Think.session.checker" value="1"}
+                    <a title="安全检查" class="btn btn-sm btn-warning" href="{:url('check?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-copyright-mark"></i></a>
+                    <a title="审核" class="btn btn-sm btn-info" href="{:url('audit?id=' . $_Safety->getData('id'))}"><i class="glyphicon glyphicon-check"></i></a>
+                    {else/}
+                    {/eq}
+                    {eq name="Think.session.admin" value="1"}
+                    <a title="删除" class="btn btn-sm btn-danger" href="{:url('delete?id=' . $_Safety->getData('id'))}" onclick='return del();'><i class="glyphicon glyphicon-trash"></i></a>
+                    {else/}
+                    {/eq}
+                </td>
+            </tr>
+            {/eq}
+            {/eq}
+            {/volist}
+        </table>
+        {$safetys->render()}
+    </div>
+</body>
+</html>

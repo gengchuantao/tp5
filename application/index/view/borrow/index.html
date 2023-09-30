@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>合同借阅</title>
+</head>
+<body>
+<div class="page-header">
+    <h4>合同借阅<small></small></h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form class="form-inline">
+            <div class="col-xs-3 col-sm-3">
+                <input name="contract_id" type="text" class="form-control" placeholder="合同号..."value="{:input('get.contract_id')}">
+            </div>
+            <div class="col-xs-2 col-sm-2">
+                <select name="check_status" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="状态">
+                    　　                  <optgroup label="请选择借阅状态：">
+                    　　                  <option value="已借出">已借出</option>
+                    　　                  <option value="已借出">已归还</option>
+                    　　                  </optgroup>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
+            <a class="btn btn-primary" data-toggle="modal" data-target="#AddModal"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增</a>
+            <a href="{:url('')}" class="btn btn-danger"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</a>
+        </form>
+    </div>
+</div>
+<hr />
+<div class="table-responsive">
+    <table class="table table-hover table-bordered table-striped table-condensed">
+        <tr class="info">
+            <th>ID</th>
+            <th>合同号</th>
+            <th>借阅内容</th>
+            <th>借阅人</th>
+            <th>区域</th>
+            <th>借阅时间</th>
+            <th>预计归还时间</th>
+            <th>快递单号</th>
+            <th>备注</th>
+            <th>归还时间</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        {volist name="borrows" id="_Borrow" key="key"}
+        <tr>
+            <td>{$_Borrow->getData('id')}</td>
+            <td>{$_Borrow->getData('contract_id')}</td>
+            <td>{$_Borrow->getData('content')}</td>
+            <td>{$_Borrow->getData('borrower')}</td>
+            <td>{$_Borrow->getData('company')}</td>
+            <td>{$_Borrow->getData('borrow_date')}</td>
+            <td>{$_Borrow->getData('expect_return_date')}</td>
+            <td>{$_Borrow->getData('courier_number')}</td>
+            <td>{$_Borrow->getData('remarks')}</td>
+            <td>{$_Borrow->getData('return_date')}</td>
+            <td>{$_Borrow->getData('status')}</td>
+            <td>&nbsp;<a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#EditModal" onclick="GetEditID('{$_Contract.id}');"><i class="glyphicon glyphicon-inbox"></i>归还</a></td>
+        </tr>
+        {/volist}
+    </table>
+    {$borrows->render()}
+</div>
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    合同借出
+                </h4>
+            </div>
+            <form id="AddForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <input class="form-control" type="hidden" id="edit_id" name="edit_id" />
+                            合同号: <input class="form-control" type="text" id="contract_id" name="contract_id" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            借阅内容: <input class="form-control" type="text" id="content" name="content" required="required"/>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            借阅人: <input class="form-control" type="text" id="borrower" name="borrower" required="required" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            区域: <input class="form-control" type="text" id="company" name="company" required="required" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            借阅时间: <input class="form-control" type="text" id="borrow_date" name="borrow_date" required="required" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            预计归还时间: <input class="form-control" type="text" id="expect_return_date" name="expect_return_date" required="required" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            快递单号: <input class="form-control" type="text" id="courier_number" name="courier_number" required="required" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            备注:
+                            <textarea class="form-control" type="text" rows="8" id="contract_filing_remarks" name="contract_filing_remarks" ></textarea><br/>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="AddPost()" class="btn btn-primary">
+                        提交
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+</body>
+<script src="/../tp5/public/static/js/myjs/borrow.js" type="text/javascript"></script>
+</html>

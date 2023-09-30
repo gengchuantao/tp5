@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>月度明细</title>
+</head>
+<body class="container">
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="#">山东司报表</a></li>
+            <li class="active">区域生效按月汇总(生效日期:{$Think.session.intoforce_date})</li>
+        </ol>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr class="info">
+                    <th>区域</th>
+                    <th class="text-right">4月</th>
+                    <th class="text-right">5月</th>
+                    <th class="text-right">6月</th>
+                    <th class="text-right">7月</th>
+                    <th class="text-right">8月</th>
+                    <th class="text-right">9月</th>
+                    <th class="text-right">10月</th>
+                    <th class="text-right">11月</th>
+                    <th class="text-right">12月</th>
+                    <th class="text-right">1月</th>
+                    <th class="text-right">2月</th>
+                    <th class="text-right">3月</th>
+                    <th class="text-right">合计</th>
+                </tr>
+                {volist name="result" id="result"}
+                <tr>
+                    <td class="text-left">{$result.company}</td>
+                    <td class="text-right">{$result.month4}</td>
+                    <td class="text-right">{$result.month5}</td>
+                    <td class="text-right">{$result.month6}</td>
+                    <td class="text-right">{$result.month7}</td>
+                    <td class="text-right">{$result.month8}</td>
+                    <td class="text-right">{$result.month9}</td>
+                    <td class="text-right">{$result.month10}</td>
+                    <td class="text-right">{$result.month11}</td>
+                    <td class="text-right">{$result.month12}</td>
+                    <td class="text-right">{$result.month1}</td>
+                    <td class="text-right">{$result.month2}</td>
+                    <td class="text-right">{$result.month3}</td>
+                    <td class="text-right">{$result.total}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="#">山东司报表</a></li>
+            <li class="active">设备入金按月汇总</li>
+        </ol>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr class="info">
+                    <th>区域</th>
+                    <th class="text-right">4月</th>
+                    <th class="text-right">5月</th>
+                    <th class="text-right">6月</th>
+                    <th class="text-right">7月</th>
+                    <th class="text-right">8月</th>
+                    <th class="text-right">9月</th>
+                    <th class="text-right">10月</th>
+                    <th class="text-right">11月</th>
+                    <th class="text-right">12月</th>
+                    <th class="text-right">1月</th>
+                    <th class="text-right">2月</th>
+                    <th class="text-right">3月</th>
+                    <th class="text-right">合计</th>
+                </tr>
+                {volist name="result1" id="result1"}
+                <tr>
+                    <td class="text-left" style="white-space:nowrap">{$result1.company}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month4|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month5|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month6|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month7|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month8|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month9|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month10|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month11|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month12|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month1|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month2|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.month3|number_format=2}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result1.total|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="#">山东司报表</a></li>
+            <li class="active">安装入金按月汇总</li>
+        </ol>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr class="info">
+                    <th>区域</th>
+                    <th class="text-right">4月</th>
+                    <th class="text-right">5月</th>
+                    <th class="text-right">6月</th>
+                    <th class="text-right">7月</th>
+                    <th class="text-right">8月</th>
+                    <th class="text-right">9月</th>
+                    <th class="text-right">10月</th>
+                    <th class="text-right">11月</th>
+                    <th class="text-right">12月</th>
+                    <th class="text-right">1月</th>
+                    <th class="text-right">2月</th>
+                    <th class="text-right">3月</th>
+                    <th class="text-right">合计</th>
+                </tr>
+                {volist name="result2" id="result2"}
+                <tr>
+                    <td class="text-left" style=" white-space:nowrap">{$result2.company}</td>
+                    <td class="text-right" style="white-space:nowrap">{$result2.month4|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.month3|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result2.total|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="#">山东司报表</a></li>
+            <li class="active">安装入金按月汇总（不含一体化合同）</li>
+        </ol>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <tr class="info">
+                    <th>区域</th>
+                    <th class="text-right" style=" white-space:nowrap">4月</th>
+                    <th class="text-right" style=" white-space:nowrap">5月</th>
+                    <th class="text-right" style=" white-space:nowrap">6月</th>
+                    <th class="text-right" style=" white-space:nowrap">7月</th>
+                    <th class="text-right" style=" white-space:nowrap">8月</th>
+                    <th class="text-right" style=" white-space:nowrap">9月</th>
+                    <th class="text-right" style=" white-space:nowrap">10月</th>
+                    <th class="text-right" style=" white-space:nowrap">11月</th>
+                    <th class="text-right" style=" white-space:nowrap">12月</th>
+                    <th class="text-right" style=" white-space:nowrap">1月</th>
+                    <th class="text-right" style=" white-space:nowrap">2月</th>
+                    <th class="text-right" style=" white-space:nowrap">3月</th>
+                    <th class="text-right" style=" white-space:nowrap">合计</th>
+                </tr>
+                {volist name="result3" id="result3"}
+                <tr>
+                    <td class="text-left" style=" white-space:nowrap">{$result3.company}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month4|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month5|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month6|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month7|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month8|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month9|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month10|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month11|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month12|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month1|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month2|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.month3|number_format=2}</td>
+                    <td class="text-right" style=" white-space:nowrap">{$result3.total|number_format=2}</td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

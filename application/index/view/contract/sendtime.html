@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>合同时效</title>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading"><strong>近30天合同处理情况</strong></div>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <tr style="background-color: #d42d32;color: white">
+                        <th>合同号</th>
+                        <th>区域</th>
+                        <th>营业员</th>
+                        <th>台量</th>
+                        <th>分公司提交</th>
+                        <th>合同部审核</th>
+                        <th>审核人</th>
+                        <th>审核次数</th>
+                        <th>总部接收</th>
+                        <th>非标</th>
+                        <th>总部寄出</th>
+                    </tr>
+                    {volist name="result" id="vo"}
+                    <tr>
+                        <td>{$vo.contract_id}</td>
+                        <td>{$vo.company}</td>
+                        <td>{$vo.sales_clerk}</td>
+                        <td>{$vo.contract_num}</td>
+                        <td>{$vo.branch_submit_date}</td>
+                        <td>{$vo.audit_date}</td>
+                        <td>{$vo.contract_auditor}</td>
+                        <td>{$vo.audit_version}</td>
+                        <td>{$vo.delivery_date}</td>
+                        <td>{$vo.if_nonstandard}</td>
+                        <td>{$vo.send_date}</td>
+                        {/volist}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

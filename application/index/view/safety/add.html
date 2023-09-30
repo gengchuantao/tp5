@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建项目</title>
+</head>
+<body class="container">
+<ol class="breadcrumb">
+    <li><a href="Index/safety/index"><span class = "glyphicon glyphicon-option-vertical"></span>项目列表</a></li>
+    <li class="active">新建项目</li>
+</ol>
+    <form class="form-horizontal center-block" id="myform">
+        <fieldset>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >项目类型：</label>
+                <div class="col-sm-8">
+                    <select name="project_type" class="selectpicker" multiple data-max-options="1" data-live-search="false" data-live-search-placeholder="搜索" data-actions-box="false">
+　　                  <optgroup label="请选择：">
+　　                  <option selected value="安装">安装</option>
+　　                  <option value="维改">维改</option>
+                     <option value="保养">保养</option>
+　　                  </optgroup>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label class="col-sm-2 control-label" >合同号：</label>
+                <div  class="col-sm-8 ">
+                    <input class="form-control" id="contract_id" name="contract_id" type="text"  required="required" />
+                </div>
+            </div>
+            <div class="form-group ">
+                <label class="col-sm-2 control-label" >项目名称：</label>
+                <div  class="col-sm-8 ">
+                    <input class="form-control" id="project_name" name="project_name" type="text"  required="required" />
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <label class="col-sm-2 control-label" >项目地址：</label>
+                <div  class="col-sm-8">
+                    <input class="form-control" id="project_address" name="project_address" type="text"  required="required" />
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <label class="col-sm-2 control-label" >台量：</label>
+                <div  class="col-sm-8 ">
+                    <input class="form-control" id="contract_num" name="contract_num" type="number"  required="required" oninput="value=value.replace(/[^\d]/g,'')" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >工号：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" id="product_id" name="product_id" type="text"  required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >安装/施工单位：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" id="install_unit" name="install_unit" type="text"  required="required"/>
+                </div>
+            </div>
+            {eq name="Think.session.stationmaster" value="1"}
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >作业经理：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="debuggers" readonly="true" value="{$Think.session.staff_name}" />
+                </div>
+            </div>
+            {else/}
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >站长：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="debuggers" readonly="true" value="{$Think.session.staff_name}" />
+                </div>
+            </div>
+            {/eq}
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >班组：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" id="team" name="team" type="text"  required="required"/>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label class="col-sm-2 control-label" >作业人数：</label>
+                <div  class="col-sm-8 ">
+                    <input class="form-control" id="operators_num" name="operators_num" type="number"  required="required" oninput="value=value.replace(/[^\d]/g,'')" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >电工：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" id="electrician" name="electrician" type="text"  required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >焊工：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" id="welder" name="welder" type="text"  required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >组员：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" id="team_members" name="team_members" type="text"  required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >是否购买保险：</label>
+                <div class="col-sm-8">
+                    <select name="buy_insurance" class="selectpicker" multiple data-max-options="1" data-live-search="false" data-live-search-placeholder="搜索" data-actions-box="false">
+                        　　                  <optgroup label="请选择：">
+                        　　                  <option selected value="是">是</option>
+                        　　                  <option value="否">否</option>
+                        　　                  </optgroup>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >是否持有操作证：</label>
+                <div class="col-sm-8">
+                    <select name="hold_certificate" class="selectpicker" multiple data-max-options="1" data-live-search="false" data-live-search-placeholder="搜索" data-actions-box="false">
+                        　　                  <optgroup label="请选择：">
+                        　　                  <option selected value="是">是</option>
+                        　　                  <option value="否">否</option>
+                        　　                  </optgroup>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >进场时间：</label>
+                <div class="col-sm-8">
+                    <div class='input-group date' id='approach_date' >
+                        <input type='text' class="form-control" name='approach_date' />
+                        <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <hr />
+        <div class="col-sm-10 text-right">
+            <button class="btn btn-success" onclick="ajaxPost()">保存</button>
+        </div>
+    </form>
+
+</body>
+<script>
+    $(function () {
+        $('#approach_date').datetimepicker({
+            showTodayButton: true,
+            format: 'YYYY-MM-DD',
+            locale: moment.locale('zh-cn')
+        });
+
+    });
+    function ajaxPost(){
+        var contract_id=$("input[name='contract_id']").val();
+        var project_name=$("input[name='project_name']").val();
+        var project_type=$("input[name='project_type']").val();
+        var project_address=$("input[name='project_address']").val();
+        var contract_num=$("input[name='contract_num']").val();
+        var product_id=$("input[name='product_id']").val();
+        var install_unit=$("input[name='install_unit']").val();
+        var debuggers=$("input[name='debuggers']").val();
+        var team=$("input[name='team']").val();
+        var operators_num=$("input[name='operators_num']").val();
+        var buy_insurance=$("input[name='buy_insurance']").val();
+        var hold_certificate=$("input[name='hold_certificate']").val();
+        var approach_date=$("input[name='approach_date']").val();
+        if(!contract_id){
+            alert('合同号不能为空！');
+            contract_id.focus();
+            return ;
+        }
+        if(!project_name){
+            alert('项目名称不能为空！');
+            project_name.focus();
+            return ;
+        }
+        if(!project_address){
+            alert('项目地址不能为空！');
+            project_address.focus();
+            return ;
+        }
+        let formData = $("#myform").serialize();
+        //serialize() 方法通过序列化表单值，创建 URL 编码文本字符串,这个是jquery提供的方法
+        $.ajax({
+            type:"post",
+            async:false,
+            url:"{:url('Index/safety/insert')}",  //数据传输的控制器方法
+            data:formData,//这里data传递过去的是序列化以后的字符串
+            success:function(date){
+                if(date==0){
+                    alert("项目名称重复，请重新输入！");
+                    project_name.focus();
+                    return false;
+                }
+                if(date==1){
+                    alert("更新成功！");
+                    windows.location.href = "Safety/index";
+                }
+            },
+        });
+    }
+</script>
+</html>

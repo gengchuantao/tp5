@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>收款拆分</title>
+</head>
+<body>
+<!--start page wrapper -->
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">应收账款管理</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{:url('Index/main')}"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">款项拆分</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+        <hr class="border border-secondary border-1opacity-50">
+        <div class="card">
+            <div class="card-body">
+                <!--<div class="card-title">
+                    <h5 class="mb-0">合同信息管理</h5>
+                </div>-->
+                <div class="row">
+                    <div class="col-auto">
+                        <label for="search_receipt_id"></label><input id="search_receipt_id" class="form-control" placeholder="收款编号" />
+                    </div>
+                    <div class="col-auto">
+                        <label for="search_contract_id"></label><input id="search_contract_id" class="form-control" placeholder="合同号" />
+                    </div>
+                    <div class="col-auto">
+                        <label for="search_split_five_days"></label><select id="search_split_five_days" class="form-control" >
+                            <option value="">是否5天内拆分</option>
+                            <option value="是">是</option>
+                            <option value="否">否</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label for="search_classification"></label><select id="search_classification" class="form-control" >
+                            <option value="">请选择入金分类</option>
+                            <option value="设备">设备</option>
+                            <option value="安装">安装</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label for="search_check_status"></label>
+                        <div class="input-group">
+                            <select id="search_check_status" class="form-control" >
+                                <option value="">请选择审核状态</option>
+                                <option value="待审核">待审核</option>
+                                <option value="已审核">已审核</option>
+                                <option value="已拒绝">已拒绝</option>
+                            </select>
+                            <button class="btn btn-outline-info bi bi-search" type="button" id="query"></button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div id="toolbar">
+                    <div style="display:inline-block;">
+                        <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                            {eq name="Think.session.super_admin" value="1"}
+                            <a class="btn btn-sm btn-primary bi bi-plus-square" data-bs-toggle="modal" data-bs-target="#addModal" title="新增">新增</a>
+                            <a class="btn btn-sm btn-danger bi bi-trash" data-bs-toggle="modal" data-bs-target="#DeleteModal" title="删除" onclick="GetDeleteID('id');">删除</a>
+                            <a class="btn btn-sm btn-success bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#EditModal" title="编辑" onclick="GetEditID('id');">编辑</a>
+                            <a class="btn btn-sm btn-warning bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#CheckModal" title="审核" onclick="GetCheckID('id');">审核</a>
+                            <a href="{:url('refresh')}" class="btn btn-sm btn-default"><i class="bi bi-arrow-repeat" title="刷新"></i></a>
+                            {else/}
+                            <a class="btn btn-sm btn-primary bi bi-plus-square" data-bs-toggle="modal" data-bs-target="#addModal" title="新增">新增</a>
+                            <a class="btn btn-sm btn-success bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#EditModal" title="编辑" onclick="GetEditID('id');">编辑</a>
+                            {/eq}
+                            <a href="{:url('exportToExcel')}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-export" title="导出"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table
+                            class="table table-striped table-sm"
+                            id="fundingIndex"
+                            data-toggle="table"
+                            data-buttons-class="xs"
+                            style="white-space: nowrap;"
+                            data-unique-id="id">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end page wrapper -->
+<!-- 模态框（新增收款拆分-开始） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">新建</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="add_receipt_id">收款编号: </label><input class="form-control" type="text" id="add_receipt_id" name="add_receipt_id" required="required"  />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="add_classification">入金分类:</label>
+                            <select class="form-control selectpicker" id="add_classification" name="add_classification"  >
+                                <option value="">请选择入金分类</option>
+                                <option value="设备">设备</option>
+                                <option value="安装">安装</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            来款方式:
+                            <select id="add_funding_way" name="add_funding_way" class="selectpicker form-control form-group-sm" multiple data-max-options="1"  title="请选择">
+                                <option value="汇款">汇款</option>
+                                <option value="银承">银承</option>
+                                <option value="商承">商承</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            款项类型:
+                            <select id="select_id" class="selectpicker form-control" multiple data-max-options="5" data-live-search="false" data-live-search-placeholder="搜索" data-actions-box="false" title="请选择款项类型">
+    　　                  <optgroup label="请选择：">
+　　                         <option value="定金">定金</option>
+　　                             <option value="预付款">预付款</option>
+                                <option value="提货款">提货款</option>
+                                <option value="安装进场款">安装进场款</option>
+                                <option value="货到地盘款">货到地盘款</option>
+                                <option value="验收合格款">验收合格款</option>
+                                <option value="结算款">结算款</option>
+                                <option value="质保金">质保金</option>
+                                <option value="赶工奖">赶工奖</option>
+                                　　                  </optgroup>
+                            </select>
+                            <input type="text" id="input_select_id" style="display:none;" name="add_payment_type"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            来款单位: <input class="form-control" type="text" id="add_payer" name="add_payer" required="required"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            合同号: <input class="form-control" type="text" id="add_contract_id" name="add_contract_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            总金额: <input class="form-control" type="number" id="add_amount_money" name="add_amount_money" onblur="delSubstr();" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            拆分金额: <input class="form-control" type="number" id="add_expect_split_amount" name="add_expect_split_amount" onblur="delSubstring();" />
+                        </div>
+
+                        <div class="col-xs-6 col-sm-2">
+                            第一收款人:
+                            <input class="form-control" type="text" id="add_first_payee" name="add_first_payee" required="required"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            第一分配比例:
+                            <select id="add_first_ratio" name="add_first_ratio" class="selectpicker form-control" >
+            　　                  <option selected value="100">100%</option>
+            　　                 <option value="90">90%</option>
+            　　                 <option value="80">80%</option>
+        　　                     <option value="70">70%</option>
+                                <option value="60">60%</option>
+                                <option value="50">50%</option>
+                                <option value="40">40%</option>
+                                <option value="30">30%</option>
+                                <option value="20">20%</option>
+                                <option value="10">10%</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            第二收款人:
+                            <input class="form-control" type="text" id="add_second_payee" name="add_second_payee" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            第二分配比例:
+                            <select id="add_second_ratio" name="add_second_ratio" class="selectpicker form-control" >
+                                <option selected value="0">0%</option>
+            　　                 <option value="100">100%</option>
+                                <option value="90">90%</option>
+            　　                 <option value="80">80%</option>
+        　　                     <option value="70">70%</option>
+                                <option value="60">60%</option>
+                                <option value="50">50%</option>
+                                <option value="40">40%</option>
+                                <option value="30">30%</option>
+                                <option value="20">20%</option>
+                                <option value="10">10%</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            状态:
+                            <select id="add_status" name="add_status" class="selectpicker form-control" >
+                                　　                  <option selected value="正常">正常</option>
+                                　　                  <option value="拆杂项">拆杂项</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            工号:
+                            <textarea class="form-control" type="text" id="add_product_id" name="add_product_id" ></textarea><br/>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                        备注:
+                        <textarea class="form-control" type="text" id="add_remarks" name="add_remarks" ></textarea><br/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="fundingAddButton" type="button" onclick="addPost()" class="btn btn-primary">
+                        新增
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（新增收款拆分-结束） -->
+<!-- 模态框（审核-开始） -->
+<div class="modal fade" id="CheckModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">拆分审核</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="checkForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            <input class="form-control" type="hidden" id="check_id" name="check_id" />
+                            <label for="check_status">审核状态:</label>
+                                <select id="check_status" name="check_status" class="form-control selectpicker" >
+                                    <option value="">请选择状态</option>
+                                        <option value="待审核">待审核</option>
+            　　                         <option value="已审核">已审核</option>
+        　　                             <option value="已拒绝">已拒绝</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            <label for="record_date">录入时间:</label><input class="form-control" type="text" id="record_date" name="record_date" required="required"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <label for="check_remarks">审核备注:</label><textarea class="form-control" type="text" id="check_remarks" rows="8" name="check_remarks">
+                    </textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <label for="special_instructions">特殊说明:</label><textarea class="form-control" type="text" id="special_instructions" rows="3" name="special_instructions">
+                    </textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="checkButton" onclick="CheckPost()" class="btn btn-primary">审核</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（审核-结束） -->
+<!-- 模态框（编辑-开始） -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">信息修改</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="EditForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-2">
+                            <input class="form-control" type="hidden" id="edit_id" name="edit_id" />
+                            <label for="edit_receipt_id">收款编号: </label><input class="form-control" type="text" id="edit_receipt_id" name="edit_receipt_id" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_payer">来款单位: </label><input class="form-control" type="text" id="edit_payer" name="edit_payer" required="required"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            款项类型:
+                            <select  id="edit_payment_type"  class="selectpicker form-control" multiple data-max-options="5" data-live-search="false"  data-actions-box="false" title="">
+                                　　                     <optgroup label="请选择：">
+                                　　                         <option value="定金">定金</option>
+                                　　                             <option value="预付款">预付款</option>
+                                <option value="提货款">提货款</option>
+                                <option value="安装进场款">安装进场款</option>
+                                <option value="货到地盘款">货到地盘款</option>
+                                <option value="验收合格款">验收合格款</option>
+                                <option value="结算款">结算款</option>
+                                <option value="质保金">质保金</option>
+                                <option value="赶工奖">赶工奖</option>
+                            </optgroup>
+                            </select>
+                            <label for="edit_payment_type_input"></label><input class="form-control" type="text" id="edit_payment_type_input" style="display:none;" name="edit_payment_type_input" readonly="readonly"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_classification">入金分类:</label><select id="edit_classification" name="edit_classification" class="selectpicker form-control" >
+                                　　                  <option selected value="设备">设备</option>
+                                　　                  <option value="安装">安装</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_contract_id">合同号: </label><input class="form-control" type="text" id="edit_contract_id" name="edit_contract_id" required="required" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_product_id">工号: </label><input class="form-control" type="text" id="edit_product_id" name="edit_product_id" required="required"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_amount_money">金额: </label><input class="form-control" type="number" id="edit_amount_money" name="edit_amount_money" onblur="delAmountMoney();" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_expect_split_amount">预计拆分金额: </label><input class="form-control" type="number" id="edit_expect_split_amount" name="edit_expect_split_amount" onblur="delExpectAmount();" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_funding_way">来款方式:</label><select id="edit_funding_way" name="edit_funding_way" class="selectpicker form-control" >
+                                　　                     <option selected value="汇款">汇款</option>
+                                　　                     <option value="银承">银承</option>
+                                <option value="商承">商承</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_status">状态:</label><select id="edit_status" name="edit_status" class="selectpicker form-control" >
+                                　　                  <option selected value="正常">正常</option>
+                                　　                  <option value="拆杂项">拆杂项</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_first_payee">第一收款人:</label><input class="form-control" type="text" id="edit_first_payee" name="edit_first_payee"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_first_ratio">第一分配比例:</label><select id="edit_first_ratio" name="edit_first_ratio" class="selectpicker form-control" >
+        　　                      <option selected value="100">100%</option>
+        　　                      <option value="90">90%</option>
+        　　                      <option value="80">80%</option>
+        　　                     <option value="70">70%</option>
+                                <option value="60">60%</option>
+                                <option value="50">50%</option>
+                                <option value="40">40%</option>
+                                <option value="30">30%</option>
+                                <option value="20">20%</option>
+                                <option value="10">10%</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_second_payee">第二收款人:</label><input class="form-control" type="text" id="edit_second_payee" name="edit_second_payee" />
+                        </div>
+                        <div class="col-xs-6 col-sm-2">
+                            <label for="edit_second_ratio">第二分配比例:</label><select id="edit_second_ratio" name="edit_second_ratio" class="selectpicker form-control" >
+                                <option selected value="0">0%</option>　　
+                                <option value="100">100%</option>
+                                <option value="90">90%</option>
+                                　　                 <option value="80">80%</option>
+                                　　                     <option value="70">70%</option>
+                                <option value="60">60%</option>
+                                <option value="50">50%</option>
+                                <option value="40">40%</option>
+                                <option value="30">30%</option>
+                                <option value="20">20%</option>
+                                <option value="10">10%</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <label for="edit_remarks">备注:</label><textarea class="form-control" type="text" id="edit_remarks" name="edit_remarks" ></textarea><br/>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id='editButton' onclick="EditForm()" class="btn btn-primary">
+                        提交更改
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（编辑-结束） -->
+<!-- 模态框（删除-开始） -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:30%">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">请确认是否删除？</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="DeleteForm">
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="input-group">
+                                <span class="input-group-text">ID:</span>
+                                <input id="delete_id" name="delete_id" class="form-control" aria-label="With textarea"  readonly="readonly"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" onclick="Delete()" class="btn btn-danger">删除</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 模态框（删除-结束） -->
+</body>
+<script src="<?php addVersion('__JS__/myjs/funding.js');?>"></script>
+</html>
